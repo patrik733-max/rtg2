@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.17](https://github.com/realbestia1/erdb/compare/v0.1.16...v0.1.17) - 2026-03-31
+
+- rename proxy metadata selector label and bump to v0.1.17 ([3901517](https://github.com/realbestia1/erdb/commit/3901517d02c537ea1fe862bbc65f12a6b247d3aa))
+- . ([adf1263](https://github.com/realbestia1/erdb/commit/adf1263976c179c137e9a111af61d918b79481f6))
+- Update docker-image.yml ([01b2113](https://github.com/realbestia1/erdb/commit/01b2113b6530130b121ce74a846837222017e300))
+
 ## [0.1.16](https://github.com/realbestia1/erdb/compare/v0.1.15...v0.1.16) - 2026-03-31
 
 - simplify proxy metadata selector copy and bump to v0.1.16 ([1505a3e](https://github.com/realbestia1/erdb/commit/1505a3e6ce1d9c345b3927329fec2741b3fd10c7))
