@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.16](https://github.com/realbestia1/erdb/compare/v0.1.15...v0.1.16) - 2026-03-31
+
+- simplify proxy metadata selector copy and bump to v0.1.16 ([1505a3e](https://github.com/realbestia1/erdb/commit/1505a3e6ce1d9c345b3927329fec2741b3fd10c7))
+
 ## [0.1.15](https://github.com/realbestia1/erdb/compare/v0.1.14...v0.1.15) - 2026-03-31
 
 - Update README.md ([e502d73](https://github.com/realbestia1/erdb/commit/e502d73a7dd6e01310001c867def6594e57909ab))
