@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.25](https://github.com/realbestia1/erdb/compare/v0.1.24...v0.1.25) - 2026-03-31
+
+- align anime rating provider logos and bump package version to 0.1.25 ([92dbe86](https://github.com/realbestia1/erdb/commit/92dbe8698914b612ac1ee8dfaea4e33528e16ea6))
+  Updated the anime rating provider badges to use cleaner and more accurate provider assets, with special fixes for MyAnimeList, AniList, and Kitsu rendering. This includes centering and scaling adjustments for MAL, switching AniList to its official icon asset, and replacing the Kitsu badge with the exact favicon asset used by the official Kitsu web app. Also bumped the package version from 0.1.24 to 0.1.25.
+- update ([671b47e](https://github.com/realbestia1/erdb/commit/671b47ef0a437bedfb1f57377361cfca09f57e48))
+
 ## [0.1.24](https://github.com/realbestia1/erdb/compare/v0.1.23...v0.1.24) - 2026-03-31
 
 - Bump to v0.1.24 and add configurable logo rating limits ([02885e0](https://github.com/realbestia1/erdb/commit/02885e0e093ff053ec086fe8e1f5255df965ca86))
