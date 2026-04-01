@@ -1211,7 +1211,35 @@ export function HomePageView({ refs, state, derived, actions }: HomePageViewProp
           </div>
         </section>
 
-        {/* Documentation Section */}
+        <section className="pb-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 md:p-10">
+              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div className="max-w-2xl space-y-3">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.28em] text-slate-400">
+                    <Code2 className="w-3.5 h-3.5 text-orange-400" />
+                    <span>API Docs</span>
+                  </div>
+                  <h2 className="text-3xl font-[var(--font-display)] text-white">Documentation moved to its own page.</h2>
+                  <p className="text-sm leading-7 text-slate-400">
+                    The full renderer, proxy, helper endpoints, ID formats, and integration notes now live on the dedicated docs page so the homepage stays focused on configuration and previews.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/docs" className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-slate-100 transition-colors">
+                    Open API Docs
+                  </Link>
+                  <a href="https://github.com/realbestia1/erdb" className="px-6 py-3 rounded-full border border-white/10 bg-white/[0.04] text-white font-semibold hover:bg-white/10 transition-colors inline-flex items-center gap-2">
+                    <span>View Repo</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {false && (
         <section id="docs" className="scroll-mt-16 pb-20">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-2">
@@ -1700,6 +1728,7 @@ Skip any params that are undefined. Keep empty ratings/posterRatings/backdropRat
           </div>
         </div>
         </section>
+        )}
       </main>
 
       <footer className="border-t border-white/5 py-8 bg-[#080b10]">

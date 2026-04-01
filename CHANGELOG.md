@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.27](https://github.com/realbestia1/erdb/compare/v0.1.26...v0.1.27) - 2026-04-01
+
+- finalize dedicated API docs flow and bump package version to 0.1.27
+  Kept the new standalone `/docs` page as the single place for API documentation, linked the homepage to it, removed the old duplicated API docs content from the main page UI, and clarified `realimdb:` usage for addons that actually source series or episode metadata from IMDb IDs.
+
 ## [0.1.26](https://github.com/realbestia1/erdb/compare/v0.1.25...v0.1.26) - 2026-04-01
 
 - add dedicated API docs page and bump package version to 0.1.26
