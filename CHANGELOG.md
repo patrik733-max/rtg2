@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.2.0](https://github.com/realbestia1/erdb/compare/v0.1.27...v0.2.0) - 2026-04-01
+
+- rework web panel UI for a more modern, minimal workspace feel ([f8e861d](https://github.com/realbestia1/erdb/commit/f8e861d2aae67d7360ebe8e4298e5a2828791f26))
+
 ## [0.1.27](https://github.com/realbestia1/erdb/compare/v0.1.26...v0.1.27) - 2026-04-01
 
 - finalize dedicated API docs flow and bump package version to 0.1.27
