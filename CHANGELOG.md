@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.2.8](https://github.com/realbestia1/erdb/compare/v0.2.7...v0.2.8) - 2026-04-02
+
+- Improve Docker font handling and image response types ([3f2033f](https://github.com/realbestia1/erdb/commit/3f2033f99d1cb7a922747d337360f439ec8031b0))
+  Update Dockerfiles to skip automatic font install by default (ERDB_SKIP_FONT_INSTALL) and add bash/curl to Alpine deps; copy and execute scripts/install-fonts-linux.sh (with chmod) in build/runtime images so fonts are installed reliably. Refactor server image rendering flow in app/[type]/[id]/route.tsx: change in-flight maps to carry RenderedImagePayload, return payload objects from internal branches, and centralize the final respond(...) call to ensure consistent response construction. Also bump app version to 0.2.8 (package.json) and update displayed currentVersion in the home page component.
+
 ## [0.2.7](https://github.com/realbestia1/erdb/compare/v0.2.6...v0.2.7) - 2026-04-02
 
 - Add custom logo variants and caching ([88ce2c3](https://github.com/realbestia1/erdb/commit/88ce2c3c01295d72d29043f4da204bc002a8de88))
