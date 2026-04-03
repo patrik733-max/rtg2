@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.2](https://github.com/realbestia1/erdb/compare/v0.3.1...v0.3.2) - 2026-04-03
+
+- Fix poster token badge layout so stacked is ignored for non-vertical poster layouts ([13e1967](https://github.com/realbestia1/erdb/commit/13e196797ff88c86ba3ae91f9f78718080905612))
+  Updated the poster render pipeline to apply verticalBadgeContent=stacked only when posterRatingsLayout is vertical (left, right, or left-right).
+
+  This prevents tokens using Poster Layout=top from incorrectly rendering poster badges in stacked mode when a lingering verticalBadgeContent=stacked value is present in the token or imported config.
+
 ## [0.3.1](https://github.com/realbestia1/erdb/compare/v0.3.0...v0.3.1) - 2026-04-03
 
 - Add token-based accounts and workspace APIs ([9244088](https://github.com/realbestia1/erdb/commit/924408803cf9ba549268bd540fd8ff0ee93e5b04))
