@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.3](https://github.com/realbestia1/erdb/compare/v0.3.2...v0.3.3) - 2026-04-03
+
+- Bump package to 0.3.3; fix backdrop badge layout ([2502917](https://github.com/realbestia1/erdb/commit/25029174080311ef786450d173321c955d386222))
+  Import and use isVerticalBackdropRatingLayout in app/[type]/[id]/route.tsx so backdrop badge content uses the vertical variant only when backdropRatingsLayout is vertical (falls back to 'standard' otherwise). Update components/home-page.tsx to reflect currentVersion 0.3.3 and bump package version in package.json/package-lock.json. tsconfig.tsbuildinfo updated by the build. This fixes incorrect badge selection for backdrop images and publishes a patch version bump.
+
 ## [0.3.2](https://github.com/realbestia1/erdb/compare/v0.3.1...v0.3.2) - 2026-04-03
 
 - Fix poster token badge layout so stacked is ignored for non-vertical poster layouts ([13e1967](https://github.com/realbestia1/erdb/commit/13e196797ff88c86ba3ae91f9f78718080905612))
