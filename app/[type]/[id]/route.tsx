@@ -27,6 +27,7 @@ import {
   DEFAULT_POSTER_RATING_LAYOUT,
   getPosterRatingLayoutMaxBadges,
   getPosterRatingLayoutLimit,
+  isVerticalPosterRatingLayout,
   normalizePosterRatingLayout,
   normalizePosterRatingsMaxPerSide,
   type PosterRatingLayout,
@@ -5305,7 +5306,9 @@ export async function GET(
   
   const verticalBadgeContent =
     imageType === 'poster'
-      ? posterVerticalBadgeContent
+      ? isVerticalPosterRatingLayout(posterRatingsLayout)
+        ? posterVerticalBadgeContent
+        : 'standard'
       : imageType === 'thumbnail'
         ? thumbnailVerticalBadgeContent
         : imageType === 'backdrop'
