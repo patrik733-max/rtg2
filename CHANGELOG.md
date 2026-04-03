@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.8](https://github.com/realbestia1/erdb/compare/v0.3.7...v0.3.8) - 2026-04-03
+
+- fix(poster): handle regional locale fallback for clean title overlay ([bd90a19](https://github.com/realbestia1/erdb/commit/bd90a196e4dd1becfd4ac21a96c6cfa7064a96da))
+  - fix TMDB translation fallback in `app/[type]/[id]/route.tsx`
+  - derive the base language from the normalized locale before evaluating translation fallbacks
+  - allow regional locales like `it-IT` to correctly resolve base-language translations like `it`
+  - bump project version from `0.3.7` to `0.3.8`
+  - bump final image renderer cache version from `v58` to `v59` to invalidate stale cached poster outputs
+  - add changelog entry for `0.3.8`
+
 ## [0.3.7](https://github.com/realbestia1/erdb/compare/v0.3.6...v0.3.7) - 2026-04-03
 
 - Improve SQLite WAL management in v0.3.7 ([8c1ca2c](https://github.com/realbestia1/erdb/commit/8c1ca2c82b474622248d605a2c7f358b406b7369))
