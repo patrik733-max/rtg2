@@ -178,7 +178,7 @@ const resolveOriginalAwareImageLanguage = (input: {
   ) ||
   normalizeTmdbLanguageCode(input.requestLanguage) ||
   input.fallbackLanguage;
-const FINAL_IMAGE_RENDERER_CACHE_VERSION = 'poster-backdrop-logo-thumbnail-v62';
+const FINAL_IMAGE_RENDERER_CACHE_VERSION = 'poster-backdrop-logo-thumbnail-v63';
 const TMDB_CACHE_TTL_MS = parseCacheTtlMs(
   process.env.ERDB_TMDB_CACHE_TTL_MS,
   3 * 24 * 60 * 60 * 1000,
@@ -2102,8 +2102,8 @@ const pickBackdropByPreference = (
   }
 
   const canonicalOriginalPath =
-    pickByLanguageWithFallback(backdrops, preferredLang, fallbackLang)?.file_path ||
     originalBackdropPath ||
+    pickByLanguageWithFallback(backdrops, preferredLang, fallbackLang)?.file_path ||
     backdrops[0]?.file_path ||
     null;
   const originalBackdrop = canonicalOriginalPath
@@ -7126,6 +7126,10 @@ export async function GET(
             isEffectiveOriginalPosterLang && mediaOriginalLanguage
               ? normalizeTmdbLanguageCode(mediaOriginalLanguage) || effectivePosterRequestedImageLang
               : effectivePosterRequestedImageLang;
+          const resolvedBackdropRequestedImageLang =
+            isEffectiveOriginalBackdropLang && mediaOriginalLanguage
+              ? normalizeTmdbLanguageCode(mediaOriginalLanguage) || effectiveBackdropRequestedImageLang
+              : effectiveBackdropRequestedImageLang;
           const preferredPosterPath = isEffectiveOriginalPosterLang
             ? null
             : media?.poster_path || details?.poster_path || null;
@@ -7174,12 +7178,19 @@ export async function GET(
           const localizedBackdropPath =
             pickByLanguageWithFallback(
               backdropCollection,
-              effectiveBackdropRequestedImageLang,
+              resolvedBackdropRequestedImageLang,
               FALLBACK_IMAGE_LANGUAGE,
               preferredBackdropPath
             )?.file_path || preferredBackdropPath;
           const originalBackdropPath =
-            localizedBackdropPath ||
+            (isEffectiveOriginalBackdropLang
+              ? pickByLanguageWithFallback(
+                  backdropCollection,
+                  mediaOriginalLanguage,
+                  ''
+                )?.file_path
+              : localizedBackdropPath) ||
+            preferredBackdropPath ||
             backdropCollection[0]?.file_path;
 
           // Kitsu IDs usually represent a specific anime season: prefer season posters over unified show posters.
@@ -7277,7 +7288,7 @@ export async function GET(
             const selectedBackdrop = pickBackdropByPreference(
               backdropCollection,
               effectiveBackdropTextPreference,
-              effectiveBackdropRequestedImageLang,
+              resolvedBackdropRequestedImageLang,
               FALLBACK_IMAGE_LANGUAGE,
               originalBackdropPath
             );
@@ -7323,7 +7334,7 @@ export async function GET(
             const selectedBackdrop = pickBackdropByPreference(
               backdropCollection,
               effectiveBackdropTextPreference,
-              effectiveBackdropRequestedImageLang,
+              resolvedBackdropRequestedImageLang,
               FALLBACK_IMAGE_LANGUAGE,
               originalBackdropPath
             );
