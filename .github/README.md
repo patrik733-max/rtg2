@@ -84,53 +84,6 @@ The repository includes a GitHub Actions workflow at [`.github/workflows/docker-
 - On tags like `v1.0.0`, it also publishes a versioned image tag.
 </details>
 
-## HuggingFace Guide (NOT RECOMMENDED)
-
-<details>
-<summary>Click to view HuggingFace instructions (to avoid bans)</summary>
-
-(to avoid bans on HuggingFace)
-1. Go to the ERDB GitHub repo: https://github.com/realbestia1/erdb
-2. Click the "Fork" button in the top-right corner
-3. Choose any name for the fork (do not use "erdb")
-
-### HuggingFace Steps
-
-1. Create a new Space
-2. Choose any name
-3. Select Docker
-4. Select Blank
-5. Set it as a Public space
-6. Click Create Space
-
-Now click "Create the Dockerfile" (near the bottom of the page).
-
-Copy and paste the content of `Dockerfile.hf` into the editor that opens,
-replacing "realbestia1" with your GitHub username.
-
-Line to change:
-
-```text
-RUN git clone https://github.com/realbestia1/erdb.git .
-```
-
-After the edit, click "Commit new file to main".
-
-### ERDB URL
-
-To get your personal link:
-
-1. Click the three dots in the top-right corner
-2. Go to "Embed this Space"
-3. Copy the Direct URL
-
-Done! Your ERDB is ready to use on HuggingFace.
-
-Note: to update ERDB quickly, go to the Space settings and click
-"Factory Rebuild" only after syncing your fork on GitHub.
-
-</details>
-
 ## API & Configuration
 
 **Full documentation, interactive API builder, and Addon generator are available on our official website:**
@@ -168,5 +121,4 @@ https://github.com/user-attachments/assets/5e1e2496-509a-4b85-ab45-d1f406576af4
 https://github.com/user-attachments/assets/2385d7a1-c5da-4240-b016-d2880c6d1184
 
 © 2026 ERDB Project
-
 
