@@ -6188,6 +6188,33 @@ export async function GET(
             }
           }
 
+          // Align MAL / AniList / AniDB with Kitsu: season-level native IDs should resolve to a
+          // TMDB season for posters. Kitsu does this via animemapping ?ep=1 when season is absent.
+          if (media && mediaType === 'tv' && !season) {
+            const initialAnimeMappingPayload = await fetchAnimemappingPayload({
+              provider: inputAnimeMappingProvider,
+              externalId: inputAnimeMappingExternalId,
+              season,
+              episode,
+              phases,
+            });
+            const mappingSubtype = extractAnimeSubtypeFromAnimemapping(initialAnimeMappingPayload);
+            if (mappingSubtype !== 'movie') {
+              const seasonProbePayload = await fetchAnimemappingPayload({
+                provider: inputAnimeMappingProvider,
+                externalId: inputAnimeMappingExternalId,
+                season,
+                episode: '1',
+                phases,
+              });
+              const seasonProbeEpisode =
+                seasonProbePayload?.mappings?.tmdb_episode || seasonProbePayload?.tmdb_episode;
+              if (seasonProbeEpisode?.season != null && String(seasonProbeEpisode.season).length > 0) {
+                season = String(seasonProbeEpisode.season);
+              }
+            }
+          }
+
           if (!media) {
             const kitsuId = await fetchKitsuIdFromReverseMapping({
               provider: inputAnimeMappingProvider,
@@ -7610,8 +7637,9 @@ export async function GET(
             preferredBackdropPath ||
             backdropCollection[0]?.file_path;
 
-          // Kitsu IDs usually represent a specific anime season: prefer season posters over unified show posters.
-          if (isKitsu && season && !episode && type === 'poster') {
+          // Native anime IDs (Kitsu, MAL, AniList, AniDB) usually refer to one cour/season: prefer TMDB
+          // season posters over the unified show poster when we have a resolved season and no episode.
+          if (hasNativeAnimeInput && season && !episode && type === 'poster') {
             const seasonImagesQuery = input.seasonIncludeImageLanguage
               ? `&include_image_language=${input.seasonIncludeImageLanguage}`
               : '';
