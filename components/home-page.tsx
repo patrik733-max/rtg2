@@ -720,7 +720,7 @@ export default function HomePage({
 }) {
   const [previewType, setPreviewType] = useState<PreviewType>('poster');
   const [mediaId, setMediaId] = useState(DEFAULT_SERIES_ID);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('en-US');
   const [posterLang, setPosterLang] = useState('');
   const [posterAnimeLang, setPosterAnimeLang] = useState('');
   const [backdropLang, setBackdropLang] = useState('');
@@ -728,7 +728,7 @@ export default function HomePage({
   const [logoLang, setLogoLang] = useState('');
   const [logoAnimeLang, setLogoAnimeLang] = useState('');
   const [posterImageText, setPosterImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
-  const [posterAnimeImageText, setPosterAnimeImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
+  const [posterAnimeImageText, setPosterAnimeImageText] = useState<'default' | 'clean' | 'alternative'>('default');
   const [backdropImageText, setBackdropImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
   const [backdropAnimeImageText, setBackdropAnimeImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
   const [posterRatingRows, setPosterRatingRows] = useState<RatingProviderRow[]>(buildDefaultRatingRows);
@@ -749,26 +749,26 @@ export default function HomePage({
   );
   const logoRatingPreferences = useMemo(() => rowsToEnabledOrdered(logoRatingRows), [logoRatingRows]);
   const [posterStreamBadges, setPosterStreamBadges] = useState<StreamBadgesSetting>('auto');
-  const [backdropStreamBadges, setBackdropStreamBadges] = useState<StreamBadgesSetting>('auto');
+  const [backdropStreamBadges, setBackdropStreamBadges] = useState<StreamBadgesSetting>('off');
   const [qualityBadgesSide, setQualityBadgesSide] = useState<QualityBadgesSide>('left');
   const [posterQualityBadgesPosition, setPosterQualityBadgesPosition] =
     useState<PosterQualityBadgesPosition>('auto');
-  const [posterQualityBadgesStyle, setPosterQualityBadgesStyle] = useState<RatingStyle>(DEFAULT_QUALITY_BADGES_STYLE);
+  const [posterQualityBadgesStyle, setPosterQualityBadgesStyle] = useState<RatingStyle>('glass');
   const [backdropQualityBadgesStyle, setBackdropQualityBadgesStyle] = useState<RatingStyle>(DEFAULT_QUALITY_BADGES_STYLE);
-  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('bottom');
-  const [backdropRatingsLayout, setBackdropRatingsLayout] = useState<BackdropRatingLayout>(DEFAULT_BACKDROP_RATING_LAYOUT);
-  const [backdropRatingsSize, setBackdropRatingsSize] = useState<BackdropRatingsSize>(DEFAULT_BACKDROP_RATINGS_SIZE);
-  const [thumbnailRatingsLayout, setThumbnailRatingsLayout] = useState<ThumbnailRatingLayout>(DEFAULT_THUMBNAIL_RATING_LAYOUT);
-  const [posterVerticalBadgeContent, setPosterVerticalBadgeContent] = useState<VerticalBadgeContent>('standard');
-  const [backdropVerticalBadgeContent, setBackdropVerticalBadgeContent] = useState<VerticalBadgeContent>('standard');
-  const [thumbnailVerticalBadgeContent, setThumbnailVerticalBadgeContent] = useState<VerticalBadgeContent>('standard');
-  const [thumbnailSize, setThumbnailSize] = useState<ThumbnailSize>(DEFAULT_THUMBNAIL_SIZE);
-  const [posterRatingStyle, setPosterRatingStyle] = useState<RatingStyle>(DEFAULT_RATING_STYLE);
-  const [backdropRatingStyle, setBackdropRatingStyle] = useState<RatingStyle>(DEFAULT_RATING_STYLE);
-  const [thumbnailRatingStyle, setThumbnailRatingStyle] = useState<RatingStyle>(DEFAULT_RATING_STYLE);
+  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('left-right');
+  const [backdropRatingsLayout, setBackdropRatingsLayout] = useState<BackdropRatingLayout>('right-vertical');
+  const [backdropRatingsSize, setBackdropRatingsSize] = useState<BackdropRatingsSize>('large');
+  const [thumbnailRatingsLayout, setThumbnailRatingsLayout] = useState<ThumbnailRatingLayout>('left-vertical');
+  const [posterVerticalBadgeContent, setPosterVerticalBadgeContent] = useState<VerticalBadgeContent>('stacked');
+  const [backdropVerticalBadgeContent, setBackdropVerticalBadgeContent] = useState<VerticalBadgeContent>('stacked');
+  const [thumbnailVerticalBadgeContent, setThumbnailVerticalBadgeContent] = useState<VerticalBadgeContent>('stacked');
+  const [thumbnailSize, setThumbnailSize] = useState<ThumbnailSize>('large');
+  const [posterRatingStyle, setPosterRatingStyle] = useState<RatingStyle>('glass');
+  const [backdropRatingStyle, setBackdropRatingStyle] = useState<RatingStyle>('glass');
+  const [thumbnailRatingStyle, setThumbnailRatingStyle] = useState<RatingStyle>('glass');
   const [logoRatingStyle, setLogoRatingStyle] = useState<RatingStyle>('plain');
   const [posterRatingsMaxPerSide, setPosterRatingsMaxPerSide] = useState<number | null>(DEFAULT_POSTER_RATINGS_MAX_PER_SIDE);
-  const [logoRatingsMax, setLogoRatingsMax] = useState<number | null>(DEFAULT_LOGO_RATINGS_MAX);
+  const [logoRatingsMax, setLogoRatingsMax] = useState<number | null>(5);
   const [logoMode, setLogoMode] = useState<LogoMode>(DEFAULT_LOGO_MODE);
   const [logoFontVariant, setLogoFontVariant] = useState<LogoFontVariant>(DEFAULT_LOGO_FONT_VARIANT);
   const [logoCustomPrimary, setLogoCustomPrimary] = useState(DEFAULT_LOGO_CUSTOM_PRIMARY);
@@ -801,7 +801,7 @@ export default function HomePage({
   const [showProxyUrl, setShowProxyUrl] = useState(false);
   const [aiometadataCopiedType, setAiometadataCopiedType] = useState<AiometadataPatternType | null>(null);
   const [aiometadataEpisodeProvider, setAiometadataEpisodeProvider] = useState<AiometadataEpisodeProvider>('realimdb');
-  const [currentVersion, setCurrentVersion] = useState('0.3.19');
+  const [currentVersion, setCurrentVersion] = useState('0.3.20');
   const [githubPackageVersion, setGithubPackageVersion] = useState<string | null>(null);
   const [repoUrl, setRepoUrl] = useState<string | null>(null);
   const [exportStatus, setExportStatus] = useState<'idle' | 'with' | 'without'>('idle');
@@ -811,6 +811,8 @@ export default function HomePage({
   const [activeToken, setActiveToken] = useState<string | null>(initialToken);
   const [configSaveStatus, setConfigSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const navRef = useRef<HTMLElement | null>(null);
+  const isHydrated = useRef(false);
+  const isPreviewHydrated = useRef(false);
   const baseUrl = normalizeBaseUrl(useClientOrigin());
   const hasTmdbKey = tmdbKey.length > 10;
   const supportedLanguages: SupportedLanguage[] = useMemo(
@@ -953,6 +955,7 @@ export default function HomePage({
     const storedSimklClientId = safeLocalStorageGet(SIMKL_CLIENT_ID_STORAGE_KEY);
     const storedToken = safeLocalStorageGet(ERDB_TOKEN_STORAGE_KEY);
     if (!storedTmdbKey && !storedMdblistKey && !storedSimklClientId && !storedToken) {
+      isHydrated.current = true;
       return;
     }
     const frameId = window.requestAnimationFrame(() => {
@@ -968,11 +971,13 @@ export default function HomePage({
       if (!initialToken && storedToken) {
         setActiveToken(storedToken);
       }
+      isHydrated.current = true;
     });
     return () => window.cancelAnimationFrame(frameId);
   }, [initialToken]);
 
   useEffect(() => {
+    if (!isHydrated.current) return;
     if (activeToken) {
       safeLocalStorageSet(ERDB_TOKEN_STORAGE_KEY, activeToken);
     } else {
@@ -981,6 +986,7 @@ export default function HomePage({
   }, [activeToken]);
 
   useEffect(() => {
+    if (!isHydrated.current) return;
     if (tmdbKey) {
       safeLocalStorageSet(TMDB_KEY_STORAGE_KEY, tmdbKey);
     } else {
@@ -989,6 +995,7 @@ export default function HomePage({
   }, [tmdbKey]);
 
   useEffect(() => {
+    if (!isHydrated.current) return;
     if (mdblistKey) {
       safeLocalStorageSet(MDBLIST_KEY_STORAGE_KEY, mdblistKey);
     } else {
@@ -997,6 +1004,7 @@ export default function HomePage({
   }, [mdblistKey]);
 
   useEffect(() => {
+    if (!isHydrated.current) return;
     if (simklClientId) {
       safeLocalStorageSet(SIMKL_CLIENT_ID_STORAGE_KEY, simklClientId);
     } else {
@@ -1305,15 +1313,15 @@ export default function HomePage({
         query.set('posterVerticalBadgeContent', posterVerticalBadgeContent);
       }
     } else if (previewType === 'backdrop' || previewType === 'thumbnail') {
-        query.set(
-          previewType === 'thumbnail' ? 'thumbnailRatingsLayout' : 'backdropRatingsLayout',
-          previewType === 'thumbnail' ? thumbnailRatingsLayout : backdropRatingsLayout
-        );
-        if (previewType === 'backdrop') {
-          query.set('backdropRatingsSize', backdropRatingsSize);
-        }
-        if (
-          previewType === 'backdrop' &&
+      query.set(
+        previewType === 'thumbnail' ? 'thumbnailRatingsLayout' : 'backdropRatingsLayout',
+        previewType === 'thumbnail' ? thumbnailRatingsLayout : backdropRatingsLayout
+      );
+      if (previewType === 'backdrop') {
+        query.set('backdropRatingsSize', backdropRatingsSize);
+      }
+      if (
+        previewType === 'backdrop' &&
         backdropRatingsLayout === 'right-vertical' &&
         backdropVerticalBadgeContent !== 'standard'
       ) {
@@ -2340,6 +2348,7 @@ export default function HomePage({
     if (typeof window === 'undefined') return;
     const storedPreviewConfig = safeLocalStorageGet(PREVIEW_CONFIG_STORAGE_KEY);
     if (!storedPreviewConfig) {
+      isPreviewHydrated.current = true;
       return;
     }
     const frameId = window.requestAnimationFrame(() => {
@@ -2349,6 +2358,7 @@ export default function HomePage({
       } catch {
         safeLocalStorageRemove(PREVIEW_CONFIG_STORAGE_KEY);
       }
+      isPreviewHydrated.current = true;
     });
     return () => window.cancelAnimationFrame(frameId);
   }, []);
@@ -2364,6 +2374,7 @@ export default function HomePage({
   }, [initialConfig]);
 
   useEffect(() => {
+    if (!isPreviewHydrated.current) return;
     const payload: Record<string, unknown> = {
       version: EXPORT_CONFIG_VERSION,
       previewType,
