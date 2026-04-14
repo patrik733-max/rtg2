@@ -193,7 +193,9 @@ function AnimatedCounter({ target }: { target: number }) {
   const frameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (target === 0) { setDisplay(0); return; }
+    if (target === 0) {
+      return;
+    }
     const duration = 1200;
     const start = performance.now();
     const animate = (now: number) => {
@@ -206,7 +208,7 @@ function AnimatedCounter({ target }: { target: number }) {
     return () => { if (frameRef.current) cancelAnimationFrame(frameRef.current); };
   }, [target]);
 
-  return <>{display}</>;
+  return <>{target === 0 ? 0 : display}</>;
 }
 
 export function HomePageView({ refs, derived }: HomePageViewProps) {

@@ -819,7 +819,7 @@ export default function HomePage({
   const [showProxyUrl, setShowProxyUrl] = useState(false);
   const [aiometadataCopiedType, setAiometadataCopiedType] = useState<AiometadataPatternType | null>(null);
   const [aiometadataEpisodeProvider, setAiometadataEpisodeProvider] = useState<AiometadataEpisodeProvider>('realimdb');
-  const [currentVersion, setCurrentVersion] = useState('0.3.26');
+  const [currentVersion, setCurrentVersion] = useState('0.3.27');
   const [githubPackageVersion, setGithubPackageVersion] = useState<string | null>(null);
   const [repoUrl, setRepoUrl] = useState<string | null>(null);
   const [userCount, setUserCount] = useState<number | null>(null);
@@ -840,7 +840,7 @@ export default function HomePage({
         languages: hasTmdbKey ? tmdbLanguages : [],
         primaryTranslations: hasTmdbKey ? tmdbPrimaryTranslations : [],
       }),
-    [hasTmdbKey, tmdbLanguages, tmdbPrimaryTranslations]
+    [tmdbLanguages, tmdbPrimaryTranslations, hasTmdbKey]
   );
   const effectiveLang = useMemo(() => {
     const normalizedLang = normalizeTmdbLanguageCode(lang) || lang;
@@ -872,7 +872,7 @@ export default function HomePage({
       return effectiveLang;
     }
     return normalizedPosterLang;
-  }, [effectiveLang, hasTmdbKey, posterLang, supportedLanguages]);
+  }, [effectiveLang, posterLang]);
   const effectivePosterAnimeLang = useMemo(() => {
     if (!posterAnimeLang) {
       return effectivePosterLang;
@@ -1631,7 +1631,17 @@ export default function HomePage({
     backdropQualityBadgesStyle,
     effectiveLang,
     effectivePosterLang,
+    effectivePosterAnimeLang,
+    effectiveBackdropLang,
+    effectiveBackdropAnimeLang,
+    effectiveLogoLang,
+    effectiveLogoAnimeLang,
     posterLang,
+    posterAnimeLang,
+    backdropLang,
+    backdropAnimeLang,
+    logoLang,
+    logoAnimeLang,
     posterRatingStyle,
     backdropRatingStyle,
     logoRatingStyle,
@@ -1643,6 +1653,7 @@ export default function HomePage({
     posterImageText,
     posterAnimeImageText,
     backdropImageText,
+    backdropAnimeImageText,
     posterRatingsLayout,
     posterRatingsMaxPerSide,
     logoRatingsMax,
@@ -1882,7 +1893,17 @@ export default function HomePage({
     logoRatingPreferences,
     effectiveLang,
     effectivePosterLang,
+    effectivePosterAnimeLang,
+    effectiveBackdropLang,
+    effectiveBackdropAnimeLang,
+    effectiveLogoLang,
+    effectiveLogoAnimeLang,
     posterLang,
+    posterAnimeLang,
+    backdropLang,
+    backdropAnimeLang,
+    logoLang,
+    logoAnimeLang,
     posterStreamBadges,
     backdropStreamBadges,
     shouldShowPosterQualityBadgesSide,
@@ -1900,7 +1921,9 @@ export default function HomePage({
     logoCustomSecondary,
     logoCustomOutline,
     posterImageText,
+    posterAnimeImageText,
     backdropImageText,
+    backdropAnimeImageText,
     posterRatingsLayout,
     posterRatingsMaxPerSide,
     logoRatingsMax,
@@ -2520,8 +2543,13 @@ export default function HomePage({
     effectiveLang,
     posterLang,
     posterAnimeLang,
+    backdropLang,
+    backdropAnimeLang,
+    logoLang,
+    logoAnimeLang,
     posterImageText,
     posterAnimeImageText,
+    backdropAnimeImageText,
     backdropImageText,
     posterRatingPreferences,
     backdropRatingPreferences,
@@ -2552,6 +2580,7 @@ export default function HomePage({
     backdropVerticalBadgeContent,
     thumbnailVerticalBadgeContent,
     thumbnailSize,
+    thumbnailRatingStyle,
     aiometadataEpisodeProvider,
     proxySeriesMetadataProvider,
     proxyAiometadataProvider,
@@ -2706,6 +2735,7 @@ export default function HomePage({
       tmdbKey,
       mdblistKey,
       simklClientId,
+      fanartKey,
     ]
   );
 

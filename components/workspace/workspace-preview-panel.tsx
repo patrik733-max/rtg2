@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MonitorPlay } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { HomePageViewProps } from '@/components/workspace-page-view';
@@ -8,15 +8,49 @@ import { PREVIEW_PANEL_CLASS } from './constants';
 
 type WorkspacePreviewPanelProps = Pick<HomePageViewProps, 'state' | 'derived'>;
 
+function PreviewImage({ previewUrl, previewType }: { previewUrl: string; previewType: HomePageViewProps['state']['previewType'] }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  return (
+    <motion.div
+      key="previewedImageContainer"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-1"
+    >
+      {!imageLoaded && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 m-4 overflow-hidden rounded-[24px] bg-white/[0.02] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]"
+        >
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        </motion.div>
+      )}
+      <motion.img
+        key={previewUrl}
+        src={previewUrl}
+        alt="Preview"
+        onLoad={() => setImageLoaded(true)}
+        initial={{ opacity: 0, filter: 'blur(10px)' }}
+        animate={{ opacity: imageLoaded ? 1 : 0, filter: imageLoaded ? 'blur(0px)' : 'blur(10px)' }}
+        transition={{ duration: 0.4 }}
+        className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-[#030303] shadow-[0_24px_70px_-35px_rgba(0,0,0,1)] ring-1 ring-white/8 ${
+          previewType === 'logo'
+            ? 'block h-auto w-full max-w-2xl'
+            : 'block h-auto max-h-full max-w-full w-auto'
+        }`}
+      />
+    </motion.div>
+  );
+}
+
 export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelProps) {
   const { previewType } = state;
   const { previewUrl, previewNotice } = derived;
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Reset loading state when preview url changes
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [previewUrl]);
 
   return (
     <div className={`${PREVIEW_PANEL_CLASS} flex min-h-0 flex-col p-4 w-full xl:flex-1`}>
@@ -47,40 +81,7 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
               </div>
             </motion.div>
           ) : previewUrl ? (
-            <motion.div
-              key="previewedImageContainer"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-1"
-            >
-              {!imageLoaded && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 m-4 rounded-[24px] bg-white/[0.02] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] overflow-hidden"
-                >
-                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-[shimmer_1.5s_infinite]" />
-                </motion.div>
-              )}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <motion.img
-                key={previewUrl}
-                src={previewUrl}
-                alt="Preview"
-                onLoad={() => setImageLoaded(true)}
-                initial={{ opacity: 0, filter: 'blur(10px)' }}
-                animate={{ opacity: imageLoaded ? 1 : 0, filter: imageLoaded ? 'blur(0px)' : 'blur(10px)' }}
-                transition={{ duration: 0.4 }}
-                className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-[#030303] shadow-[0_24px_70px_-35px_rgba(0,0,0,1)] ring-1 ring-white/8 ${
-                  previewType === 'logo'
-                    ? 'block w-full max-w-2xl h-auto'
-                    : 'block max-w-full max-h-full w-auto h-auto'
-                }`}
-              />
-            </motion.div>
+            <PreviewImage key={previewUrl} previewUrl={previewUrl} previewType={previewType} />
           ) : (
             <motion.div
               key="empty"
