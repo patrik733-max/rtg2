@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.1](https://github.com/realbestia1/erdb/compare/v0.4.0...v0.4.1) - 2026-05-11
+
+- Refactor poster rating config and bump version ([52ea033](https://github.com/realbestia1/erdb/commit/52ea03325ff609bf6ae59f53e13bc768d1e90a9c))
+  Consolidate poster rating configuration in HomePage: add explicit handling for the 'simple' posterConfiguratorPreset (sets posterConfiguratorPreset, posterRatingsMode, posterRatings, posterRatingStyle, and posterRatingsLayout) and simplify conditional assignments for non-simple presets. Add handling for vertical poster rating layouts to set posterRatingsMaxPerSide when applicable, and keep backdrop/thumbnail/logo rating style assignments conditional. Also bump package version to 0.4.1 in package.json.
+
 ## [0.4.0](https://github.com/realbestia1/erdb/compare/v0.3.31...v0.4.0) - 2026-05-11
 
 - Support poster average rating & simple preset ([6e2003f](https://github.com/realbestia1/erdb/commit/6e2003fce64598b2fe177aefbbe3ed90d8d302ed))
