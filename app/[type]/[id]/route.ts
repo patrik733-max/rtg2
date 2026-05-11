@@ -257,51 +257,8 @@ const GENERATED_LOGO_VARIANT_CACHE_TTL_MS = parseCacheTtlMs(
   60 * 60 * 1000,
   365 * 24 * 60 * 60 * 1000
 );
-const FINAL_IMAGE_CACHE_MAX_ENTRIES = 300;
-const SOURCE_IMAGE_CACHE_MAX_ENTRIES = 128;
-const METADATA_CACHE_MAX_ENTRIES = 2000;
-const PROVIDER_ICON_CACHE_MAX_ENTRIES = 64;
 const GENERATED_LOGO_VARIANT_CACHE_MAX_ENTRIES = 256;
 const TMDB_ANIMATION_GENRE_ID = 16;
-const TMDB_MOVIE_GENRE_NAMES = new Map<number, string>([
-  [28, 'Action'],
-  [12, 'Adventure'],
-  [16, 'Animation'],
-  [35, 'Comedy'],
-  [80, 'Crime'],
-  [99, 'Documentary'],
-  [18, 'Drama'],
-  [10751, 'Family'],
-  [14, 'Fantasy'],
-  [36, 'History'],
-  [27, 'Horror'],
-  [10402, 'Music'],
-  [9648, 'Mystery'],
-  [10749, 'Romance'],
-  [878, 'Sci-Fi'],
-  [10770, 'TV Movie'],
-  [53, 'Thriller'],
-  [10752, 'War'],
-  [37, 'Western'],
-]);
-const TMDB_TV_GENRE_NAMES = new Map<number, string>([
-  [10759, 'Action'],
-  [16, 'Animation'],
-  [35, 'Comedy'],
-  [80, 'Crime'],
-  [99, 'Documentary'],
-  [18, 'Drama'],
-  [10751, 'Family'],
-  [10762, 'Kids'],
-  [9648, 'Mystery'],
-  [10763, 'News'],
-  [10764, 'Reality'],
-  [10765, 'Sci-Fi'],
-  [10766, 'Soap'],
-  [10767, 'Talk'],
-  [10768, 'War'],
-  [37, 'Western'],
-]);
 const STAR_RATING_ICON = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="#ffffff" d="M32 5.6 39.7 22l17.8 2.7-12.9 12.7 3 17.9L32 46.8 16.4 55.3l3-17.9L6.5 24.7 24.3 22 32 5.6Z"/></svg>'
 )}`;
@@ -927,21 +884,29 @@ const isTmdbAnimationTitle = (media: any) => {
   });
 };
 
-const getFirstTmdbGenreName = (media: any, mediaType: 'movie' | 'tv' | null) => {
+const getFirstTmdbGenreName = async (
+  media: any,
+  mediaType: 'movie' | 'tv' | null,
+  tmdbKey: string,
+  language: string,
+  phases: PhaseDurations
+) => {
   const genres = Array.isArray(media?.genres) ? media.genres : [];
   for (const genre of genres) {
     const name = String(genre?.name || '').trim();
     if (name) return name;
   }
 
+  if (!tmdbKey || !mediaType || (mediaType !== 'movie' && mediaType !== 'tv')) return null;
+
   const genreIds = Array.isArray(media?.genre_ids) ? media.genre_ids : [];
+  if (genreIds.length === 0) return null;
+
+  const genreMap = await fetchTmdbGenres(tmdbKey, language, mediaType, phases);
   for (const genreId of genreIds) {
     const numericGenreId = Number(genreId);
     if (!Number.isFinite(numericGenreId)) continue;
-    const mappedGenre =
-      mediaType === 'tv'
-        ? TMDB_TV_GENRE_NAMES.get(numericGenreId)
-        : TMDB_MOVIE_GENRE_NAMES.get(numericGenreId);
+    const mappedGenre = genreMap.get(numericGenreId);
     if (mappedGenre) return mappedGenre;
   }
 
@@ -2370,6 +2335,36 @@ const fetchTextCached = async (
     setMetadata(key, payload, response.ok ? ttlMs : failureTtlMs);
     return payload;
   });
+};
+
+const fetchTmdbGenres = async (
+  tmdbKey: string,
+  language: string,
+  mediaType: 'movie' | 'tv',
+  phases: PhaseDurations
+): Promise<Map<number, string>> => {
+  const cacheKey = `tmdb:genres:${mediaType}:${language}`;
+  const url = `https://api.themoviedb.org/3/genre/${mediaType}/list?api_key=${tmdbKey}&language=${language}`;
+
+  const response = await fetchJsonCached(
+    cacheKey,
+    url,
+    TMDB_CACHE_TTL_MS,
+    phases,
+    'tmdb'
+  );
+
+  const genreMap = new Map<number, string>();
+  if (response.ok && Array.isArray(response.data?.genres)) {
+    for (const genre of response.data.genres) {
+      const id = Number(genre?.id);
+      const name = String(genre?.name || '').trim();
+      if (Number.isFinite(id) && name) {
+        genreMap.set(id, name);
+      }
+    }
+  }
+  return genreMap;
 };
 
 const extractTvdbEpisodeIdFromAiredOrderHtml = (
@@ -8921,7 +8916,13 @@ export async function GET(
           const average = values.reduce((sum, value) => sum + value, 0) / values.length;
           const firstGenreName =
             posterConfiguratorPreset === 'simple'
-              ? getFirstTmdbGenreName(localizedMediaDetails || fallbackMediaDetails || media, mediaType as 'movie' | 'tv' | null)
+              ? await getFirstTmdbGenreName(
+                  localizedMediaDetails || fallbackMediaDetails || media,
+                  mediaType as 'movie' | 'tv' | null,
+                  tmdbKey || '',
+                  requestedImageLang,
+                  phases
+                )
               : null;
           const averageValue = `${firstGenreName ? `${firstGenreName} ` : ''}★ ${formatRatingNumber(average)}`;
           ratingBadges.splice(0, ratingBadges.length, {
