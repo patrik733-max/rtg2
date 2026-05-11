@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.41](https://github.com/realbestia1/erdb/compare/v0.4.4...v0.4.41) - 2026-05-11
+
+- Improve SVG shadow rendering and bump version ([fa12b39](https://github.com/realbestia1/erdb/commit/fa12b39e143bbf4258a5849d778780af4a6b7114))
+  Replace multiple feDropShadow usages with explicit SVG filter chains (feGaussianBlur, feFlood, feComposite, feOffset, feMerge) to produce more consistent shadows and better control. Add universal stroke and filter attributes to text elements, expand SVG viewBox bounds to avoid clipping, and update FINAL_IMAGE_RENDERER_CACHE_VERSION. Also bump package version to 0.4.41 (package.json + package-lock.json). Changes target app/[type]/[id]/route.ts and package metadata.
+
 ## [0.4.4](https://github.com/realbestia1/erdb/compare/v0.4.3...v0.4.4) - 2026-05-11
 
 - fix ([90ac99a](https://github.com/realbestia1/erdb/commit/90ac99a94e4b3173ad1114d12a50d8257f12e728))
