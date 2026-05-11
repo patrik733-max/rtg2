@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.43](https://github.com/realbestia1/erdb/compare/v0.4.42...v0.4.43) - 2026-05-11
+
+- Fetch TMDB genres dynamically and update lookup ([d9942f1](https://github.com/realbestia1/erdb/commit/d9942f1a8695a39bb13b3655c5e42010bdf85f3f))
+  Remove hardcoded TMDB genre maps and unused cache size constants; add fetchTmdbGenres to fetch and cache genre lists from TMDB. Make getFirstTmdbGenreName async and extend its signature (tmdbKey, language, phases) so it can fetch localized genre names when media.genre_ids are present. Add input guards and use the fetched genre map for id->name resolution; update the call site to await the new async function. This enables up-to-date, localized genre names and removes reliance on static mappings.
+
 ## [0.4.42](https://github.com/realbestia1/erdb/compare/v0.4.41...v0.4.42) - 2026-05-11
 
 - . ([ba4ad84](https://github.com/realbestia1/erdb/commit/ba4ad8421d06231b24e8b3e62d1c924235891ece))
