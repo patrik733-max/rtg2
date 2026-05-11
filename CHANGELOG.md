@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.3](https://github.com/realbestia1/erdb/compare/v0.4.2...v0.4.3) - 2026-05-11
+
+- fix token ([9031c9d](https://github.com/realbestia1/erdb/commit/9031c9d26ae1a418d8a56b433517c8dcfa444995))
+
 ## [0.4.2](https://github.com/realbestia1/erdb/compare/v0.4.1...v0.4.2) - 2026-05-11
 
 - Handle poster preset/ratings and bump version ([92cb5b8](https://github.com/realbestia1/erdb/commit/92cb5b8d688b3103c1fc9ddb134290d49486774e))
