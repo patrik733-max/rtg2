@@ -179,7 +179,7 @@ const resolveOriginalAwareImageLanguage = (input: {
   ) ||
   normalizeTmdbLanguageCode(input.requestLanguage) ||
   input.fallbackLanguage;
-const FINAL_IMAGE_RENDERER_CACHE_VERSION = 'poster-backdrop-logo-thumbnail-v99';
+const FINAL_IMAGE_RENDERER_CACHE_VERSION = 'poster-backdrop-logo-thumbnail-v100';
 const TMDB_CACHE_TTL_MS = parseCacheTtlMs(
   process.env.ERDB_TMDB_CACHE_TTL_MS,
   3 * 24 * 60 * 60 * 1000,
@@ -2847,9 +2847,9 @@ const configureSharp = (sharp: any) => {
   }
 
   const cacheOptions: { memory?: number; files?: number; items?: number } = {};
-  const memory = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_MEMORY_MB, 8192);
-  const files = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_FILES, 20000);
-  const items = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_ITEMS, 2000);
+  const memory = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_MEMORY_MB, 0);
+  const files = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_FILES, 0);
+  const items = parseNonNegativeInt(process.env.ERDB_SHARP_CACHE_ITEMS, 0);
   if (memory !== null) cacheOptions.memory = memory;
   if (files !== null) cacheOptions.files = files;
   if (items !== null) cacheOptions.items = items;
