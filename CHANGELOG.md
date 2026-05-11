@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.4](https://github.com/realbestia1/erdb/compare/v0.4.3...v0.4.4) - 2026-05-11
+
+- fix ([90ac99a](https://github.com/realbestia1/erdb/commit/90ac99a94e4b3173ad1114d12a50d8257f12e728))
+
 ## [0.4.3](https://github.com/realbestia1/erdb/compare/v0.4.2...v0.4.3) - 2026-05-11
 
 - fix token ([9031c9d](https://github.com/realbestia1/erdb/commit/9031c9d26ae1a418d8a56b433517c8dcfa444995))
