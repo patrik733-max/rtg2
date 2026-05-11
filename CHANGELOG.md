@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.42](https://github.com/realbestia1/erdb/compare/v0.4.41...v0.4.42) - 2026-05-11
+
+- . ([ba4ad84](https://github.com/realbestia1/erdb/commit/ba4ad8421d06231b24e8b3e62d1c924235891ece))
+- Update route.ts ([97ea3a4](https://github.com/realbestia1/erdb/commit/97ea3a46e927a50384321f9ba92badf7f02d14b0))
+- Update route.ts ([7a1bdfe](https://github.com/realbestia1/erdb/commit/7a1bdfe7931b01e1b86c23e7a8caba2efa721bf7))
+
 ## [0.4.41](https://github.com/realbestia1/erdb/compare/v0.4.4...v0.4.41) - 2026-05-11
 
 - Improve SVG shadow rendering and bump version ([fa12b39](https://github.com/realbestia1/erdb/commit/fa12b39e143bbf4258a5849d778780af4a6b7114))
