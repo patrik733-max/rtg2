@@ -7480,10 +7480,13 @@ export async function GET(
         allowAnimeOnlyRatings = hasConfirmedAnimeMapping && mediaLooksAnimated;
       }
       const isAnimeContent = hasNativeAnimeInput || hasConfirmedAnimeMapping || mediaLooksAnimated;
+      const isGenericCatalogId = isTmdb || isTvdb || isRealImdb || idPrefix === 'imdb' || idPrefix.startsWith('tt');
+      const shouldApplyAnimeTextPreference = isAnimeContent && !isGenericCatalogId;
+      
       const effectivePosterTextPreference =
-        type === 'poster' && isAnimeContent ? posterAnimeTextPreference : posterTextPreference;
+        type === 'poster' && shouldApplyAnimeTextPreference ? posterAnimeTextPreference : posterTextPreference;
       const effectiveBackdropTextPreference =
-        type === 'backdrop' && isAnimeContent ? backdropAnimeTextPreference : (imageText as PosterTextPreference);
+        type === 'backdrop' && shouldApplyAnimeTextPreference ? backdropAnimeTextPreference : (imageText as PosterTextPreference);
       const activePosterLanguageSetting =
         imageType === 'poster'
           ? isAnimeContent && posterAnimeLang
