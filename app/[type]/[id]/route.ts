@@ -4728,22 +4728,18 @@ const buildBadgeSvg = ({
       ? ''
       : `<rect x="0.75" y="0.75" width="${Math.max(0, width - 1.5)}" height="${Math.max(0, height - 1.5)}" rx="${outerRadius}" fill="${ratingStyle === 'square' ? 'rgb(5,5,5)' : 'rgb(17,24,39)'}" fill-opacity="${ratingStyle === 'square' ? '0.94' : '0.70'}" stroke="${ratingStyle === 'square' ? accentColor : accentColor}" stroke-opacity="${ratingStyle === 'square' ? '1' : '0.58'}" stroke-width="${ratingStyle === 'square' ? '1.5' : '1'}" />`;
   const monogramFill = ratingStyle === 'glass' ? 'white' : accentColor;
-  const textShadowFilter =
-    ratingStyle === 'plain'
-      ? `<defs><filter id="text-shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" /><feFlood flood-color="#000000" flood-opacity="0.80" /><feComposite in2="blur" operator="in" result="shadow" /><feOffset in="shadow" dx="0" dy="2" result="offsetShadow" /><feMerge><feMergeNode in="offsetShadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs>`
-      : '';
-  const itemFilter = ratingStyle === 'plain' ? ' filter="url(#text-shadow)"' : '';
+  const textShadowFilter = '';
+  const itemFilter = '';
   const iconImage =
     !iconDataUri
       ? ''
       : ratingStyle === 'plain'
-        ? `<image href="${iconDataUri}" x="${iconImageX}" y="${iconImageY}" width="${renderedIconSize}" height="${renderedIconSize}" preserveAspectRatio="xMidYMid meet"${itemFilter} />`
+        ? `<image href="${iconDataUri}" x="${iconImageX}" y="${iconImageY}" width="${renderedIconSize}" height="${renderedIconSize}" preserveAspectRatio="xMidYMid meet" />`
         : `<defs><clipPath id="icon-clip">${iconClipPath}</clipPath></defs><image href="${iconDataUri}" x="${iconImageX}" y="${iconImageY}" width="${renderedIconSize}" height="${renderedIconSize}" preserveAspectRatio="xMidYMid meet" clip-path="url(#icon-clip)" />${iconBorder}`;
   const monogramText =
     iconDataUri || hideIcon
       ? ''
-      : `<text x="${iconCx}" y="${Math.round(iconCy + iconFontSize * 0.34)}" font-family="Arial, sans-serif" font-size="${iconFontSize}" font-weight="700" text-anchor="middle" fill="${monogramFill}"${itemFilter}>${escapeXml(monogram)}</text>${iconBorder}`;
-  const valueFilter = itemFilter;
+      : `<text x="${iconCx}" y="${Math.round(iconCy + iconFontSize * 0.34)}" font-family="Arial, sans-serif" font-size="${iconFontSize}" font-weight="700" text-anchor="middle" fill="${monogramFill}">${escapeXml(monogram)}</text>${iconBorder}`;
   const valueStroke = ' stroke="rgba(0,0,0,0.80)" stroke-width="1.8" paint-order="stroke fill"';
   const plainGroupStart = '';
   const plainGroupEnd = '';
@@ -4751,18 +4747,29 @@ const buildBadgeSvg = ({
     ' style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: \'tnum\' 1, \'lnum\' 1;"';
   const valueTextAnchor = contentLayout === 'stacked' || hideIcon ? ' text-anchor="middle"' : '';
   const starRatingMatch = hideIcon ? value.match(/^(?:(.+?)\s+)?★\s+(.+)$/) : null;
-  const valueText =
-    starRatingMatch
-      ? (() => {
-        const genreValue = String(starRatingMatch[1] || '').trim();
-        const ratingValue = starRatingMatch[2];
-        const genreText = genreValue ? genreValue : '';
-        const dyOffset = Math.round(fontSize * 0.07);
+  const textInnerContent = starRatingMatch
+    ? (() => {
+      const genreValue = String(starRatingMatch[1] || '').trim();
+      const ratingValue = starRatingMatch[2];
+      const genreText = genreValue ? genreValue : '';
+      const dyOffset = Math.round(fontSize * 0.07);
+      return `${genreText ? `<tspan xml:space="preserve" fill-opacity="0.72">${escapeXml(genreText)} </tspan><tspan dy="-${dyOffset}">★</tspan>` : `<tspan dy="-${dyOffset}">★</tspan>`
+        }<tspan xml:space="preserve" dy="${dyOffset}"${valueNumericStyle}> ${escapeXml(ratingValue)}</tspan>`;
+    })()
+    : escapeXml(value);
 
-        return `<text x="${valueX}" y="${valueY}" font-family="${valueFontFamily}" font-size="${fontSize}" font-weight="800" fill="white" text-anchor="middle" xml:space="preserve"${valueFilter}${valueStroke}${valueLetterSpacing}>${genreText ? `<tspan xml:space="preserve" fill-opacity="0.72">${escapeXml(genreText)} </tspan><tspan dy="-${dyOffset}">★</tspan>` : `<tspan dy="-${dyOffset}">★</tspan>`
-          }<tspan xml:space="preserve" dy="${dyOffset}"${valueNumericStyle}> ${escapeXml(ratingValue)}</tspan></text>`;
-      })()
-      : `<text x="${valueX}" y="${valueY}" font-family="${valueFontFamily}" font-size="${fontSize}" font-weight="800" fill="white"${valueFilter}${valueStroke}${valueLetterSpacing}${valueTextLength}${valueNumericStyle}${valueTextAnchor}>${escapeXml(value)}</text>`;
+  const isStackedOrHide = contentLayout === 'stacked' || hideIcon;
+  const commonAttrs = `x="${valueX}" y="${valueY}" font-family="${valueFontFamily}" font-size="${fontSize}" font-weight="800"${isStackedOrHide ? ' text-anchor="middle"' : valueTextAnchor}${valueLetterSpacing}${starRatingMatch ? ' xml:space="preserve"' : valueTextLength}`;
+
+  const glowLayers = ratingStyle === 'plain'
+    ? Array.from({ length: 8 }, (_, i) => {
+        const strokeWidth = 20 - i * 2.5;
+        const opacity = 0.05 + (i * 0.05);
+        return `<text ${commonAttrs} fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round">${textInnerContent}</text>`;
+      }).join('\\n')
+    : '';
+
+  const valueText = `${glowLayers}<text ${commonAttrs} fill="white"${valueStroke}>${textInnerContent}</text>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="-4 -4 ${width + 8} ${height + 8}">
 ${textShadowFilter}
 ${outerRect}
@@ -4795,10 +4802,31 @@ const buildRankingBadgeSvg = (value: string, label: string, iconDataUri?: string
   const textY = Math.round(height / 2 + labelFontSize * 0.36);
   const iconY = Math.round((height - iconSize) / 2);
 
+  const rankGlowLayers = noBox
+    ? Array.from({ length: 8 }, (_, i) => {
+        const strokeWidth = 20 - i * 2.5;
+        const opacity = 0.05 + (i * 0.05);
+        return `<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>`;
+      }).join('\\n')
+    : '';
+
+  const labelGlowLayers = noBox
+    ? Array.from({ length: 8 }, (_, i) => {
+        const strokeWidth = 20 - i * 2.5;
+        const opacity = 0.05 + (i * 0.05);
+        return `<text x="${labelX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${labelFontSize}" font-weight="800" fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round">${escapeXml(label)}</text>`;
+      }).join('\\n')
+    : '';
+
+  const blurDef = '';
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="-4 -4 ${width + 8} ${height + 8}">
+${blurDef}
 ${!noBox ? `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="10" fill="rgb(21,35,49)" fill-opacity="0.92" stroke="rgba(255,255,255,0.10)" stroke-width="1" />` : ''}
 ${hasIcon ? `<image href="${iconDataUri}" x="${iconX}" y="${iconY}" width="${iconSize}" height="${iconSize}" />` : ''}
+${rankGlowLayers}
 <text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="white" stroke="rgba(0,0,0,0.85)" stroke-width="2.2" paint-order="stroke fill" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>
+${labelGlowLayers}
 <text x="${labelX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${labelFontSize}" font-weight="800" fill="white" stroke="rgba(0,0,0,0.85)" stroke-width="2.2" paint-order="stroke fill">${escapeXml(label)}</text>
 </svg>`;
   return { svg, width, height };
