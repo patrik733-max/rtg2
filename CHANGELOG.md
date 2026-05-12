@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.52](https://github.com/realbestia1/erdb/compare/v0.4.51...v0.4.52) - 2026-05-12
+
+- Exclude generic catalog IDs from anime text prefs ([2c4bd07](https://github.com/realbestia1/erdb/commit/2c4bd078a28b43e09cfb6347a4ad6b710d8ffbf0))
+  Don't apply anime-specific poster/backdrop text preferences for generic catalog IDs (tmdb, tvdb, realimdb, imdb or tt-prefixed IDs). Introduce isGenericCatalogId and shouldApplyAnimeTextPreference, and use that when computing effective poster/backdrop text preferences. Also bump package version to 0.4.52 and update the displayed currentVersion in the home page component.
+
 ## [0.4.51](https://github.com/realbestia1/erdb/compare/v0.4.43...v0.4.51) - 2026-05-12
 
 - Fix poster quality badge placement, bump version ([8629a77](https://github.com/realbestia1/erdb/commit/8629a77a5f80ce7e4d563921d601e66a3aae8785))
