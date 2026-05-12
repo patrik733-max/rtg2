@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.57](https://github.com/realbestia1/erdb/compare/v0.4.56...v0.4.57) - 2026-05-12
+
+- Adjust badge layout, use next/image, bump version ([4330009](https://github.com/realbestia1/erdb/commit/433000992f3b7b58592eefbbdfba580e33589135))
+  Update image renderer cache version and refine logo/quality badge placement math to better compute available space and anchor Y positioning. Replace plain <img> with Next.js Image component for provider icons and import Image. Add ranking state and bump UI currentVersion to 0.4.57. Convert applyImportedConfig to a useCallback and update effect dependencies to avoid stale closures. Also update package.json version accordingly.
+
 ## [0.4.56](https://github.com/realbestia1/erdb/compare/v0.4.55...v0.4.56) - 2026-05-12
 
 - Add 'solid-light' badge style & poster average ratings ([51b4ca7](https://github.com/realbestia1/erdb/commit/51b4ca74200265811d26956eea9c9cdf7f7324bb))
