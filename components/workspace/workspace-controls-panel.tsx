@@ -221,11 +221,10 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setPosterSimpleRatingSource('average')}
-                    className={`rounded-xl px-4 py-2.5 text-xs font-semibold transition-all shadow-sm ${
-                      posterSimpleRatingSource === 'average'
+                    className={`rounded-xl px-4 py-2.5 text-xs font-semibold transition-all shadow-sm ${posterSimpleRatingSource === 'average'
                         ? 'border border-orange-500/30 bg-orange-500/15 text-white'
                         : 'border border-white/5 bg-[#0a0a0a] text-slate-400 hover:bg-[#121212] hover:text-slate-200'
-                    }`}
+                      }`}
                   >
                     Average
                   </button>
@@ -233,11 +232,10 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                     <button
                       key={provider.id}
                       onClick={() => setPosterSimpleRatingSource(provider.id)}
-                      className={`flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all shadow-sm ${
-                        posterSimpleRatingSource === provider.id
+                      className={`flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all shadow-sm ${posterSimpleRatingSource === provider.id
                           ? 'border border-orange-500/30 bg-orange-500/15 text-white'
                           : 'border border-white/5 bg-[#0a0a0a] text-slate-400 hover:bg-[#121212] hover:text-slate-200'
-                      }`}
+                        }`}
                     >
                       <img src={provider.iconUrl} alt={provider.label} className="h-3.5 w-3.5 rounded-sm object-contain" />
                       {provider.label}
@@ -474,7 +472,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                       </button>
                     ))}
                   </div>
-                  
+
                   <div className="grid gap-3 lg:grid-cols-3 pt-2">
                     <label className="space-y-2">
                       <span className="text-xs font-medium text-slate-400">Primary</span>
@@ -498,7 +496,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                       </div>
                     </label>
                   </div>
-                  
+
                   <div className="space-y-3 pt-2">
                     <h3 className="text-xs font-medium text-slate-300">Color Presets</h3>
                     <div className="flex flex-wrap gap-2">
@@ -538,17 +536,17 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
             </div>
             {!(previewType === 'poster' && posterConfiguratorPreset === 'simple') && (
               <div className="pt-2 space-y-3">
-              <h3 className="text-xs font-medium text-slate-300">Badge Style</h3>
-              <div className="flex flex-wrap gap-2">
-                {RATING_STYLE_OPTIONS.map(option => (
-                  <button key={`quality-style-${option.id}`} onClick={() => setActiveQualityBadgesStyle(option.id)} className={`rounded-xl px-4 py-2.5 text-xs font-semibold transition-all shadow-sm ${activeQualityBadgesStyle === option.id ? 'border border-orange-500/30 bg-orange-500/15 text-white' : 'border border-white/5 bg-[#0a0a0a] text-slate-400 hover:bg-[#121212] hover:text-slate-200'}`}>
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+                <h3 className="text-xs font-medium text-slate-300">Badge Style</h3>
+                <div className="flex flex-wrap gap-2">
+                  {RATING_STYLE_OPTIONS.map(option => (
+                    <button key={`quality-style-${option.id}`} onClick={() => setActiveQualityBadgesStyle(option.id)} className={`rounded-xl px-4 py-2.5 text-xs font-semibold transition-all shadow-sm ${activeQualityBadgesStyle === option.id ? 'border border-orange-500/30 bg-orange-500/15 text-white' : 'border border-white/5 bg-[#0a0a0a] text-slate-400 hover:bg-[#121212] hover:text-slate-200'}`}>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
-            
+
             <div className="flex flex-wrap gap-4 pt-2">
               {shouldShowQualityBadgesPosition && (
                 <div className="space-y-3">
@@ -579,105 +577,107 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
         )}
 
         {/* JUSTWATCH RANKING */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`${INNER_PANEL_CLASS} p-5 space-y-4`}>
-          <div className="flex items-center gap-2">
-            <h3 className="text-xs font-medium text-slate-300">Ranking</h3>
-            <span className="rounded-full bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 text-[9px] uppercase tracking-wider text-orange-400 font-bold">New</span>
-          </div>
-          <p className="text-xs text-slate-500">Show the popularity rank from JustWatch charts on your posters.</p>
-          
-          <div className="space-y-4 pt-1">
-            <div className="space-y-3">
-              <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Ranking Interval</h4>
-              <div className={SEGMENT_CLASS + " bg-black/40 inline-flex flex-wrap"}>
-                {RANKING_OPTIONS.map(option => (
-                  <button key={option.id} onClick={() => setRanking(option.id)} className={`px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${ranking === option.id ? 'bg-orange-500/20 text-orange-200' : 'text-slate-400 hover:text-slate-200'}`}>
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+        {previewType === 'poster' && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`${INNER_PANEL_CLASS} p-5 space-y-4`}>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-medium text-slate-300">Ranking</h3>
+              <span className="rounded-full bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 text-[9px] uppercase tracking-wider text-orange-400 font-bold">New</span>
             </div>
+            <p className="text-xs text-slate-500">Show the popularity rank from JustWatch charts on your posters.</p>
+            
+            <div className="space-y-4 pt-1">
+              <div className="space-y-3">
+                <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Ranking Interval</h4>
+                <div className={SEGMENT_CLASS + " bg-black/40 inline-flex flex-wrap"}>
+                  {RANKING_OPTIONS.map(option => (
+                    <button key={option.id} onClick={() => setRanking(option.id)} className={`px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${ranking === option.id ? 'bg-orange-500/20 text-orange-200' : 'text-slate-400 hover:text-slate-200'}`}>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            <AnimatePresence>
-              {ranking !== 'off' && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 overflow-hidden">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Chart Country</h4>
-                      <div className="flex items-center gap-2">
-                        <Globe2 className="w-4 h-4 text-slate-500" />
-                        <select
-                          value={hasKnownRankingCountry ? normalizedRankingCountry : rankingCountry}
-                          onChange={(e) => setRankingCountry(e.target.value)}
-                          className={INPUT_CLASS}
-                        >
-                          {!hasKnownRankingCountry && (
-                            <option value={rankingCountry}>{rankingCountry}</option>
-                          )}
-                          {JUSTWATCH_COUNTRY_OPTIONS.map((option) => (
-                            <option key={option.id} value={option.id} className="bg-[#0a0a0a]">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
+              <AnimatePresence>
+                {ranking !== 'off' && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Chart Country</h4>
+                        <div className="flex items-center gap-2">
+                          <Globe2 className="w-4 h-4 text-slate-500" />
+                          <select
+                            value={hasKnownRankingCountry ? normalizedRankingCountry : rankingCountry}
+                            onChange={(e) => setRankingCountry(e.target.value)}
+                            className={INPUT_CLASS}
+                          >
+                            {!hasKnownRankingCountry && (
+                              <option value={rankingCountry}>{rankingCountry}</option>
+                            )}
+                            {JUSTWATCH_COUNTRY_OPTIONS.map((option) => (
+                              <option key={option.id} value={option.id} className="bg-[#0a0a0a]">
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Display Style</h4>
+                        <div className="flex items-center gap-2 h-10">
+                          <label className="flex items-center gap-3 cursor-pointer group">
+                            <div className="relative">
+                              <input type="checkbox" checked={rankingNoBox} onChange={(e) => setRankingNoBox(e.target.checked)} className="sr-only peer" />
+                              <div className="w-9 h-5 bg-black/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-orange-400 after:border-slate-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500/20"></div>
+                            </div>
+                            <span className="text-xs font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Hide Background Box</span>
+                          </label>
+                        </div>
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Display Style</h4>
-                      <div className="flex items-center gap-2 h-10">
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                          <div className="relative">
-                            <input type="checkbox" checked={rankingNoBox} onChange={(e) => setRankingNoBox(e.target.checked)} className="sr-only peer" />
-                            <div className="w-9 h-5 bg-black/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-orange-400 after:border-slate-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500/20"></div>
-                          </div>
-                          <span className="text-xs font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Hide Background Box</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
 
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
 
         {/* PROVIDERS */}
         {!(previewType === 'poster' && posterConfiguratorPreset === 'simple') && (
-        <motion.div layout className={`${INNER_PANEL_CLASS} p-5 space-y-4`}>
-          <div className="flex flex-col gap-1 mb-4">
-            <h3 className="text-xs font-medium text-slate-300">{providersLabel}</h3>
-            <p className="text-xs text-slate-500">Drag the grips to reorder providers. Order flows top to bottom.</p>
-          </div>
-          {previewType === 'poster' && posterConfiguratorPreset === 'advanced' && (
-            <label className="mb-4 flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-3">
-              <span className="text-xs font-medium text-slate-300">Average rating</span>
-              <button
-                type="button"
-                onClick={() => setPosterAverageRatingsEnabled((value) => !value)}
-                className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full p-1 transition-colors ${posterAverageRatingsEnabled ? 'bg-orange-500/80' : 'bg-white/10'}`}
-                aria-pressed={posterAverageRatingsEnabled}
-              >
-               <span className={`block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${posterAverageRatingsEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+          <motion.div layout className={`${INNER_PANEL_CLASS} p-5 space-y-4`}>
+            <div className="flex flex-col gap-1 mb-4">
+              <h3 className="text-xs font-medium text-slate-300">{providersLabel}</h3>
+              <p className="text-xs text-slate-500">Drag the grips to reorder providers. Order flows top to bottom.</p>
+            </div>
+            {previewType === 'poster' && posterConfiguratorPreset === 'advanced' && (
+              <label className="mb-4 flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-3">
+                <span className="text-xs font-medium text-slate-300">Average rating</span>
+                <button
+                  type="button"
+                  onClick={() => setPosterAverageRatingsEnabled((value) => !value)}
+                  className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full p-1 transition-colors ${posterAverageRatingsEnabled ? 'bg-orange-500/80' : 'bg-white/10'}`}
+                  aria-pressed={posterAverageRatingsEnabled}
+                >
+                  <span className={`block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${posterAverageRatingsEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </label>
+            )}
+            <div className="flex gap-2 mb-4">
+              <button onClick={enableAllRatingPreferences} className="rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-2 text-xs font-medium text-slate-300 hover:bg-[#121212] transition-colors shadow-sm">
+                Enable All
               </button>
-            </label>
-          )}
-          <div className="flex gap-2 mb-4">
-            <button onClick={enableAllRatingPreferences} className="rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-2 text-xs font-medium text-slate-300 hover:bg-[#121212] transition-colors shadow-sm">
-              Enable All
-            </button>
-            <button onClick={disableAllRatingPreferences} className="rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-2 text-xs font-medium text-slate-300 hover:bg-[#121212] transition-colors shadow-sm">
-              Disable All
-            </button>
-          </div>
-          <RatingProviderSortableList
-            rows={ratingProviderRows}
-            onReorder={reorderRatingPreference}
-            onToggle={toggleRatingPreference}
-            fillDirection="column"
-            singleColumnOnMobile
-          />
-        </motion.div>
+              <button onClick={disableAllRatingPreferences} className="rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-2 text-xs font-medium text-slate-300 hover:bg-[#121212] transition-colors shadow-sm">
+                Disable All
+              </button>
+            </div>
+            <RatingProviderSortableList
+              rows={ratingProviderRows}
+              onReorder={reorderRatingPreference}
+              onToggle={toggleRatingPreference}
+              fillDirection="column"
+              singleColumnOnMobile
+            />
+          </motion.div>
         )}
 
       </div>

@@ -466,7 +466,7 @@ const buildAiometadataPattern = (options: {
     ['lang', '{language_code}'],
   ];
 
-  if (ranking !== 'off') {
+  if (imageType === 'poster' && ranking !== 'off') {
     params.push(['ranking', ranking]);
     if (rankingCountry !== 'global') {
       params.push(['rankingCountry', rankingCountry]);
@@ -630,10 +630,12 @@ const buildAiometadataPatternBlock = (options: {
 
   pushIfString('tmdbKey');
   pushIfString('lang');
-  pushIfString('ranking');
-  pushIfString('rankingCountry');
-  if (config.rankingNoBox === 'on' || config.rankingNoBox === true) {
-    params.push(['rankingNoBox', 'on']);
+  if (options.imageType === 'poster') {
+    pushIfString('ranking');
+    pushIfString('rankingCountry');
+    if (config.rankingNoBox === 'on' || config.rankingNoBox === true) {
+      params.push(['rankingNoBox', 'on']);
+    }
   }
 
   if (options.imageType !== 'thumbnail') {
@@ -824,6 +826,7 @@ export default function HomePage({
       setPosterAnimeImageText('default');
       setPosterStreamBadges('on');
       setPosterQualityBadgesStyle('plain');
+      setRanking('on');
     } else {
       setPosterAverageRatingsEnabled(false);
     }
@@ -838,7 +841,7 @@ export default function HomePage({
   const [thumbnailSize, setThumbnailSize] = useState<ThumbnailSize>('large');
   const [posterRatingStyle, setPosterRatingStyle] = useState<RatingStyle>('glass');
   const [backdropRatingStyle, setBackdropRatingStyle] = useState<RatingStyle>('glass');
-  const [ranking, setRanking] = useState('off');
+  const [ranking, setRanking] = useState('on');
   const [rankingCountry, setRankingCountry] = useState('global');
   const [rankingCountryTouched, setRankingCountryTouched] = useState(false);
   const [rankingNoBox, setRankingNoBox] = useState(false);
@@ -884,7 +887,7 @@ export default function HomePage({
   const [showProxyUrl, setShowProxyUrl] = useState(false);
   const [aiometadataCopiedType, setAiometadataCopiedType] = useState<AiometadataPatternType | null>(null);
   const [aiometadataEpisodeProvider, setAiometadataEpisodeProvider] = useState<AiometadataEpisodeProvider>('realimdb');
-  const [currentVersion, setCurrentVersion] = useState('0.4.54');
+  const [currentVersion, setCurrentVersion] = useState('0.4.55');
   const [githubPackageVersion, setGithubPackageVersion] = useState<string | null>(null);
   const [repoUrl, setRepoUrl] = useState<string | null>(null);
   const [userCount, setUserCount] = useState<number | null>(null);
@@ -1481,7 +1484,7 @@ export default function HomePage({
         query.set('previewVariant', `${thumbnailSize}-${thumbnailRatingsLayout}`);
       }
     }
-    if (ranking !== 'off') {
+    if (previewType === 'poster' && ranking !== 'off') {
       query.set('ranking', ranking);
       if (effectiveRankingCountry !== 'global') {
         query.set('rankingCountry', effectiveRankingCountry);
