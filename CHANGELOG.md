@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.5](https://github.com/realbestia1/erdb/compare/v0.4.43...v0.4.5) - 2026-05-12
+
+- Add glow text generator for badge SVGs ([09ab2dd](https://github.com/realbestia1/erdb/commit/09ab2ddcf0e641939e15dbbcd2922654b30355a8))
+  Introduce generateGlowText helper to replace the previous filter-based text shadow (plainDefs/filterAttr) with a layered stroke-based glow for plain reference mode. Remove redundant <defs> usage and consistently apply universalStroke for colored text. Update multiple quality badge variants (4K, HDR, Dolby Vision/ATMOS, REMUX, etc.) to use the new generator or universal stroke, simplifying SVG output and improving visual consistency.
+- Replace SVG text-shadow filter with stroked glow ([c2c2471](https://github.com/realbestia1/erdb/commit/c2c2471d83d658aa3897f834d113d97b9a0e936a))
+  Remove the SVG feGaussianBlur-based text-shadow/filter and replace it with multi-layer stroked text "glow" for plain badges. Simplifies text/icon rendering by dropping itemFilter/valueFilter usage, introduces textInnerContent and commonAttrs to centralize value text construction, and builds glow layers for both value and ranking badges (rankGlowLayers/labelGlowLayers). Also adds a blurDef placeholder and integrates glow layers into the generated SVG output. These changes reduce reliance on filter primitives and standardize the visual glow effect.
+- Add JustWatch ranking badges and controls ([844e056](https://github.com/realbestia1/erdb/commit/844e056dc246b1731b8e3e5a53dcb4e0f46724ad))
+  Introduce JustWatch-based ranking support and UI controls across the app. This adds a GraphQL query and fetchRanking logic (with caching and country/language normalization), builds a ranking SVG badge (with optional icon/box), and composes it into the existing image rendering pipeline. Exposes ranking settings through the proxy/token, workspace/home UI (new controls, options, and country mappings), and aiometadata pattern generation. Also includes layout and badge placement tweaks, a renderer cache version bump, small SVG/string fixes, a debug log append for GET requests, and a minor front-end version bump.
+
 ## [0.4.43](https://github.com/realbestia1/erdb/compare/v0.4.42...v0.4.43) - 2026-05-11
 
 - Fetch TMDB genres dynamically and update lookup ([d9942f1](https://github.com/realbestia1/erdb/commit/d9942f1a8695a39bb13b3655c5e42010bdf85f3f))
