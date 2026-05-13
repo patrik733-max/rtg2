@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.66](https://github.com/realbestia1/erdb/compare/v0.4.65...v0.4.66) - 2026-05-13
+
+- Add poster vignette toggle and handling ([b2439ee](https://github.com/realbestia1/erdb/commit/b2439eec37a99e969b00caad49fed08116b48b2d))
+  Introduce a poster vignette option across the app: add UI toggle and state (home page, workspace types, controls panel), propagate setting through the home page controller (query/config encoding, cache keys), parse and include posterVignette in proxy/token config and addon proxy optional params, and honor the flag in image rendering (skip vignette when disabled). Also include route type update for fast render input and bump package version.
+
 ## [0.4.65](https://github.com/realbestia1/erdb/compare/v0.4.64...v0.4.65) - 2026-05-13
 
 - Add poster genre badge and UI control ([c140553](https://github.com/realbestia1/erdb/commit/c1405530aff7f92ef35a0de3cdbed8bead5fb0cb))
