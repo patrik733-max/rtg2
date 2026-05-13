@@ -119,6 +119,7 @@ export type FastRenderInput = {
   rankingBadge?: RankingBadge | null;
   rankingPosition: RankingPosition;
   posterConfiguratorPreset?: string | null;
+  posterVignetteEnabled?: boolean;
   cacheControl: string;
 };
 

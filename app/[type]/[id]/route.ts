@@ -162,7 +162,9 @@ export async function GET(
       tokenConfig.posterRatingPreferences = tokenConfig.posterSimpleRatingSource;
     }
     tokenConfig.posterRatingStyle = 'plain';
-    tokenConfig.posterRatingsLayout = 'bottom';
+    if (!tokenConfig.posterRatingsLayout && !request.nextUrl.searchParams.get('posterRatingsLayout')) {
+      tokenConfig.posterRatingsLayout = 'bottom';
+    }
     tokenConfig.posterQualityBadgesStyle = 'plain';
     tokenConfig.posterImageText = 'clean';
     const simpleQualityBadges = tokenConfig.posterSimpleQualityBadges || request.nextUrl.searchParams.get('posterSimpleQualityBadges');
@@ -205,6 +207,8 @@ export async function GET(
   const posterAverageRatingsEnabled = posterAverageRatingsEnabledRaw === true || posterAverageRatingsEnabledRaw === 'true' || posterAverageRatingsEnabledRaw === 'on';
   const posterRatingsMode =
     tokenConfig.posterRatingsMode || request.nextUrl.searchParams.get('posterRatingsMode') || (posterAverageRatingsEnabled ? 'average' : null);
+  const posterVignetteEnabledRaw = tokenConfig.posterVignette ?? request.nextUrl.searchParams.get('posterVignette');
+  const posterVignetteEnabled = posterVignetteEnabledRaw === false || posterVignetteEnabledRaw === 'false' || posterVignetteEnabledRaw === 'off' ? false : true;
   const posterGenrePosition = normalizePosterGenrePosition(tokenConfig.posterGenrePosition || request.nextUrl.searchParams.get('posterGenrePosition'));
   // Removed duplicate posterConfiguratorPreset declaration
   const backdropRatings = getRatings('backdropRatingPreferences', 'backdropRatings') ?? globalRatings;
@@ -1411,6 +1415,7 @@ export async function GET(
         rankingCountry,
         rankingNoBox ? 'nobox' : 'box',
         rankingPosition,
+        posterVignetteEnabled ? 'vignette' : 'no-vignette',
         fanartKey ? 'fanart' : 'no-fanart',
         'v1',
       ].join('|');
@@ -3673,6 +3678,7 @@ export async function GET(
           rankingBadge,
           rankingPosition,
           posterConfiguratorPreset,
+          posterVignetteEnabled,
           cacheControl: responseHeadersCacheControl,
         },
         phases

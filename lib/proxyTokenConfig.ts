@@ -80,6 +80,9 @@ export const buildProxyConfigFromToken = (
   if (typeof t.posterAverageRatingsEnabled === 'boolean' || typeof t.posterAverageRatingsEnabled === 'string') {
     config.posterAverageRatingsEnabled = t.posterAverageRatingsEnabled;
   }
+  if (typeof t.posterVignette === 'boolean' || typeof t.posterVignette === 'string') {
+    config.posterVignette = t.posterVignette;
+  }
   if (typeof t.rankingNoBox === 'boolean' || typeof t.rankingNoBox === 'string') {
     config.rankingNoBox = t.rankingNoBox;
   }

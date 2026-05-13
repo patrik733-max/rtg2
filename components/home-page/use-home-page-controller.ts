@@ -196,6 +196,7 @@ export function useHomePageController({
   const [posterAnimeImageText, setPosterAnimeImageText] = useState<'default' | 'clean' | 'alternative'>('default');
   const [posterConfiguratorPreset, setPosterConfiguratorPresetState] = useState<PosterConfiguratorPreset>('simple');
   const [posterAverageRatingsEnabled, setPosterAverageRatingsEnabled] = useState(false);
+  const [posterVignetteEnabled, setPosterVignetteEnabled] = useState(true);
   const [posterGenrePosition, setPosterGenrePosition] = useState<PosterGenrePosition>('top');
   const [posterSimpleRatingSource, setPosterSimpleRatingSource] = useState<'average' | RatingPreference>('average');
   const [backdropImageText, setBackdropImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
@@ -237,11 +238,13 @@ export function useHomePageController({
       setPosterQualityBadgesStyle('plain');
       setRanking('daily');
       setPosterGenrePosition('top');
+      setPosterVignetteEnabled(true);
+      setPosterRatingsLayout('top');
     } else {
       setPosterAverageRatingsEnabled(false);
     }
   }, []);
-  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('left-right');
+  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('top');
   const [backdropRatingsLayout, setBackdropRatingsLayout] = useState<BackdropRatingLayout>('right-vertical');
   const [backdropRatingsSize, setBackdropRatingsSize] = useState<BackdropRatingsSize>('large');
   const [thumbnailRatingsLayout, setThumbnailRatingsLayout] = useState<ThumbnailRatingLayout>('left-vertical');
@@ -862,7 +865,7 @@ export function useHomePageController({
       query.set('imageText', imageTextForType);
     }
     if (previewType === 'poster') {
-      const effectivePosterRatingsLayout = isSimplePosterPreset ? 'bottom' : posterRatingsLayout;
+      const effectivePosterRatingsLayout = posterRatingsLayout;
       query.set('posterRatingsLayout', effectivePosterRatingsLayout);
       if (isVerticalPosterRatingLayout(effectivePosterRatingsLayout) && posterRatingsMaxPerSide !== null) {
         query.set('posterRatingsMaxPerSide', String(posterRatingsMaxPerSide));
@@ -908,6 +911,9 @@ export function useHomePageController({
       if (rankingPosition !== 'auto') {
         query.set('rankingPosition', rankingPosition);
       }
+    }
+    if (previewType === 'poster' && !posterVignetteEnabled) {
+      query.set('posterVignette', 'off');
     }
 
     if (!baseUrl) {
@@ -979,6 +985,7 @@ export function useHomePageController({
     effectiveRankingCountry,
     rankingNoBox,
     rankingPosition,
+    posterVignetteEnabled,
   ]);
 
   const configString = useMemo(() => {
@@ -1092,7 +1099,7 @@ export function useHomePageController({
         config.posterRatings = posterSimpleRatingSource;
       }
       config.posterRatingStyle = 'plain';
-      config.posterRatingsLayout = 'bottom';
+      config.posterRatingsLayout = posterRatingsLayout;
       if (posterGenrePosition !== 'off') {
         config.posterGenrePosition = posterGenrePosition;
       }
@@ -1162,6 +1169,9 @@ export function useHomePageController({
         config.rankingPosition = rankingPosition;
       }
     }
+    if (!posterVignetteEnabled) {
+      config.posterVignette = 'off';
+    }
 
     return encodeBase64Url(JSON.stringify(config));
   }, [
@@ -1227,6 +1237,7 @@ export function useHomePageController({
     effectiveRankingCountry,
     rankingNoBox,
     rankingPosition,
+    posterVignetteEnabled,
   ]);
 
   const proxyUrl = useMemo(() => {
@@ -1361,7 +1372,7 @@ export function useHomePageController({
         config.posterRatings = posterSimpleRatingSource;
       }
       config.posterRatingStyle = 'plain';
-      config.posterRatingsLayout = 'bottom';
+      config.posterRatingsLayout = posterRatingsLayout;
       if (posterGenrePosition !== 'off') {
         config.posterGenrePosition = posterGenrePosition;
       }
@@ -1417,7 +1428,7 @@ export function useHomePageController({
         config.posterRatings = posterSimpleRatingSource;
       }
       config.posterRatingStyle = 'plain';
-      config.posterRatingsLayout = 'bottom';
+      config.posterRatingsLayout = posterRatingsLayout;
       if (posterGenrePosition !== 'off') {
         config.posterGenrePosition = posterGenrePosition;
       }
@@ -1739,6 +1750,7 @@ export function useHomePageController({
       qualityBadgesSide,
       posterQualityBadgesPosition,
       posterGenrePosition,
+      posterVignetteEnabled,
       posterQualityBadgesStyle,
       backdropQualityBadgesStyle,
       posterRatingStyle,
@@ -1918,6 +1930,11 @@ export function useHomePageController({
     }
     if (typeof payload.posterGenrePosition === 'string' && isPosterGenrePosition(payload.posterGenrePosition)) {
       setPosterGenrePosition(payload.posterGenrePosition);
+    }
+    if (typeof payload.posterVignetteEnabled === 'boolean') {
+      setPosterVignetteEnabled(payload.posterVignetteEnabled);
+    } else if (payload.posterVignette === 'off') {
+      setPosterVignetteEnabled(false);
     }
     if (typeof payload.ranking === 'string') {
       setRanking(payload.ranking);
@@ -2169,6 +2186,7 @@ export function useHomePageController({
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
       posterGenrePosition,
+      posterVignette: !posterVignetteEnabled ? 'off' : undefined,
       posterSimpleRatingSource,
       backdropAnimeImageText,
       backdropImageText,
@@ -2207,7 +2225,7 @@ export function useHomePageController({
       proxyAiometadataProvider,
       proxyManifestUrl,
       proxyEnabledTypes,
-      translateMeta: proxyTranslateMeta,
+      proxyTranslateMeta,
       proxyCatalogNames: sanitizedProxyCatalogNames,
       proxyHiddenCatalogs: sanitizedProxyHiddenCatalogs,
       proxySearchDisabledCatalogs: sanitizedProxySearchDisabledCatalogs,
@@ -2240,6 +2258,7 @@ export function useHomePageController({
     posterConfiguratorPreset,
     posterAverageRatingsEnabled,
     posterGenrePosition,
+    posterVignetteEnabled,
     posterStreamBadges,
     backdropStreamBadges,
     qualityBadgesSide,
@@ -2339,6 +2358,7 @@ export function useHomePageController({
       posterQualityBadgesPosition,
       posterAverageRatingsEnabled,
       posterGenrePosition,
+      posterVignetteEnabled,
       posterConfiguratorPreset,
       posterSimpleRatingSource,
       posterQualityBadgesStyle,
@@ -2399,6 +2419,7 @@ export function useHomePageController({
       posterQualityBadgesPosition,
       posterAverageRatingsEnabled,
       posterGenrePosition,
+      posterVignetteEnabled,
       posterConfiguratorPreset,
       posterSimpleRatingSource,
       posterQualityBadgesStyle,
@@ -2459,6 +2480,7 @@ export function useHomePageController({
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
       posterGenrePosition,
+      posterVignette: !posterVignetteEnabled ? 'off' : undefined,
       posterSimpleRatingSource,
       backdropAnimeImageText,
       backdropImageText,
@@ -2514,6 +2536,7 @@ export function useHomePageController({
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
       posterGenrePosition,
+      posterVignetteEnabled,
       backdropAnimeImageText,
       backdropImageText,
       posterRatingPreferences,
@@ -2736,6 +2759,7 @@ export function useHomePageController({
       thumbnailSize,
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
+      posterVignetteEnabled,
       posterGenrePosition,
       posterSimpleRatingSource,
       qualityBadgesSide,
@@ -2819,6 +2843,7 @@ export function useHomePageController({
       setThumbnailSize,
       setPosterConfiguratorPreset,
       setPosterAverageRatingsEnabled,
+      setPosterVignetteEnabled,
       setPosterGenrePosition,
       setPosterSimpleRatingSource,
       setAiometadataEpisodeProvider,

@@ -274,7 +274,7 @@ export const renderWithSharp = async (
       }
     }
 
-    if (input.imageType === 'poster') {
+    if (input.imageType === 'poster' && input.posterVignetteEnabled !== false) {
       const vignetteSvg = `<svg width="${input.outputWidth}" height="${input.finalOutputHeight}">
         <defs>
           <radialGradient id="vignette" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">

@@ -81,6 +81,7 @@ type HomePageViewState = {
   thumbnailSize: ThumbnailSize;
   posterConfiguratorPreset: PosterConfiguratorPreset;
   posterAverageRatingsEnabled: boolean;
+  posterVignetteEnabled: boolean;
   posterGenrePosition: PosterGenrePosition;
   posterSimpleRatingSource: 'average' | import('@/lib/ratingPreferences').RatingPreference;
   qualityBadgesSide: QualityBadgesSide;
@@ -164,6 +165,7 @@ type HomePageViewActions = {
   setThumbnailSize: Dispatch<SetStateAction<ThumbnailSize>>;
   setPosterConfiguratorPreset: (value: PosterConfiguratorPreset) => void;
   setPosterAverageRatingsEnabled: Dispatch<SetStateAction<boolean>>;
+  setPosterVignetteEnabled: Dispatch<SetStateAction<boolean>>;
   setPosterGenrePosition: Dispatch<SetStateAction<PosterGenrePosition>>;
   setPosterSimpleRatingSource: Dispatch<SetStateAction<'average' | import('@/lib/ratingPreferences').RatingPreference>>;
   setAiometadataEpisodeProvider: Dispatch<SetStateAction<AiometadataEpisodeProvider>>;

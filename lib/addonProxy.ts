@@ -48,6 +48,7 @@ const ERDB_TYPE_OPTIONAL_PARAMS = {
     'rankingNoBox',
     'rankingPosition',
     'posterAverageRatingsEnabled',
+    'posterVignette',
   ],
   backdrop: ['backdropStreamBadges', 'backdropQualityBadgesStyle', 'backdropRatings', 'backdropRatingsMax'],
   logo: ['logoRatings', 'logoRatingsMax', 'logoMode', 'logoFontVariant', 'logoPrimary', 'logoSecondary', 'logoOutline'],
@@ -170,6 +171,7 @@ export type ProxyConfig = {
   rankingNoBox?: string | boolean;
   rankingPosition?: string;
   posterAverageRatingsEnabled?: boolean | string;
+  posterVignette?: boolean | string;
   posterSimpleRatingSource?: string;
   seriesMetadataProvider?: string;
   aiometadataProvider?: string;
@@ -255,6 +257,7 @@ const PROXY_OPTIONAL_BOOLEAN_KEYS = [
   'logoEnabled',
   'thumbnailEnabled',
   'posterAverageRatingsEnabled',
+  'posterVignette',
 ] as const satisfies readonly (keyof ProxyConfig)[];
 type ProxyOptionalBooleanKey = (typeof PROXY_OPTIONAL_BOOLEAN_KEYS)[number];
 

@@ -74,6 +74,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
     backdropVerticalBadgeContent,
     posterConfiguratorPreset,
     posterAverageRatingsEnabled,
+    posterVignetteEnabled,
     posterGenrePosition,
     posterSimpleRatingSource,
     qualityBadgesSide,
@@ -125,6 +126,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
     setThumbnailVerticalBadgeContent,
     setPosterConfiguratorPreset,
     setPosterAverageRatingsEnabled,
+    setPosterVignetteEnabled,
     setPosterGenrePosition,
     setPosterSimpleRatingSource,
     setLogoMode,
@@ -339,6 +341,20 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                     </div>
                   </div>
                 )}
+                <label className="flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-3">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-xs font-medium text-slate-300">Vignette</span>
+                    <span className="text-[10px] text-slate-500">Darken poster edges</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPosterVignetteEnabled((value) => !value)}
+                    className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full p-1 transition-colors ${posterVignetteEnabled ? 'bg-orange-500/80' : 'bg-white/10'}`}
+                    aria-pressed={posterVignetteEnabled}
+                  >
+                    <span className={`block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${posterVignetteEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
+                </label>
               </div>
             )}
 

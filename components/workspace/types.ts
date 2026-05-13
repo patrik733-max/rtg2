@@ -77,6 +77,7 @@ export type HomePageViewState = {
   thumbnailSize: ThumbnailSize;
   posterConfiguratorPreset: PosterConfiguratorPreset;
   posterAverageRatingsEnabled: boolean;
+  posterVignetteEnabled: boolean;
   posterGenrePosition: PosterGenrePosition;
   posterSimpleRatingSource: 'average' | RatingPreference;
   qualityBadgesSide: QualityBadgesSide;
@@ -159,6 +160,7 @@ export type HomePageViewActions = {
   setThumbnailSize: Dispatch<SetStateAction<ThumbnailSize>>;
   setPosterConfiguratorPreset: (value: PosterConfiguratorPreset) => void;
   setPosterAverageRatingsEnabled: Dispatch<SetStateAction<boolean>>;
+  setPosterVignetteEnabled: Dispatch<SetStateAction<boolean>>;
   setPosterGenrePosition: Dispatch<SetStateAction<PosterGenrePosition>>;
   setPosterSimpleRatingSource: Dispatch<SetStateAction<'average' | RatingPreference>>;
   setAiometadataEpisodeProvider: Dispatch<SetStateAction<AiometadataEpisodeProvider>>;
