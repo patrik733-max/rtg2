@@ -1935,6 +1935,8 @@ export function useHomePageController({
       setPosterVignetteEnabled(payload.posterVignetteEnabled);
     } else if (payload.posterVignette === 'off') {
       setPosterVignetteEnabled(false);
+    } else if (payload.posterVignette === 'on') {
+      setPosterVignetteEnabled(true);
     }
     if (typeof payload.ranking === 'string') {
       setRanking(payload.ranking);
@@ -2186,7 +2188,7 @@ export function useHomePageController({
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
       posterGenrePosition,
-      posterVignette: !posterVignetteEnabled ? 'off' : undefined,
+      posterVignette: posterVignetteEnabled ? 'on' : 'off',
       posterSimpleRatingSource,
       backdropAnimeImageText,
       backdropImageText,
@@ -2480,7 +2482,7 @@ export function useHomePageController({
       posterConfiguratorPreset,
       posterAverageRatingsEnabled,
       posterGenrePosition,
-      posterVignette: !posterVignetteEnabled ? 'off' : undefined,
+      posterVignette: posterVignetteEnabled ? 'on' : 'off',
       posterSimpleRatingSource,
       backdropAnimeImageText,
       backdropImageText,
