@@ -19,3 +19,4 @@ data/
 *.db-wal
 *.sqlite
 Thumbs.db
+AGENTS.md
