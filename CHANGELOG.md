@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.67](https://github.com/realbestia1/erdb/compare/v0.4.66...v0.4.67) - 2026-05-13
+
+- Normalize posterVignette handling and bump version ([58eb904](https://github.com/realbestia1/erdb/commit/58eb904bce879b7f5102f723cf3984c431b06834))
+  Handle payload.posterVignette explicitly for 'on' and 'off' (set posterVignetteEnabled true for 'on'), and always emit posterVignette as either 'on' or 'off' instead of omitting it. Also bump package version from 0.4.66 to 0.4.67 in package.json and package-lock.json.
+- Update .gitignore ([37ea7f8](https://github.com/realbestia1/erdb/commit/37ea7f81a5fded82506813710bcca6b73ec4e7fb))
+
 ## [0.4.66](https://github.com/realbestia1/erdb/compare/v0.4.65...v0.4.66) - 2026-05-13
 
 - Add poster vignette toggle and handling ([b2439ee](https://github.com/realbestia1/erdb/commit/b2439eec37a99e969b00caad49fed08116b48b2d))
