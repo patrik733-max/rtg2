@@ -412,11 +412,24 @@ export const splitPosterBadgesByLayout = (
 
   if (layout === 'left-right') {
     const effectiveLimit = columnLimit || Math.ceil(limitedBadges.length / 2);
+    const leftBadges: RatingBadge[] = [];
+    const rightBadges: RatingBadge[] = [];
+
+    for (const badge of limitedBadges) {
+      if (leftBadges.length <= rightBadges.length && leftBadges.length < effectiveLimit) {
+        leftBadges.push(badge);
+      } else if (rightBadges.length < effectiveLimit) {
+        rightBadges.push(badge);
+      } else if (leftBadges.length < effectiveLimit) {
+        leftBadges.push(badge);
+      }
+    }
+
     return {
       topBadges: [],
       bottomBadges: [],
-      leftBadges: limitedBadges.slice(0, effectiveLimit),
-      rightBadges: limitedBadges.slice(effectiveLimit, effectiveLimit * 2),
+      leftBadges,
+      rightBadges,
     };
   }
 
