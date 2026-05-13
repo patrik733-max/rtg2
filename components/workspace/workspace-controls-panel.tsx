@@ -181,7 +181,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
   );
 
   return (
-    <div className={`${CONFIG_PANEL_CLASS} flex flex-col xl:self-stretch xl:h-full`}>
+    <div className={`xl:order-1 ${CONFIG_PANEL_CLASS} flex flex-col xl:self-stretch xl:h-full`}>
       <div className="shrink-0 p-5 pb-3 bg-black/20">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { MonitorPlay } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { HomePageViewProps } from '@/components/workspace/types';
@@ -51,50 +51,100 @@ function PreviewImage({ previewUrl, previewType }: { previewUrl: string; preview
 export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelProps) {
   const { previewType } = state;
   const { previewUrl, previewNotice } = derived;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className={`${PREVIEW_PANEL_CLASS} flex min-h-0 flex-col p-4 w-full xl:flex-1`}>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-sky-100">
-          <MonitorPlay className="h-3.5 w-3.5" />
-          <span>Preview Output</span>
-        </div>
-        <p className="text-[11px] text-slate-400 sm:text-xs">
-          All ratings are normalized to a 0-10 scale.
-        </p>
-      </div>
+    <>
+      {/* Invisible viewport boundary for drag constraint */}
+      <div ref={viewportRef} className="fixed inset-0 pointer-events-none z-0" />
 
-      <div className={`relative mt-4 flex min-h-[340px] flex-1 items-center justify-center xl:min-h-0 ${previewType === 'poster' ? 'xl:mx-auto xl:max-w-[28rem]' : previewType === 'logo' ? 'xl:mx-auto xl:max-w-[56rem]' : ''}`}>
-        <AnimatePresence mode="wait">
-          {previewNotice ? (
-            <motion.div
-              key="notice"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10 max-w-md text-center"
+      {/* Mobile floating preview (small, top-right) */}
+      {previewUrl && (
+        <>
+          {isExpanded && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm xl:hidden"
+              onClick={() => setIsExpanded(false)}
             >
-              <div className="text-sm font-semibold text-orange-300">{previewNotice}</div>
-              <div className="mt-2 text-xs text-slate-500">
-                Use an episode ID in the format `imdb_id:season:episode`.
-              </div>
-            </motion.div>
-          ) : previewUrl ? (
-            <PreviewImage key={previewUrl} previewUrl={previewUrl} previewType={previewType} />
-          ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="relative z-10 text-sm text-slate-500"
-            >
-              No preview available.
-            </motion.div>
+              <motion.img
+                key={previewUrl}
+                src={previewUrl}
+                alt="Preview"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.25 }}
+                className="max-h-[90vh] max-w-[90vw] rounded-2xl border border-white/10 shadow-2xl"
+              />
+            </div>
           )}
-        </AnimatePresence>
+          <motion.div
+            drag
+            dragMomentum={false}
+            dragConstraints={viewportRef}
+            whileDrag={{ scale: 1.08, opacity: 0.9 }}
+            className="fixed top-20 right-3 z-40 cursor-grab active:cursor-grabbing xl:hidden"
+            onClick={() => setIsExpanded(true)}
+          >
+            <div className="pointer-events-none overflow-hidden rounded-xl border border-white/15 bg-[#06070b]/80 shadow-2xl ring-1 ring-white/10 backdrop-blur-xl">
+              <motion.img
+                key={previewUrl}
+                src={previewUrl}
+                alt="Preview"
+                initial={{ opacity: 0, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                transition={{ duration: 0.4 }}
+                className="block h-auto w-24 object-cover"
+              />
+            </div>
+          </motion.div>
+        </>
+      )}
+
+      {/* Desktop full preview */}
+      <div className={`xl:order-2 ${PREVIEW_PANEL_CLASS} hidden flex-col p-4 w-full xl:flex xl:flex-1`}>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-sky-100">
+            <MonitorPlay className="h-3.5 w-3.5" />
+            <span>Preview Output</span>
+          </div>
+          <p className="text-[11px] text-slate-400 sm:text-xs">
+            All ratings are normalized to a 0-10 scale.
+          </p>
+        </div>
+
+        <div className={`relative mt-4 flex min-h-[200px] flex-1 items-center justify-center sm:min-h-[280px] xl:min-h-0 ${previewType === 'poster' ? 'xl:mx-auto xl:max-w-[28rem]' : previewType === 'logo' ? 'xl:mx-auto xl:max-w-[56rem]' : ''}`}>
+          <AnimatePresence mode="wait">
+            {previewNotice ? (
+              <motion.div
+                key="notice"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="relative z-10 max-w-md text-center"
+              >
+                <div className="text-sm font-semibold text-orange-300">{previewNotice}</div>
+                <div className="mt-2 text-xs text-slate-500">
+                  Use an episode ID in the format `imdb_id:season:episode`.
+                </div>
+              </motion.div>
+            ) : previewUrl ? (
+              <PreviewImage key={previewUrl} previewUrl={previewUrl} previewType={previewType} />
+            ) : (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="relative z-10 text-sm text-slate-500"
+              >
+                No preview available.
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

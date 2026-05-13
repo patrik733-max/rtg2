@@ -69,7 +69,7 @@ export function WorkspaceProxyPanel({ state, derived, actions, onOpenAiometadata
   ).length;
 
   return (
-    <div className="min-w-0 w-full flex flex-col xl:self-stretch xl:h-full xl:overflow-hidden">
+    <div className="xl:order-3 min-w-0 w-full flex flex-col xl:self-stretch xl:h-full xl:overflow-hidden">
       
       {/* Proxy Settings Panel */}
       <div id="proxy" className={`${PROXY_PANEL_CLASS} flex flex-col flex-1 shrink-0 overflow-hidden`}>

@@ -222,9 +222,9 @@ export function WorkspacePageView({ refs, state, derived, actions }: HomePageVie
 
           <main className="mx-auto flex w-full flex-col pb-6 pt-3 xl:flex-1 xl:min-h-0 xl:overflow-hidden xl:pb-0">
             <section id="preview" className="relative flex flex-col overflow-visible xl:min-h-0 xl:flex-1 xl:overflow-hidden">
-              <div className="relative z-10 grid grid-cols-1 gap-4 xl:premium-scrollbar xl:min-h-0 xl:flex-1 xl:overflow-hidden xl:grid-cols-[minmax(0,1.08fr)_minmax(0,1.28fr)_minmax(0,0.88fr)] xl:items-stretch">
-                <WorkspaceControlsPanel state={state} derived={derived} actions={actions} />
+              <div className="relative z-10 flex flex-col gap-4 xl:premium-scrollbar xl:min-h-0 xl:flex-1 xl:overflow-hidden xl:grid xl:grid-cols-[minmax(0,1.08fr)_minmax(0,1.28fr)_minmax(0,0.88fr)] xl:items-stretch">
                 <WorkspacePreviewPanel state={state} derived={derived} />
+                <WorkspaceControlsPanel state={state} derived={derived} actions={actions} />
                 <WorkspaceProxyPanel state={state} derived={derived} actions={actions} onOpenAiometadataModal={() => setIsAiometadataModalOpen(true)} onOpenCatalogModal={() => setIsCatalogModalOpen(true)} />
               </div>
             </section>
