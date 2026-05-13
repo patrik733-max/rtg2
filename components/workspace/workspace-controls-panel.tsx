@@ -3,7 +3,7 @@
 import { Settings2, ChevronDown, KeyRound, Palette, Globe2, Layers } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
-import type { HomePageViewProps } from '@/components/workspace-page-view';
+import type { HomePageViewProps } from '@/components/workspace/types';
 import { RatingProviderSortableList } from '@/components/rating-provider-sortable-list';
 import { isVerticalPosterRatingLayout, type PosterRatingLayout } from '@/lib/posterRatingLayout';
 import { RATING_STYLE_OPTIONS, QUALITY_BADGE_STYLE_OPTIONS, type RatingStyle } from '@/lib/ratingStyle';

@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Terminal, Check, Clipboard, RefreshCcw, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import type { HomePageViewProps } from '@/components/workspace-page-view';
+import type { HomePageViewProps } from '@/components/workspace/types';
 import { AIOMETADATA_EPISODE_PROVIDER_OPTIONS } from './constants';
-import type { AiometadataPatternType } from '@/components/workspace-page-view';
+import type { AiometadataPatternType } from '@/components/workspace/types';
 
 type WorkspaceModalsProps = Pick<HomePageViewProps, 'state' | 'actions' | 'derived'> & {
   isCatalogModalOpen: boolean;

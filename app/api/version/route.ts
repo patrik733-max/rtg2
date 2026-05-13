@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import packageJson from '@/package.json';
+import { CURRENT_VERSION } from '@/lib/appVersion';
 
 export const runtime = 'nodejs';
 
@@ -21,7 +21,7 @@ const fetchJson = async (url: string) => {
 };
 
 export async function GET() {
-  const currentVersion = String(packageJson.version || '').trim();
+  const currentVersion = CURRENT_VERSION;
   let githubPackageVersion: string | null = null;
 
   const githubPackage = await fetchJson(GITHUB_PACKAGE_URL);

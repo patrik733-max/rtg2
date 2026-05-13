@@ -6,7 +6,7 @@ import {
   ArrowLeft, Save, Check, Clipboard, RefreshCcw, LogOut, Lock, Globe2,
   ChevronRight, Image as ImageIcon, MonitorPlay, Layers, Search, Tv, Film, X, Loader2,
 } from 'lucide-react';
-import type { HomePageViewProps } from '@/components/workspace-page-view';
+import type { HomePageViewProps } from '@/components/workspace/types';
 
 const SEGMENT_CLASS =
   'flex gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]';

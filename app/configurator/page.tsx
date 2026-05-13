@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HomePage from '@/components/home-page';
 import { WorkspaceAuthPage } from '@/components/workspace-auth-page';
+import { CURRENT_VERSION } from '@/lib/appVersion';
 import { getTokenConfig } from '@/lib/tokens';
 import { isWorkspacePasswordEnabled, readWorkspaceAccess } from '@/lib/workspaceAccess';
 import { readWorkspaceSession } from '@/lib/workspaceSession';
@@ -25,7 +26,7 @@ export default async function ConfiguratorPage({
   }
 
   if (guestMode) {
-    return <HomePage mode="workspace" />;
+    return <HomePage mode="workspace" initialVersion={CURRENT_VERSION} />;
   }
 
   const session = await readWorkspaceSession();
@@ -39,5 +40,12 @@ export default async function ConfiguratorPage({
     return <WorkspaceAuthPage requiresWorkspacePassword={requiresWorkspacePassword} />;
   }
 
-  return <HomePage mode="workspace" initialToken={session.token} initialConfig={tokenConfig.config} />;
+  return (
+    <HomePage
+      mode="workspace"
+      initialToken={session.token}
+      initialConfig={tokenConfig.config}
+      initialVersion={CURRENT_VERSION}
+    />
+  );
 }

@@ -1,4 +1,4 @@
-import type { StreamBadgesSetting, QualityBadgesSide, PosterQualityBadgesPosition, VerticalBadgeContent, AiometadataEpisodeProvider, ProxySeriesMetadataProvider, ProxyEpisodeProvider, ProxyType } from '@/components/workspace-page-view';
+import type { StreamBadgesSetting, QualityBadgesSide, PosterQualityBadgesPosition, VerticalBadgeContent, AiometadataEpisodeProvider, ProxySeriesMetadataProvider, ProxyEpisodeProvider, ProxyType } from '@/components/workspace/types';
 
 export const PROXY_TYPES: ProxyType[] = ['poster', 'backdrop', 'logo', 'thumbnail'];
 export const STREAM_BADGE_OPTIONS: Array<{ id: StreamBadgesSetting; label: string }> = [

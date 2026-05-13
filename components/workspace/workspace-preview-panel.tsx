@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { MonitorPlay } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import type { HomePageViewProps } from '@/components/workspace-page-view';
+import type { HomePageViewProps } from '@/components/workspace/types';
 import { PREVIEW_PANEL_CLASS } from './constants';
 
 type WorkspacePreviewPanelProps = Pick<HomePageViewProps, 'state' | 'derived'>;

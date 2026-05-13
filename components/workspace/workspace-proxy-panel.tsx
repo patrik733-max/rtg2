@@ -1,7 +1,7 @@
 'use client';
 
 import { Terminal, Layers, EyeOff, Eye, Check, Clipboard, ExternalLink } from 'lucide-react';
-import type { HomePageViewProps } from '@/components/workspace-page-view';
+import type { HomePageViewProps } from '@/components/workspace/types';
 import {
   INPUT_CLASS,
   INNER_PANEL_CLASS,
