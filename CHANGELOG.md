@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.63](https://github.com/realbestia1/erdb/compare/v0.4.62...v0.4.63) - 2026-05-13
+
+- Use shared button style constants ([e86399f](https://github.com/realbestia1/erdb/commit/e86399ff93e32e6610b0112bfa862add35f8f860))
+  Add reusable button style constants (BUTTON_GROUP_CONTAINER_CLASS, BUTTON_BASE_CLASS, BUTTON_ACTIVE_CLASS, BUTTON_INACTIVE_CLASS) and refactor WorkspaceControlsPanel to replace many duplicated inline button/group classes with those constants. The change centralizes and normalizes button/group styling across poster/backdrop/thumbnail/logo/quality/ranking controls and updates a few 'Auto' and preset buttons to use the new base/inactive classes. No functional logic changes—only CSS class consolidation and minor class tweaks for consistency.
+
 ## [0.4.62](https://github.com/realbestia1/erdb/compare/v0.4.61...v0.4.62) - 2026-05-13
 
 - Add rankingPosition option and badge positioning ([3756b18](https://github.com/realbestia1/erdb/commit/3756b186313e52413b175ec6b0815238967b0335))
