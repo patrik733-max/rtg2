@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.69](https://github.com/realbestia1/erdb/compare/v0.4.68...v0.4.69) - 2026-05-14
+
+- update version ([28c7a5d](https://github.com/realbestia1/erdb/commit/28c7a5d2e0107136644782ee3fa652b24f595af1))
+- Adjust workspace UI spacing and preview portal ([5faf910](https://github.com/realbestia1/erdb/commit/5faf9105abb169be0b731b8d2dbc226366d05d28))
+  Refine layout and sizing across workspace components and mount the expanded preview to the document body.
+
+  - Dropdown: tweak classes to stabilize width/height behavior and ensure consistent control sizing.
+  - WorkspaceNav: adjust compact input font size, segment padding, and button heights; standardize language dropdown and mobile control heights to improve alignment and visual consistency.
+  - WorkspacePreviewPanel: import createPortal and render the expanded preview overlay into document.body to avoid clipping; update the fixed viewport boundary to use left/right insets for better spacing on small screens.
+
+  These changes unify control sizing and fix modal/preview clipping issues on small viewports.
+- Add Dropdown and update workspace UI ([7539b22](https://github.com/realbestia1/erdb/commit/7539b220919375f07b0046fb5512fbf2ae626b7b))
+  Introduce a reusable Dropdown component and replace native select controls in the workspace (language and other selects) with the new dropdown. Update HomePageView to use fixed header/footer and adjust main padding to account for the fixed bars. Tweak WorkspaceControlsPanel and WorkspaceNav layouts (flex-wrap, spacing, input/button sizes) and remove a duplicated login/logout block. Simplify WorkspacePreviewPanel image handling by replacing motion.img with a standard img and removing its layout/animation props. Miscellaneous UI refinements in proxy panel labels and checkbox sizing.
+- Refactor controls UI and responsive nav ([5732552](https://github.com/realbestia1/erdb/commit/5732552476ba6e09ff4015bc790b545cdc883a4f))
+  Introduce a reusable Section component and consolidate many control groups into compact dropdowns/selects in WorkspaceControlsPanel — replacing numerous button groups with select elements and a renderDropdown helper to simplify the UI and reduce duplication. Rework Poster/Backdrop/Logo/Thumbnail panels: combine language controls, streamline rating/layout/badge options, unify color/font controls, and simplify provider/ranking/genre blocks. Adjust small copy: change preview text label to "Text on ..." in use-home-page-controller. Revamp WorkspaceNav for responsiveness: make nav sticky, reorganize desktop vs mobile layouts, add scroll detection to hide/show compact action buttons, tighten MediaIdSearch input sizing, and rearrange action buttons (save/copy/rotate/logout) for desktop and mobile. Update tsconfig build info.
+- Warn when TMDB/MDBList keys are missing in preview ([ddf795f](https://github.com/realbestia1/erdb/commit/ddf795f5b9390a658dbad05acf89102b36f6d370))
+  Add validation messages for missing TMDB and MDBList API keys in the home page controller and surface them as a mobile floating notice in the workspace preview panel. The preview will not render on mobile when a key-warning is present; existing thumbnail/movie and episode ID validation is preserved. Also remove a now-redundant help text from the expanded preview.
+
 ## [0.4.68](https://github.com/realbestia1/erdb/compare/v0.4.67...v0.4.68) - 2026-05-13
 
 - Add draggable mobile preview and reorder panels ([2cbc5e2](https://github.com/realbestia1/erdb/commit/2cbc5e2a65b8663d6170ed47b0eb476909514450))
