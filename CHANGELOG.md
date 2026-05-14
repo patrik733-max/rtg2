@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.70](https://github.com/realbestia1/erdb/compare/v0.4.69...v0.4.70) - 2026-05-14
+
+- Add Addon Proxy blurb and bump version ([3bf5dcb](https://github.com/realbestia1/erdb/commit/3bf5dcb3d83f768ad5771bf6902248f50371974a))
+  Add an informational blurb to the Workspace Proxy panel detailing the Addon Proxy features (rating badges, metadata translation, catalog customization, JustWatch rankings). Remove the previous Cinemeta-specific note. Bump package version to 0.4.70.
+
 ## [0.4.69](https://github.com/realbestia1/erdb/compare/v0.4.68...v0.4.69) - 2026-05-14
 
 - update version ([28c7a5d](https://github.com/realbestia1/erdb/commit/28c7a5d2e0107136644782ee3fa652b24f595af1))
