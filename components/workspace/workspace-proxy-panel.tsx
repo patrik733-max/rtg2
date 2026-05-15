@@ -38,6 +38,7 @@ export function WorkspaceProxyPanel({ state, derived, actions, onOpenAiometadata
 
   const {
     proxyUrl,
+    stremioInstallUrl,
     canGenerateProxy,
     isProxyUrlVisible,
     displayedProxyUrl,
@@ -249,13 +250,13 @@ export function WorkspaceProxyPanel({ state, derived, actions, onOpenAiometadata
                 )}
               </button>
               <a
-                href={canGenerateProxy ? proxyUrl : undefined}
+                href={canGenerateProxy ? stremioInstallUrl : undefined}
                 target="_blank"
                 rel="noreferrer"
                 className={`flex-1 sm:flex-none px-5 py-3 rounded-xl text-xs font-semibold inline-flex items-center justify-center gap-2 transition-all shadow-sm ${canGenerateProxy ? 'border border-white/10 bg-[#0a0a0a] text-slate-200 hover:bg-[#121212]' : 'border border-white/5 bg-transparent text-slate-600 pointer-events-none'}`}
               >
                 <ExternalLink className="w-4 h-4" />
-                <span>Launch in Stremio</span>
+                <span>Install in Stremio</span>
               </a>
             </div>
           </div>

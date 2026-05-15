@@ -51,6 +51,7 @@ import {
   DEFAULT_POSTER_RATINGS_MAX_PER_SIDE,
   DEFAULT_POSTER_RATING_LAYOUT,
   POSTER_RATING_LAYOUT_OPTIONS,
+  getPosterRatingLayoutMaxBadges,
   isVerticalPosterRatingLayout,
   type PosterRatingLayout,
 } from '@/lib/posterRatingLayout';
@@ -1572,6 +1573,11 @@ export function useHomePageController({
     rankingPosition,
   ]);
 
+  const stremioInstallUrl = useMemo(() => {
+    if (!proxyUrl) return '';
+    return proxyUrl.replace(/^https?:\/\//, 'stremio://');
+  }, [proxyUrl]);
+
   const aiometadataPatterns = useMemo(() => {
     const episodePattern = buildAiometadataPatternBlock({
       baseUrl,
@@ -2670,6 +2676,14 @@ export function useHomePageController({
     previewType === 'thumbnail'
       ? ratingProviderRows.filter((row) => THUMBNAIL_SUPPORTED_RATINGS.includes(row.id))
       : ratingProviderRows;
+  const enabledRatingCount = visibleRatingProviderRows.filter(r => r.enabled).length;
+  const tooManyRatings = previewType === 'poster'
+    ? enabledRatingCount > (getPosterRatingLayoutMaxBadges(posterRatingsLayout, posterRatingsMaxPerSide) ?? Infinity)
+    : previewType === 'backdrop'
+      ? backdropRatingsMax !== null && enabledRatingCount > backdropRatingsMax
+      : previewType === 'logo'
+        ? logoRatingsMax !== null && enabledRatingCount > logoRatingsMax
+        : false;
   const previewNotice =
     !tmdbKey.trim()
       ? 'Enter a TMDB API Key to generate previews.'
@@ -2677,7 +2691,9 @@ export function useHomePageController({
         ? 'Enter an MDBList API Key to generate previews.'
         : previewType === 'thumbnail' && !EPISODE_ID_PATTERN.test(mediaId.trim())
           ? 'Movies are not supported for thumbnails.'
-          : null;
+          : tooManyRatings
+            ? 'Too many ratings enabled — some may be hidden to avoid overlap.'
+            : null;
 
   const setRatingStyleForType = (value: RatingStyle) => {
     if (previewType === 'poster') {
@@ -2787,6 +2803,7 @@ export function useHomePageController({
       baseUrl,
       previewUrl,
       proxyUrl,
+      stremioInstallUrl,
       currentVersion,
       githubPackageVersion,
       repoUrl,

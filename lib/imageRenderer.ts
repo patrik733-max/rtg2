@@ -1550,7 +1550,7 @@ export const renderWithSharp = async (
 
       // Use slightly more generous height for Genre to avoid clipping
       const genreHeight = estimateBadgeHeight(metrics.fontSize, metrics.paddingX, metrics.paddingY, 0, 'standard');
-      const genreWidth = estimateBadgeWidth(badge.value, metrics.fontSize, metrics.paddingX, 0, metrics.gap, true, 'standard');
+      const genreWidth = estimateBadgeWidth(badge.value, metrics.fontSize, metrics.paddingX, 0, metrics.gap, false, 'standard');
       const left = Math.round((input.outputWidth - genreWidth) / 2);
 
       let top = input.badgeTopOffset;
@@ -1561,10 +1561,12 @@ export const renderWithSharp = async (
       const overlapGap = Math.max(12, Math.round(input.badgeGap * 1.1));
       const getGenreRect = (y: number) => ({ left, top: y, width: genreWidth, height: genreHeight });
 
+      let genreCollisionResolved = false;
       for (let guard = 0; guard < 12; guard++) {
+        top = Math.max(input.badgeTopOffset, Math.min(top, input.outputHeight - input.badgeBottomOffset - genreHeight));
         const rect = getGenreRect(top);
         const collisions = posterBlockingRects.filter(r => rectsOverlap(rect, r));
-        if (collisions.length === 0) break;
+        if (collisions.length === 0) { genreCollisionResolved = true; break; }
 
         if (position === 'top') {
           top = Math.max(...collisions.map(r => r.top + r.height)) + overlapGap;
@@ -1572,9 +1574,9 @@ export const renderWithSharp = async (
           top = Math.min(...collisions.map(r => r.top)) - genreHeight - overlapGap;
         }
       }
-
-      // Clamp to screen bounds
-      top = Math.max(input.badgeTopOffset, Math.min(top, input.outputHeight - input.badgeBottomOffset - genreHeight));
+      if (!genreCollisionResolved) {
+        console.warn(`[ERDB] Genre badge "${badge.value}" could not avoid collision`);
+      }
 
       const badgeSvg = buildBadgeSvg({
         width: genreWidth,
@@ -1587,7 +1589,7 @@ export const renderWithSharp = async (
         monogram: '',
         value: badge.value,
         ratingStyle: input.ratingStyle,
-        compactText: true,
+        compactText: false,
       });
 
       // Compensate for the 4px padding in buildBadgeSvg's viewBox
@@ -1719,6 +1721,27 @@ export const renderWithSharp = async (
       const minTop = input.badgeTopOffset;
       const maxTop = Math.max(minTop, input.outputHeight - input.badgeBottomOffset - renderedHeight);
       top = Math.max(minTop, Math.min(Math.round(top), maxTop));
+      let rankingCollisionResolved = false;
+      for (let guard = 0; guard < 8; guard++) {
+        const rankingRect: OverlayRect = { left, top, width: renderedWidth, height: renderedHeight };
+        const collidingRects = posterBlockingRects.filter(r => rectsOverlap(rankingRect, r));
+        if (collidingRects.length === 0) { rankingCollisionResolved = true; break; }
+        const gap = Math.max(3, Math.round(input.badgeGap * 0.35));
+        const pushDown = Math.max(top, ...collidingRects.map(r => r.top + r.height + gap));
+        if (pushDown <= maxTop) {
+          top = pushDown;
+          continue;
+        }
+        const pushUp = Math.min(top, ...collidingRects.map(r => r.top - renderedHeight - gap));
+        if (pushUp >= minTop) {
+          top = pushUp;
+          break;
+        }
+        break;
+      }
+      if (!rankingCollisionResolved) {
+        console.warn(`[ERDB] Ranking badge "${badge.value}" could not avoid collision`);
+      }
       overlays.push({ input: rankingBuffer, top, left });
       addPosterBlockingRect(left, top, renderedWidth, renderedHeight);
     }

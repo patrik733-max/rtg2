@@ -98,6 +98,7 @@ export type HomePageViewDerived = {
   baseUrl: string;
   previewUrl: string;
   proxyUrl: string;
+  stremioInstallUrl: string;
   currentVersion: string;
   githubPackageVersion: string | null;
   repoUrl: string | null;
