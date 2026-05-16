@@ -1029,7 +1029,8 @@ export const renderWithSharp = async (
           rowWidth = rowBadges.length * badgeWidth + Math.max(0, rowBadges.length - 1) * rowGap;
         }
       }
-      let rowX = rowInset;
+      let rowX = Math.floor((input.outputWidth - rowWidth) / 2);
+      rowX = Math.max(rowInset, Math.min(rowX, Math.max(rowInset, input.outputWidth - rowWidth - rowInset)));
       for (const badge of rowBadges) {
         if (!STREAM_BADGE_META.has(badge.key as StreamBadgeKey)) continue;
         const spec = buildQualityBadgeSvg(
@@ -1710,6 +1711,9 @@ export const renderWithSharp = async (
       if (rankingPosition === 'auto' && lastOverlayTopY > 0) {
         top = Math.max(top, getAboveLogoRankingTop());
       }
+      if (rankingPosition === 'top' && lastOverlayTopY > 0 && !input.rankingBadge?.compact) {
+        top = getAboveLogoRankingTop();
+      }
       if (
         rankingPosition !== 'bottom' &&
         lastPosterQualityTopY > 0 &&
@@ -1727,7 +1731,8 @@ export const renderWithSharp = async (
         const collidingRects = posterBlockingRects.filter(r => rectsOverlap(rankingRect, r));
         if (collidingRects.length === 0) { rankingCollisionResolved = true; break; }
         const gap = Math.max(3, Math.round(input.badgeGap * 0.35));
-        if (rankingPosition === 'above-logo') {
+        const resolveAbove = rankingPosition === 'above-logo' || (rankingPosition === 'top' && lastOverlayTopY > 0 && !input.rankingBadge?.compact) || (rankingPosition === 'auto' && lastOverlayTopY > 0);
+        if (resolveAbove) {
           const pushUp = Math.min(top, ...collidingRects.map(r => r.top - renderedHeight - gap));
           if (pushUp >= minTop) {
             top = pushUp;
@@ -1747,6 +1752,7 @@ export const renderWithSharp = async (
           const pushUp = Math.min(top, ...collidingRects.map(r => r.top - renderedHeight - gap));
           if (pushUp >= minTop) {
             top = pushUp;
+            rankingCollisionResolved = true;
             break;
           }
         }
