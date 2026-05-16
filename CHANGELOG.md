@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.77](https://github.com/realbestia1/erdb/compare/v0.4.76...v0.4.77) - 2026-05-16
+
+- Simplify bottom quality badge layout ([bcb1e37](https://github.com/realbestia1/erdb/commit/bcb1e37a75a76bfc4fc7610ebc634a59d2a9d98c))
+  Remove complex overlay- and spacing-specific logic for bottom-quality badge placement in lib/imageRenderer.ts and compute a single bottomRowY using posterReferenceBadgeHeight. Call composeQualityBadgeRow with the reference height and update lastPosterQualityTopY/BottomY accordingly to simplify layout behavior. Also bump package version to 0.4.77 in package.json.
+
 ## [0.4.76](https://github.com/realbestia1/erdb/compare/v0.4.75...v0.4.76) - 2026-05-16
 
 - . ([808cb4a](https://github.com/realbestia1/erdb/commit/808cb4a4d292f6ff9f7480105c787684be22e893))
