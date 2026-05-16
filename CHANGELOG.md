@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.71](https://github.com/realbestia1/erdb/compare/v0.4.70...v0.4.71) - 2026-05-15
+
+- Add Stremio install link and fix badge collisions ([caa58bb](https://github.com/realbestia1/erdb/commit/caa58bb421d850615726ffe7b690af493ee25df2))
+  Generate a stremio:// install URL from proxyUrl and expose it through the home/workspace derived props; update the WorkspaceProxyPanel to use that URL and change the CTA to “Install in Stremio”.
+
+  Add rating overflow detection (counts enabled providers and compares against layout/max limits) and show a preview notice when too many ratings are enabled to avoid overlap; import getPosterRatingLayoutMaxBadges to compute poster limits.
+
+  Improve image renderer badge placement: adjust genre width calculation, loosen compact text, add guarded collision-resolution loops for genre and ranking badges, clamp positions properly and emit console warnings if a badge can’t avoid collisions.
+
+  Bump image renderer cache version and package version (v136->v137, 0.4.70->0.4.71) to reflect rendering changes.
+
 ## [0.4.70](https://github.com/realbestia1/erdb/compare/v0.4.69...v0.4.70) - 2026-05-14
 
 - Add Addon Proxy blurb and bump version ([3bf5dcb](https://github.com/realbestia1/erdb/commit/3bf5dcb3d83f768ad5771bf6902248f50371974a))
