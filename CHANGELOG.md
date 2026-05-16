@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.74](https://github.com/realbestia1/erdb/compare/v0.4.73...v0.4.74) - 2026-05-16
+
+- Change poster genre position and badge layout ([2d0ea2a](https://github.com/realbestia1/erdb/commit/2d0ea2a3baffd887e9d81f8cccd17458df94f38b))
+  Set default poster genre position to 'bottom' and adjust the too-many-ratings message to account for poster image text when calculating allowed badges. Simplify genre badge placement in the image renderer by removing the collision-resolved flag/warning and always rendering the genre overlay and registering its blocking rect (loop break logic preserved). Bump package version to 0.4.74.
+
 ## [0.4.73](https://github.com/realbestia1/erdb/compare/v0.4.72...v0.4.73) - 2026-05-16
 
 - Fix preview notice overlay and rating counts ([ef3de31](https://github.com/realbestia1/erdb/commit/ef3de31639891dd0c343161281a43ce8119c784a))
