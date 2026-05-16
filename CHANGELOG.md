@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.75](https://github.com/realbestia1/erdb/compare/v0.4.74...v0.4.75) - 2026-05-16
+
+- Add compact ranking and above-logo genre ([d0c5dfa](https://github.com/realbestia1/erdb/commit/d0c5dfa8bb805b97e5bdb0b89aff7d338c1ef663))
+  Introduce a new 'rankingCompact' option and support a new poster genre position 'above-logo'. Propagate rankingCompact through route handling, proxy/token config, controller state, types, and UI (checkbox in workspace controls). Update ranking badge SVG to render compact (number-only) badges and adjust layout/collision logic for genre and ranking placements. Other improvements: render dropdown menus into document.body with createPortal, tweak preview panel sizing, and refine many badge sizing/spacing/inset calculations. Also bump package version to 0.4.75.
+
 ## [0.4.74](https://github.com/realbestia1/erdb/compare/v0.4.73...v0.4.74) - 2026-05-16
 
 - Change poster genre position and badge layout ([2d0ea2a](https://github.com/realbestia1/erdb/commit/2d0ea2a3baffd887e9d81f8cccd17458df94f38b))
