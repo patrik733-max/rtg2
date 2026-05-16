@@ -46,6 +46,7 @@ const ERDB_TYPE_OPTIONAL_PARAMS = {
     'ranking',
     'rankingCountry',
     'rankingNoBox',
+    'rankingCompact',
     'rankingPosition',
     'posterAverageRatingsEnabled',
     'posterVignette',
@@ -169,6 +170,7 @@ export type ProxyConfig = {
   ranking?: string;
   rankingCountry?: string;
   rankingNoBox?: string | boolean;
+  rankingCompact?: string | boolean;
   rankingPosition?: string;
   posterAverageRatingsEnabled?: boolean | string;
   posterVignette?: boolean | string;
@@ -241,6 +243,7 @@ const PROXY_OPTIONAL_STRING_KEYS = [
   'ranking',
   'rankingCountry',
   'rankingNoBox',
+  'rankingCompact',
   'rankingPosition',
   'posterSimpleRatingSource',
   'seriesMetadataProvider',

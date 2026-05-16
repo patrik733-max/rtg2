@@ -549,7 +549,7 @@ export const buildQualityBadgeSvg = (
   widthOverride?: number,
   style: RatingStyle = DEFAULT_QUALITY_BADGES_STYLE
 ) => {
-  const h = style === 'solid-light' ? Math.max(28, Math.round(height * 0.78)) : Math.max(32, Math.round(height * 0.9));
+  const h = Math.max(32, height);
   const isReferencePlain = style === 'plain';
   const radius =
     style === 'solid-light'
@@ -967,6 +967,29 @@ export const buildRankingBadgeSvg = (value: string, label: string, iconDataUri?:
   const labelWidth = estimateBadgeTextWidth(label, labelFontSize, false);
 
   const hasIcon = Boolean(iconDataUri);
+  const hasLabel = label.length > 0;
+
+  if (!hasIcon && !hasLabel) {
+    const width = Math.ceil(rankWidth + paddingX * 2);
+    const rankX = Math.round((width - rankWidth) / 2);
+    const textY = Math.round(height / 2 + rankFontSize * 0.36);
+
+    const rankGlowLayers = noBox
+      ? Array.from({ length: 8 }, (_, i) => {
+        const strokeWidth = 20 - i * 2.5;
+        const opacity = 0.05 + (i * 0.05);
+        return `<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>`;
+      }).join('\\n')
+      : '';
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="-4 -4 ${width + 8} ${height + 8}">
+${!noBox ? `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="10" fill="rgb(21,35,49)" fill-opacity="0.92" stroke="rgba(255,255,255,0.10)" stroke-width="1" />` : ''}
+${rankGlowLayers}
+<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="white" stroke="rgba(0,0,0,0.85)" stroke-width="2.2" paint-order="stroke fill" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>
+</svg>`;
+    return { svg, width, height };
+  }
+
   const iconX = paddingX;
   const rankX = hasIcon ? iconX + iconSize + gap : paddingX;
   const labelX = rankX + rankWidth + gap;

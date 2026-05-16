@@ -86,6 +86,9 @@ export const buildProxyConfigFromToken = (
   if (typeof t.rankingNoBox === 'boolean' || typeof t.rankingNoBox === 'string') {
     config.rankingNoBox = t.rankingNoBox;
   }
+  if (typeof t.rankingCompact === 'boolean' || typeof t.rankingCompact === 'string') {
+    config.rankingCompact = t.rankingCompact;
+  }
 
   if (typeof t.posterRatingsMaxPerSide === 'number') config.posterRatingsMaxPerSide = String(t.posterRatingsMaxPerSide);
   if (typeof t.logoRatingsMax === 'number') config.logoRatingsMax = String(t.logoRatingsMax);

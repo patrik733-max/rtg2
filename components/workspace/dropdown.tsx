@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 
@@ -14,7 +15,7 @@ export function Dropdown<T extends string>({ value, onChange, options, className
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [openUp, setOpenUp] = useState(false);
+  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
@@ -27,10 +28,37 @@ export function Dropdown<T extends string>({ value, onChange, options, className
       const rect = btnRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       const estimatedHeight = Math.min(options.length * 36 + 16, window.innerHeight * 0.5);
-      setOpenUp(spaceBelow < estimatedHeight && rect.top > spaceBelow);
+      const openUp = spaceBelow < estimatedHeight && rect.top > spaceBelow;
+      setMenuStyle({
+        position: 'fixed',
+        left: rect.left,
+        top: openUp ? rect.top - estimatedHeight : rect.bottom,
+        minWidth: Math.max(rect.width, 180),
+        zIndex: 9999,
+      });
     }
     setOpen(!open);
   };
+
+  const menu = open && (
+    <motion.div
+      onMouseDown={(e) => e.stopPropagation()}
+      initial={{ opacity: 0, y: -6, scaleY: 0.95 }}
+      animate={{ opacity: 1, y: 0, scaleY: 1 }}
+      exit={{ opacity: 0, y: -6, scaleY: 0.95 }}
+      transition={{ duration: 0.15, ease: 'easeOut' }}
+      style={{ transformOrigin: 'top', ...menuStyle }}
+      className="overflow-hidden rounded-xl border border-white/10 bg-[#0d0f14] shadow-2xl">
+      <div className="max-h-[50vh] overflow-y-auto">
+        {options.map(opt => (
+          <button key={opt.id} type="button" onClick={() => { onChange(opt.id); setOpen(false); }}
+            className={`w-full px-3 py-2 text-left text-sm transition-colors duration-150 whitespace-nowrap ${value === opt.id ? 'bg-orange-500/15 text-orange-300' : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'}`}>
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </motion.div>
+  );
 
   return (
     <div ref={ref} className="relative" style={width ? { width, minWidth: width } : undefined}>
@@ -41,26 +69,7 @@ export function Dropdown<T extends string>({ value, onChange, options, className
           <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
         </motion.div>
       </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: openUp ? 6 : -6, scaleY: 0.95 }}
-            animate={{ opacity: 1, y: 0, scaleY: 1 }}
-            exit={{ opacity: 0, y: openUp ? 6 : -6, scaleY: 0.95 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            style={{ transformOrigin: openUp ? 'bottom' : 'top' }}
-            className={`absolute left-0 right-0 z-50 ${openUp ? 'bottom-full mb-1' : 'mt-1'} overflow-hidden rounded-xl border border-white/10 bg-[#0d0f14] shadow-2xl`}>
-            <div className="max-h-[50vh] overflow-y-auto">
-              {options.map(opt => (
-                <button key={opt.id} type="button" onClick={() => { onChange(opt.id); setOpen(false); }}
-                  className={`w-full px-3 py-2 text-left text-sm transition-colors duration-150 ${value === opt.id ? 'bg-orange-500/15 text-orange-300' : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'}`}>
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {typeof window !== 'undefined' && open && createPortal(menu, document.body)}
     </div>
   );
 }

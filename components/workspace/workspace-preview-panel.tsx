@@ -73,7 +73,7 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
       {/* Mobile floating notice (keys missing) */}
       {previewNotice && (
         <div className={`fixed ${topClass} right-3 z-40 xl:hidden`}>
-          <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-[11px] font-medium text-orange-200 shadow-2xl backdrop-blur-xl">
+          <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-[11px] font-medium text-orange-200 shadow-2xl backdrop-blur-xl max-w-[200px]">
             {previewNotice}
           </div>
         </div>
@@ -161,7 +161,7 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
             )}
           </AnimatePresence>
           {previewUrl && previewNotice && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-[11px] font-medium text-orange-200 shadow-2xl backdrop-blur-xl whitespace-nowrap z-20">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-[11px] font-medium text-orange-200 shadow-2xl backdrop-blur-xl max-w-[280px] text-center z-20">
               {previewNotice}
             </div>
           )}

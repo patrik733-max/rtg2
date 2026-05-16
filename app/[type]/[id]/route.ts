@@ -176,6 +176,8 @@ export async function GET(
   const rankingParam = tokenConfig.ranking || request.nextUrl.searchParams.get('ranking') || 'off';
   const rankingNoBoxParam = tokenConfig.rankingNoBox || request.nextUrl.searchParams.get('rankingNoBox') || 'off';
   const rankingNoBox = rankingNoBoxParam === 'on' || rankingNoBoxParam === 'true' || rankingNoBoxParam === true;
+  const rankingCompactParam = tokenConfig.rankingCompact || request.nextUrl.searchParams.get('rankingCompact') || 'off';
+  const rankingCompact = rankingCompactParam === 'on' || rankingCompactParam === 'true' || rankingCompactParam === true;
   const rankingCountry = (tokenConfig.rankingCountry || request.nextUrl.searchParams.get('rankingCountry') || 'global').trim().toUpperCase();
   const rankingPosition = normalizeRankingPosition(tokenConfig.rankingPosition || request.nextUrl.searchParams.get('rankingPosition'));
 
@@ -1414,6 +1416,7 @@ export async function GET(
         rankingParam,
         rankingCountry,
         rankingNoBox ? 'nobox' : 'box',
+        rankingCompact ? 'compact' : 'full',
         rankingPosition,
         posterVignetteEnabled ? 'vignette' : 'no-vignette',
         fanartKey ? 'fanart' : 'no-fanart',
@@ -3009,6 +3012,7 @@ export async function GET(
           label: intervalLabel,
           value: `#${rankingValue}`,
           noBox: rankingNoBox,
+          compact: rankingCompact,
         };
       }
       if (

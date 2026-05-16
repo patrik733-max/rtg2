@@ -8,7 +8,7 @@ export type BadgeKey = RatingPreference | StreamBadgeKey | 'average' | 'genre' |
 export type QualityBadgesSide = 'left' | 'right';
 export type PosterQualityBadgesPosition = 'auto' | QualityBadgesSide;
 export type RankingPosition = 'auto' | 'top' | 'bottom' | 'above-logo';
-export type PosterGenrePosition = 'off' | 'top' | 'bottom';
+export type PosterGenrePosition = 'off' | 'top' | 'bottom' | 'above-logo';
 export type StreamQualityFlags = {
   has4k: boolean;
   hasHdr: boolean;
@@ -29,6 +29,7 @@ export type RankingBadge = {
   value: string;
   label: string;
   noBox?: boolean;
+  compact?: boolean;
 };
 export type OutputFormat = 'png' | 'jpeg' | 'webp';
 export const PERCENTAGE_RATING_PROVIDERS = new Set<RatingPreference>([
@@ -158,6 +159,7 @@ export const normalizePosterGenrePosition = (value?: string | null): PosterGenre
   const normalized = (value || '').trim().toLowerCase();
   if (['top', 't', 'up'].includes(normalized)) return 'top';
   if (['bottom', 'bot', 'b', 'down'].includes(normalized)) return 'bottom';
+  if (['above-logo', 'abovelogo', 'above_logo'].includes(normalized)) return 'above-logo';
   return 'off';
 };
 export const resolvePosterQualityBadgePlacement = (

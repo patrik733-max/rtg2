@@ -91,6 +91,7 @@ export type HomePageViewState = {
   ranking: string;
   rankingCountry: string;
   rankingNoBox: boolean;
+  rankingCompact: boolean;
   rankingPosition: RankingPosition;
 };
 
@@ -192,6 +193,7 @@ export type HomePageViewActions = {
   setRanking: Dispatch<SetStateAction<string>>;
   setRankingCountry: Dispatch<SetStateAction<string>>;
   setRankingNoBox: Dispatch<SetStateAction<boolean>>;
+  setRankingCompact: Dispatch<SetStateAction<boolean>>;
   setRankingPosition: Dispatch<SetStateAction<RankingPosition>>;
 };
 

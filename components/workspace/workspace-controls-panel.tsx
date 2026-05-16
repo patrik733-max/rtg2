@@ -97,6 +97,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
     ranking,
     rankingCountry,
     rankingNoBox,
+    rankingCompact,
     rankingPosition,
   } = state;
 
@@ -161,6 +162,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
     setRanking,
     setRankingCountry,
     setRankingNoBox,
+    setRankingCompact,
     setRankingPosition,
   } = actions;
 
@@ -543,6 +545,15 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                               <div className="w-9 h-5 bg-black/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-orange-400 after:border-slate-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500/20"></div>
                             </div>
                             <span className="text-xs font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Hide Background Box</span>
+                          </label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <label className="flex items-center gap-3 cursor-pointer group">
+                            <div className="relative">
+                              <input type="checkbox" checked={rankingCompact} onChange={(e) => setRankingCompact(e.target.checked)} className="sr-only peer" />
+                              <div className="w-9 h-5 bg-black/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-orange-400 after:border-slate-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500/20"></div>
+                            </div>
+                            <span className="text-xs font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Compact Mode (number only)</span>
                           </label>
                         </div>
                       </div>

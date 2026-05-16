@@ -22,6 +22,7 @@ export const POSTER_GENRE_POSITION_OPTIONS: Array<{ id: PosterGenrePosition; lab
   { id: 'off', label: 'Off' },
   { id: 'top', label: 'Top' },
   { id: 'bottom', label: 'Bottom' },
+  { id: 'above-logo', label: 'Above Logo' },
 ];
 export const VERTICAL_BADGE_CONTENT_OPTIONS: Array<{ id: VerticalBadgeContent; label: string }> = [
   { id: 'standard', label: 'Standard' },

@@ -95,7 +95,7 @@ export const isQualityBadgesSide = (value: unknown): value is QualityBadgesSide 
 export const isPosterQualityBadgesPosition = (value: unknown): value is PosterQualityBadgesPosition =>
   value === 'auto' || value === 'left' || value === 'right';
 export const isPosterGenrePosition = (value: unknown): value is PosterGenrePosition =>
-  value === 'off' || value === 'top' || value === 'bottom';
+  value === 'off' || value === 'top' || value === 'bottom' || value === 'above-logo';
 export const isImageText = (value: unknown): value is 'default' | 'clean' | 'alternative' =>
   value === 'default' || value === 'original' || value === 'clean' || value === 'alternative';
 export const isRatingStyle = (value: unknown): value is RatingStyle =>
