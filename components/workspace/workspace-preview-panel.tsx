@@ -80,7 +80,7 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
       )}
 
       {/* Mobile floating preview (small, top-right) */}
-      {!previewNotice && previewUrl && (
+      {previewUrl && (
         <>
           {isExpanded && createPortal(
             <div
@@ -133,7 +133,16 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
 
         <div className={`relative mt-4 flex min-h-[200px] flex-1 items-center justify-center sm:min-h-[280px] xl:min-h-0 ${previewType === 'poster' ? 'xl:mx-auto xl:max-w-[28rem]' : previewType === 'logo' ? 'xl:mx-auto xl:max-w-[56rem]' : ''}`}>
           <AnimatePresence mode="wait">
-            {previewNotice ? (
+            {previewUrl ? (
+              <div className="relative w-full">
+                <PreviewImage key={previewUrl} previewUrl={previewUrl} previewType={previewType} />
+                {previewNotice && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-2 text-[11px] font-medium text-orange-200 shadow-2xl backdrop-blur-xl whitespace-nowrap">
+                    {previewNotice}
+                  </div>
+                )}
+              </div>
+            ) : previewNotice ? (
               <motion.div
                 key="notice"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -144,8 +153,6 @@ export function WorkspacePreviewPanel({ state, derived }: WorkspacePreviewPanelP
               >
                 <div className="text-sm font-semibold text-orange-300">{previewNotice}</div>
               </motion.div>
-            ) : previewUrl ? (
-              <PreviewImage key={previewUrl} previewUrl={previewUrl} previewType={previewType} />
             ) : (
               <motion.div
                 key="empty"

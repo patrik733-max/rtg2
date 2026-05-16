@@ -1597,8 +1597,10 @@ export const renderWithSharp = async (
         .replace(`width="${genreWidth}"`, `width="${genreWidth + 8}"`)
         .replace(`height="${genreHeight}"`, `height="${genreHeight + 8}"`);
 
-      overlays.push({ input: Buffer.from(renderedSvg), top: top - 4, left: left - 4 });
-      addPosterBlockingRect(left, top, genreWidth, genreHeight);
+      if (genreCollisionResolved) {
+        overlays.push({ input: Buffer.from(renderedSvg), top: top - 4, left: left - 4 });
+        addPosterBlockingRect(left, top, genreWidth, genreHeight);
+      }
     };
 
     if (input.imageType === 'poster' && input.rankingBadge) {
@@ -1742,8 +1744,10 @@ export const renderWithSharp = async (
       if (!rankingCollisionResolved) {
         console.warn(`[ERDB] Ranking badge "${badge.value}" could not avoid collision`);
       }
-      overlays.push({ input: rankingBuffer, top, left });
-      addPosterBlockingRect(left, top, renderedWidth, renderedHeight);
+      if (rankingCollisionResolved) {
+        overlays.push({ input: rankingBuffer, top, left });
+        addPosterBlockingRect(left, top, renderedWidth, renderedHeight);
+      }
     }
 
     composePosterGenreBadge();

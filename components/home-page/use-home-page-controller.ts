@@ -51,7 +51,6 @@ import {
   DEFAULT_POSTER_RATINGS_MAX_PER_SIDE,
   DEFAULT_POSTER_RATING_LAYOUT,
   POSTER_RATING_LAYOUT_OPTIONS,
-  getPosterRatingLayoutMaxBadges,
   isVerticalPosterRatingLayout,
   type PosterRatingLayout,
 } from '@/lib/posterRatingLayout';
@@ -2678,7 +2677,12 @@ export function useHomePageController({
       : ratingProviderRows;
   const enabledRatingCount = visibleRatingProviderRows.filter(r => r.enabled).length;
   const tooManyRatings = previewType === 'poster'
-    ? enabledRatingCount > (getPosterRatingLayoutMaxBadges(posterRatingsLayout, posterRatingsMaxPerSide) ?? Infinity)
+    ? isVerticalPosterRatingLayout(posterRatingsLayout) &&
+      !shouldUsePosterAverageRatings &&
+      posterStreamBadges !== 'off' && ranking !== 'off' && posterGenrePosition !== 'off' &&
+      (posterRatingsMaxPerSide !== null
+        ? enabledRatingCount > (posterRatingsLayout === 'left-right' ? posterRatingsMaxPerSide * 2 : posterRatingsMaxPerSide)
+        : enabledRatingCount > (posterRatingsLayout === 'left-right' ? (posterVerticalBadgeContent === 'stacked' ? 4 : 8) : (posterVerticalBadgeContent === 'stacked' ? 2 : 4)))
     : previewType === 'backdrop'
       ? backdropRatingsMax !== null && enabledRatingCount > backdropRatingsMax
       : previewType === 'logo'
@@ -2692,7 +2696,7 @@ export function useHomePageController({
         : previewType === 'thumbnail' && !EPISODE_ID_PATTERN.test(mediaId.trim())
           ? 'Movies are not supported for thumbnails.'
           : tooManyRatings
-            ? 'Too many ratings enabled — some may be hidden to avoid overlap.'
+            ? `Too many ratings — set Max / Side to ${posterVerticalBadgeContent === 'stacked' ? '2' : '4'} or fewer to avoid missing badges.`
             : null;
 
   const setRatingStyleForType = (value: RatingStyle) => {
