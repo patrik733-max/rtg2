@@ -1561,21 +1561,17 @@ export const renderWithSharp = async (
       const overlapGap = Math.max(12, Math.round(input.badgeGap * 1.1));
       const getGenreRect = (y: number) => ({ left, top: y, width: genreWidth, height: genreHeight });
 
-      let genreCollisionResolved = false;
       for (let guard = 0; guard < 12; guard++) {
         top = Math.max(input.badgeTopOffset, Math.min(top, input.outputHeight - input.badgeBottomOffset - genreHeight));
         const rect = getGenreRect(top);
         const collisions = posterBlockingRects.filter(r => rectsOverlap(rect, r));
-        if (collisions.length === 0) { genreCollisionResolved = true; break; }
+        if (collisions.length === 0) break;
 
         if (position === 'top') {
           top = Math.max(...collisions.map(r => r.top + r.height)) + overlapGap;
         } else {
           top = Math.min(...collisions.map(r => r.top)) - genreHeight - overlapGap;
         }
-      }
-      if (!genreCollisionResolved) {
-        console.warn(`[ERDB] Genre badge "${badge.value}" could not avoid collision`);
       }
 
       const badgeSvg = buildBadgeSvg({
@@ -1597,10 +1593,8 @@ export const renderWithSharp = async (
         .replace(`width="${genreWidth}"`, `width="${genreWidth + 8}"`)
         .replace(`height="${genreHeight}"`, `height="${genreHeight + 8}"`);
 
-      if (genreCollisionResolved) {
-        overlays.push({ input: Buffer.from(renderedSvg), top: top - 4, left: left - 4 });
-        addPosterBlockingRect(left, top, genreWidth, genreHeight);
-      }
+      overlays.push({ input: Buffer.from(renderedSvg), top: top - 4, left: left - 4 });
+      addPosterBlockingRect(left, top, genreWidth, genreHeight);
     };
 
     if (input.imageType === 'poster' && input.rankingBadge) {

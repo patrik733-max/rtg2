@@ -197,7 +197,7 @@ export function useHomePageController({
   const [posterConfiguratorPreset, setPosterConfiguratorPresetState] = useState<PosterConfiguratorPreset>('simple');
   const [posterAverageRatingsEnabled, setPosterAverageRatingsEnabled] = useState(false);
   const [posterVignetteEnabled, setPosterVignetteEnabled] = useState(true);
-  const [posterGenrePosition, setPosterGenrePosition] = useState<PosterGenrePosition>('top');
+  const [posterGenrePosition, setPosterGenrePosition] = useState<PosterGenrePosition>('bottom');
   const [posterSimpleRatingSource, setPosterSimpleRatingSource] = useState<'average' | RatingPreference>('average');
   const [backdropImageText, setBackdropImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
   const [backdropAnimeImageText, setBackdropAnimeImageText] = useState<'default' | 'clean' | 'alternative'>('clean');
@@ -2698,7 +2698,7 @@ export function useHomePageController({
         : previewType === 'thumbnail' && !EPISODE_ID_PATTERN.test(mediaId.trim())
           ? 'Movies are not supported for thumbnails.'
           : tooManyRatings
-            ? `Too many ratings — set Max / Side to ${posterVerticalBadgeContent === 'stacked' ? '2' : '4'} or fewer to avoid missing badges.`
+            ? `Too many ratings — set Max / Side to ${(posterVerticalBadgeContent === 'stacked' ? 2 : 4) + (posterImageText === 'clean' ? 0 : 1)} or fewer to avoid missing the Ranking badge.`
             : null;
 
   const setRatingStyleForType = (value: RatingStyle) => {
