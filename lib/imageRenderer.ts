@@ -1220,32 +1220,6 @@ export const renderWithSharp = async (
       }
     };
 
-    if (input.imageType === 'poster' && input.qualityBadges.length > 0) {
-      let qualityPlacement = resolvePosterQualityBadgePlacement(
-        input.posterRatingsLayout,
-        input.qualityBadgesSide,
-        input.posterQualityBadgesPosition
-      );
-
-      if (qualityPlacement === 'bottom') {
-        const hasBottomRatings = input.bottomBadges.length > 0;
-        const hasTopRatings = input.topBadges.length > 0;
-        const isAuto = input.posterQualityBadgesPosition === 'auto';
-        if (hasBottomRatings && !hasTopRatings && isAuto) {
-          qualityPlacement = 'top';
-        }
-      }
-
-      if (qualityPlacement === 'top') {
-        const topQualityHeight = Math.max(36, Math.round(posterReferenceBadgeHeight * 1.05));
-        const actualHeight = composeQualityBadgeRow(input.qualityBadges, input.badgeTopOffset, topQualityHeight);
-        const rankingGap = Math.max(3, Math.round(input.badgeGap * 0.35));
-        input.badgeTopOffset += actualHeight + rankingGap;
-        input.qualityBadges = [];
-      }
-    }
-
-
     if (input.imageType === 'logo') {
       let rowY = imageTop + renderedImageHeight + input.logoBadgeTopGap;
       if (input.qualityBadges.length > 0) {
@@ -1378,8 +1352,6 @@ export const renderWithSharp = async (
               regionLeft: input.posterRowHorizontalInset,
               regionWidth: posterRowRegionWidth,
               align: posterRowAlign,
-              preserveBadgeSize: true,
-              contentLayoutOverride: 'standard',
             });
           }
         }
@@ -1391,11 +1363,21 @@ export const renderWithSharp = async (
     }
 
     if (input.imageType === 'poster' && input.qualityBadges.length > 0) {
-      const qualityPlacement = resolvePosterQualityBadgePlacement(
+      let qualityPlacement = resolvePosterQualityBadgePlacement(
         input.posterRatingsLayout,
         input.qualityBadgesSide,
         input.posterQualityBadgesPosition
       );
+
+      if (qualityPlacement === 'bottom') {
+        const hasBottomRatings = input.bottomBadges.length > 0;
+        const hasTopRatings = input.topBadges.length > 0;
+        const isAuto = input.posterQualityBadgesPosition === 'auto';
+        if (hasBottomRatings && !hasTopRatings && isAuto) {
+          qualityPlacement = 'top';
+        }
+      }
+
       const metrics: BadgeLayoutMetrics = {
         iconSize: input.badgeIconSize,
         fontSize: input.badgeFontSize,
@@ -1404,7 +1386,25 @@ export const renderWithSharp = async (
         gap: input.badgeGap,
       };
       const qualityBadgeHeight = Math.max(32, posterReferenceBadgeHeight);
-      if (qualityPlacement === 'bottom') {
+      if (qualityPlacement === 'top') {
+        const qualityLayout = getQualityBadgeRowLayout(input.qualityBadges, posterReferenceBadgeHeight);
+        if (qualityLayout) {
+          const rowY = findPosterQualityRowY(
+            input.badgeTopOffset,
+            qualityLayout,
+            input.badgeTopOffset,
+            Math.round(input.outputHeight * 0.4),
+            'down'
+          );
+          if (rowY === null) {
+            console.warn('[ERDB] Poster quality badges could not avoid collision at top');
+          } else {
+            const actualQualityHeight = composeQualityBadgeRow(input.qualityBadges, rowY, posterReferenceBadgeHeight);
+            lastPosterQualityTopY = rowY;
+            lastPosterQualityBottomY = rowY + actualQualityHeight;
+          }
+        }
+      } else if (qualityPlacement === 'bottom') {
         const preferredBottomRowY = getPosterBottomQualityRowY() ?? Math.max(
           input.badgeTopOffset,
           input.outputHeight - input.badgeBottomOffset - Math.max(32, posterReferenceBadgeHeight)
