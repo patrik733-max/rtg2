@@ -1088,7 +1088,7 @@ export const renderWithSharp = async (
       const qualityBaseHeight =
         input.imageType === 'poster' ? posterReferenceBadgeHeight : badgeHeight;
       const qualityBaseGap = input.imageType === 'poster' ? (input.qualityBadgeGap ?? posterReferenceBadgeGap) : input.badgeGap;
-      let qualityHeight = Math.max(32, Math.round(baseHeight ?? qualityBaseHeight));
+      let qualityHeight = Math.min(40, Math.round(baseHeight ?? qualityBaseHeight));
       let rowGap = qualityBaseGap;
 
       const getBadgeWidth = (key: StreamBadgeKey, h: number): number => {
