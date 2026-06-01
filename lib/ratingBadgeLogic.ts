@@ -2,20 +2,37 @@ import { RATING_PROVIDER_OPTIONS, type RatingPreference } from '@/lib/ratingPref
 import type { RatingStyle } from '@/lib/ratingStyle';
 import type { PosterRatingLayout } from '@/lib/posterRatingLayout';
 
-export type StreamBadgeKey = '4k' | 'hdr' | 'dolbyvision' | 'dolbyatmos' | 'remux';
+export type StreamBadgeKey =
+  | 'atmosdv'
+  | 'remux'
+  | 'bluray'
+  | 'webdl'
+  | 'webrip'
+  | '4k'
+  | '1080p'
+  | '720p'
+  | 'dolbyvision'
+  | 'hdr10plus'
+  | 'hdr10'
+  | 'hdr'
+  | 'imaxenhanced'
+  | 'imax'
+  | 'sdr'
+  | 'truehd'
+  | 'dolbyatmos'
+  | 'dtsx'
+  | 'dtshdma'
+  | 'dtshd'
+  | 'dts'
+  | 'ddplus'
+  | 'dd';
 export type RenderImageType = 'poster' | 'backdrop' | 'logo' | 'thumbnail';
 export type BadgeKey = RatingPreference | StreamBadgeKey | 'average' | 'genre' | 'ranking';
 export type QualityBadgesSide = 'left' | 'right';
 export type PosterQualityBadgesPosition = 'auto' | QualityBadgesSide | 'top' | 'bottom' | 'above-logo';
 export type RankingPosition = 'auto' | 'top' | 'bottom' | 'above-logo';
 export type PosterGenrePosition = 'off' | 'top' | 'bottom' | 'above-logo';
-export type StreamQualityFlags = {
-  has4k: boolean;
-  hasHdr: boolean;
-  hasDolbyVision: boolean;
-  hasDolbyAtmos: boolean;
-  hasRemux: boolean;
-};
+export type StreamQualityFlags = Partial<Record<StreamBadgeKey, boolean>>;
 export type RatingBadge = {
   key: BadgeKey;
   label: string;
@@ -56,41 +73,18 @@ export const SCALE_SUFFIX_RATING_PROVIDERS: Partial<Record<RatingPreference, str
 export const RATING_PROVIDER_META = new Map(
   RATING_PROVIDER_OPTIONS.map((provider) => [provider.id, provider] as const)
 );
-export const STREAM_BADGE_META = new Map<StreamBadgeKey, { label: string; value: string; accentColor: string; iconUrl: string }>([
+export const STREAM_BADGE_META = new Map<
+  StreamBadgeKey,
+  { label: string; value: string; accentColor: string; iconUrl: string; iconWidthRatio?: number }
+>([
   [
-    '4k',
+    'atmosdv',
     {
-      label: '4K',
+      label: 'Atmos+DV',
       value: '',
-      accentColor: '#f59e0b',
-      iconUrl: '',
-    },
-  ],
-  [
-    'hdr',
-    {
-      label: 'HDR',
-      value: '',
-      accentColor: '#10b981',
-      iconUrl: '',
-    },
-  ],
-  [
-    'dolbyvision',
-    {
-      label: 'Dolby Vision',
-      value: '',
-      accentColor: '#60a5fa',
-      iconUrl: '',
-    },
-  ],
-  [
-    'dolbyatmos',
-    {
-      label: 'Dolby Atmos',
-      value: '',
-      accentColor: '#22d3ee',
-      iconUrl: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/9mousaa/BetterFormatter/main/images/atmos-vision.png',
+      iconWidthRatio: 3.66,
     },
   ],
   [
@@ -98,12 +92,298 @@ export const STREAM_BADGE_META = new Map<StreamBadgeKey, { label: string; value:
     {
       label: 'REMUX',
       value: '',
-      accentColor: '#ef4444',
-      iconUrl: '',
+      accentColor: '#27c04f',
+      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images%20w%3Ao%20logo/colored-remux.png',
+      iconWidthRatio: 4.28,
+    },
+  ],
+  [
+    'bluray',
+    {
+      label: 'BluRay',
+      value: '',
+      accentColor: '#27c04f',
+      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images%20w%3Ao%20logo/colored-bluray.png',
+      iconWidthRatio: 3.46,
+    },
+  ],
+  [
+    'webdl',
+    {
+      label: 'WebDL',
+      value: '',
+      accentColor: '#27c04f',
+      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images%20w%3Ao%20logo/colored-webdl.png',
+      iconWidthRatio: 4.44,
+    },
+  ],
+  [
+    'webrip',
+    {
+      label: 'WebRip',
+      value: '',
+      accentColor: '#27c04f',
+      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images%20w%3Ao%20logo/colored-webrip.png',
+      iconWidthRatio: 3.75,
+    },
+  ],
+  [
+    '4k',
+    {
+      label: '4K',
+      value: '',
+      accentColor: '#ffbe01',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/4k.png',
+      iconWidthRatio: 1.39,
+    },
+  ],
+  [
+    '1080p',
+    {
+      label: '1080p',
+      value: '',
+      accentColor: '#ff6904',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/1080p.png',
+      iconWidthRatio: 2.23,
+    },
+  ],
+  [
+    '720p',
+    {
+      label: '720p',
+      value: '',
+      accentColor: '#fb411c',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/720p.png',
+      iconWidthRatio: 1.59,
+    },
+  ],
+  [
+    'dolbyvision',
+    {
+      label: 'DV',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/DV.png',
+      iconWidthRatio: 5.72,
+    },
+  ],
+  [
+    'hdr10plus',
+    {
+      label: 'HDR10+',
+      value: '',
+      accentColor: '#ffbe01',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR10Plus.png',
+      iconWidthRatio: 4.79,
+    },
+  ],
+  [
+    'hdr10',
+    {
+      label: 'HDR10',
+      value: '',
+      accentColor: '#ffbe01',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR10.png',
+      iconWidthRatio: 4.25,
+    },
+  ],
+  [
+    'hdr',
+    {
+      label: 'HDR',
+      value: '',
+      accentColor: '#ffbe01',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR.png',
+      iconWidthRatio: 2.6,
+    },
+  ],
+  [
+    'imaxenhanced',
+    {
+      label: 'IMAX Enhanced',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/9mousaa/BetterFormatter/main/images/IMAX-enhanced.png',
+      iconWidthRatio: 2.93,
+    },
+  ],
+  [
+    'imax',
+    {
+      label: 'IMAX',
+      value: '',
+      accentColor: '#ffbe01',
+      iconUrl: 'https://github.com/nobnobz/Omni-Template-Bot-Bid-Raiser/blob/main/Other/regex%20tags/IMAXv2.PNG?raw=true',
+      iconWidthRatio: 5.16,
+    },
+  ],
+  [
+    'sdr',
+    {
+      label: 'SDR',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images/sdr.png',
+      iconWidthRatio: 2.5,
+    },
+  ],
+  [
+    'truehd',
+    {
+      label: 'TrueHD',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/TrueHD.png',
+      iconWidthRatio: 6.26,
+    },
+  ],
+  [
+    'dolbyatmos',
+    {
+      label: 'Atmos',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/Atmos.png',
+      iconWidthRatio: 5.94,
+    },
+  ],
+  [
+    'dtsx',
+    {
+      label: 'DTS:X',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/dtsx.png',
+      iconWidthRatio: 3.4,
+    },
+  ],
+  [
+    'dtshdma',
+    {
+      label: 'DTS-HD MA',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/dtsHDMA.png',
+      iconWidthRatio: 5.54,
+    },
+  ],
+  [
+    'dtshd',
+    {
+      label: 'DTS-HD',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/dtsHD.png',
+      iconWidthRatio: 4.31,
+    },
+  ],
+  [
+    'dts',
+    {
+      label: 'DTS',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/dts.png',
+      iconWidthRatio: 2.4,
+    },
+  ],
+  [
+    'ddplus',
+    {
+      label: 'DD+',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/DDPLUS.png',
+      iconWidthRatio: 5.14,
+    },
+  ],
+  [
+    'dd',
+    {
+      label: 'DD',
+      value: '',
+      accentColor: '#ffffff',
+      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/DD.png',
+      iconWidthRatio: 4.52,
     },
   ],
 ]);
-export const STREAM_BADGE_ORDER: StreamBadgeKey[] = ['4k', 'hdr', 'dolbyvision', 'dolbyatmos', 'remux'];
+export const STREAM_BADGE_ORDER: StreamBadgeKey[] = [
+  'atmosdv',
+  'remux',
+  'bluray',
+  'webdl',
+  'webrip',
+  '4k',
+  '1080p',
+  '720p',
+  'dolbyvision',
+  'hdr10plus',
+  'hdr10',
+  'hdr',
+  'imaxenhanced',
+  'imax',
+  'sdr',
+  'truehd',
+  'dolbyatmos',
+  'dtsx',
+  'dtshdma',
+  'dtshd',
+  'dts',
+  'ddplus',
+  'dd',
+];
+const STREAM_BADGE_PATTERNS: Array<[StreamBadgeKey, RegExp]> = [
+  ['atmosdv', /^(?=.*\batmos\b)(?=.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)/i],
+  ['remux', /\bremux\b/i],
+  ['bluray', /^(?=.*(?:bluray|blu-ray))(?!.*remux)/i],
+  ['webdl', /\b(?:web[-_. ]?dl|webdl)\b/i],
+  ['webrip', /\bweb[-_. ]?rip\b/i],
+  ['4k', /^(?=.*(?:2160[pi]?|4k|uhd))(?!.*(?:1080[pi]?|720[pi]?))/i],
+  ['1080p', /\b1080[pi]?\b/i],
+  ['720p', /\b720[pi]?\b/i],
+  ['dolbyvision', /\b(?:dv|dovi|dolby[\s._-]?vision)\b/i],
+  ['hdr10plus', /^(?!.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)(?=.*hdr[\s._-]?10[\s._-]?(?:\+|plus|p))/i],
+  ['hdr10', /^(?!.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)(?=.*hdr[\s._-]?10)(?!.*hdr[\s._-]?10[\s._-]?(?:\+|plus|p))/i],
+  ['hdr', /^(?!.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)(?=.*\bHDR\b)(?!.*hdr[\s._-]?10)/i],
+  ['imaxenhanced', /\bimax[\s._-]?enhanced\b/i],
+  ['imax', /^(?=.*\bIMAX\b)(?!.*enhanced)/i],
+  ['sdr', /\bsdr\b/i],
+  ['truehd', /(?:\btrue[ ._-]?hd\b|^(?=.*\batmos\b)(?=.*\bremux\b)(?!.*\b(?:true[ ._-]?hd|ddp|dd\+|e-?ac3|eac3)\b).+$)/i],
+  ['dolbyatmos', /^(?!.*\btrue[ _.-]?hd\b).*\batmos\b.*$/i],
+  ['dtsx', /\bdts[-_.: ]?x\b/i],
+  ['dtshdma', /^(?=.*\bdts[-_. ]?(?:hd[-_. ]?)?ma\b)(?!.*\bdts[-_.: ]?x\b)/i],
+  ['dtshd', /^(?=.*\bdts[-_. ]?hd\b)(?!.*\bdts[-_. ]?(?:hd[-_. ]?)?ma\b)(?!.*\bdts[-_.: ]?x\b)/i],
+  ['dts', /^(?=.*\bDTS\b)(?!.*\bdts[-_. ]?(?:hd|ma|xll|x)\b)/i],
+  ['ddplus', /^(?=.*(?:\bddp|\bdd\+|\beac-?3|\be-?ac-?3))(?!.*\batmos\b)(?!.*\btrue[\s._-]?hd\b)(?!.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)/i],
+  ['dd', /^(?=.*\b(?:dd[25][. ][01]|dd[^p+a-z]\b|\bac-?3)\b)(?!.*(?:\bddp|\bdd\+|\beac-?3|\be-?ac-?3))(?!.*\btrue[\s._-]?hd\b)(?!.*\batmos\b)(?!.*\b(?:dv|dovi|dolby[\s._-]?vision)\b)/i],
+];
+type StreamBadgeCategory = 'quality' | 'resolution' | 'visual' | 'audio';
+const STREAM_BADGE_CATEGORY: Record<StreamBadgeKey, StreamBadgeCategory> = {
+  atmosdv: 'audio',
+  remux: 'quality',
+  bluray: 'quality',
+  webdl: 'quality',
+  webrip: 'quality',
+  '4k': 'resolution',
+  '1080p': 'resolution',
+  '720p': 'resolution',
+  dolbyvision: 'visual',
+  hdr10plus: 'visual',
+  hdr10: 'visual',
+  hdr: 'visual',
+  imaxenhanced: 'visual',
+  imax: 'visual',
+  sdr: 'visual',
+  truehd: 'audio',
+  dolbyatmos: 'audio',
+  dtsx: 'audio',
+  dtshdma: 'audio',
+  dtshd: 'audio',
+  dts: 'audio',
+  ddplus: 'audio',
+  dd: 'audio',
+};
 export const DEFAULT_QUALITY_BADGES_STYLE: RatingStyle = 'glass';
 export const STREAM_BADGES_PROVIDER_BASE_URL = (
   process.env.ERDB_STREAM_BADGES_PROVIDER_URL || 'https://corsaro.stremio.dpdns.org/eyJ0bWRiX2tleSI6IjU0NjJmNzg0NjlmM2Q4MGJmNTIwMTY0NTI5NGMxNmU0IiwidXNlX2NvcnNhcm9uZXJvIjp0cnVlLCJ1c2VfdWluZGV4IjpmYWxzZSwidXNlX2tuYWJlbiI6dHJ1ZSwidXNlX3RvcnJlbnRnYWxheHkiOmZhbHNlLCJ1c2VfdG9ycmVudGlvIjp0cnVlLCJ1c2VfbWVkaWFmdXNpb24iOnRydWUsInVzZV9jb21ldCI6dHJ1ZSwidXNlX3N0cmVtdGhydV90b3J6Ijp0cnVlLCJ1c2VfcmFyYmciOnRydWUsImZ1bGxfaXRhIjpmYWxzZSwiZGJfb25seSI6ZmFsc2UsInVzZV9nbG9iYWxfY2FjaGUiOmZhbHNlLCJvbmx5X2RlYnJpZF9jYWNoZSI6ZmFsc2UsImh5YnJpZF9tb2RlIjp0cnVlfQ/manifest.json'
@@ -198,42 +478,15 @@ export const normalizeQualityBadgesStyle = (value?: string | null): RatingStyle 
   return DEFAULT_QUALITY_BADGES_STYLE;
 };
 
-export const createEmptyStreamFlags = (): StreamQualityFlags => ({
-  has4k: false,
-  hasHdr: false,
-  hasDolbyVision: false,
-  hasDolbyAtmos: false,
-  hasRemux: false,
-});
+export const createEmptyStreamFlags = (): StreamQualityFlags => ({});
 
 export const parseStreamFlagsFromFilename = (filename: string): StreamQualityFlags => {
-  const normalized = filename.toUpperCase();
-  const hasDolbyVision =
-    /\bDOVI\b/.test(normalized) || /\bDV\b/.test(normalized) || /DOLBY\s*VISION/.test(normalized);
-  const hasHdr =
-    /\bHDR10\+\b/.test(normalized) ||
-    /\bHDR10\b/.test(normalized) ||
-    /\bHDR\b/.test(normalized) ||
-    /\bHLG\b/.test(normalized) ||
-    hasDolbyVision;
-  const hasDolbyAtmos = /\bATMOS\b/.test(normalized) || /DOLBY\s*ATMOS/.test(normalized);
-  const has4k =
-    /\b2160P\b/.test(normalized) ||
-    /\b2160\b/.test(normalized) ||
-    /\b4K\b/.test(normalized) ||
-    /\bUHD\b/.test(normalized) ||
-    /\bULTRAHD\b/.test(normalized);
-  const hasRemux = /\bREMUX\b/.test(normalized);
-  return { has4k, hasHdr, hasDolbyVision, hasDolbyAtmos, hasRemux };
+  const flags = createEmptyStreamFlags();
+  for (const [key, pattern] of STREAM_BADGE_PATTERNS) {
+    if (pattern.test(filename)) flags[key] = true;
+  }
+  return flags;
 };
-
-export const mergeStreamFlags = (left: StreamQualityFlags, right: StreamQualityFlags): StreamQualityFlags => ({
-  has4k: left.has4k || right.has4k,
-  hasHdr: left.hasHdr || right.hasHdr,
-  hasDolbyVision: left.hasDolbyVision || right.hasDolbyVision,
-  hasDolbyAtmos: left.hasDolbyAtmos || right.hasDolbyAtmos,
-  hasRemux: left.hasRemux || right.hasRemux,
-});
 
 export const extractTorrentioFilenames = (payload: any) => {
   const streams = Array.isArray(payload?.streams) ? payload.streams : [];
@@ -251,30 +504,55 @@ export const extractTorrentioFilenames = (payload: any) => {
 };
 
 export const collectStreamFlags = (filenames: string[]) => {
-  let flags = createEmptyStreamFlags();
+  let bestFlags = createEmptyStreamFlags();
+  let bestScore = 0;
+  const scoreFlags = (flags: StreamQualityFlags) =>
+    STREAM_BADGE_ORDER.reduce((score, key, index) => {
+      if (!flags[key]) return score;
+      return score + STREAM_BADGE_ORDER.length - index;
+    }, 0);
+
   for (const filename of filenames) {
     if (!filename) continue;
-    flags = mergeStreamFlags(flags, parseStreamFlagsFromFilename(filename));
-    if (flags.has4k && flags.hasHdr && flags.hasDolbyVision && flags.hasDolbyAtmos && flags.hasRemux) {
-      break;
+    const flags = parseStreamFlagsFromFilename(filename);
+    const score = scoreFlags(flags);
+    if (score > bestScore) {
+      bestFlags = flags;
+      bestScore = score;
     }
   }
-  return flags;
+  return bestFlags;
 };
 
 export const buildStreamBadgesFromFlags = (flags: StreamQualityFlags): RatingBadge[] => {
   const badges: RatingBadge[] = [];
-  const flagMap: Record<StreamBadgeKey, boolean> = {
-    '4k': flags.has4k,
-    hdr: flags.hasHdr,
-    dolbyvision: flags.hasDolbyVision,
-    dolbyatmos: flags.hasDolbyAtmos,
-    remux: flags.hasRemux,
+  const legacyFlags = flags as StreamQualityFlags & {
+    has4k?: boolean;
+    hasHdr?: boolean;
+    hasDolbyVision?: boolean;
+    hasDolbyAtmos?: boolean;
+    hasRemux?: boolean;
   };
+  const normalizedFlags: StreamQualityFlags = {
+    ...flags,
+    '4k': flags['4k'] || legacyFlags.has4k,
+    hdr: flags.hdr || legacyFlags.hasHdr,
+    dolbyvision: flags.dolbyvision || legacyFlags.hasDolbyVision,
+    dolbyatmos: flags.dolbyatmos || legacyFlags.hasDolbyAtmos,
+    remux: flags.remux || legacyFlags.hasRemux,
+  };
+  if (normalizedFlags.atmosdv) {
+    normalizedFlags.dolbyatmos = false;
+    normalizedFlags.dolbyvision = false;
+  }
+  const usedCategories = new Set<StreamBadgeCategory>();
   for (const key of STREAM_BADGE_ORDER) {
-    if (!flagMap[key]) continue;
+    if (!normalizedFlags[key]) continue;
+    const category = STREAM_BADGE_CATEGORY[key];
+    if (usedCategories.has(category)) continue;
     const meta = STREAM_BADGE_META.get(key);
     if (!meta) continue;
+    usedCategories.add(category);
     badges.push({
       key,
       label: meta.label,

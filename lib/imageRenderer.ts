@@ -80,12 +80,31 @@ export const renderWithSharp = async (
     overlays.push({ input: resizedImageBuffer, top: imageTop, left: imageLeft });
 
     const iconByProvider = new Map<BadgeKey, string | null>();
-    if (input.badges.length > 0) {
+    const badgesWithIcons = [
+      ...input.badges,
+      ...input.qualityBadges.filter((badge) => badge.iconUrl),
+    ];
+    if (badgesWithIcons.length > 0) {
       const iconEntries = await Promise.all(
-        input.badges.map(async (badge) => {
+        badgesWithIcons.map(async (badge) => {
+          const isQualityBadge = STREAM_BADGE_META.has(badge.key as StreamBadgeKey);
+          const tintColor = isQualityBadge ? badge.accentColor : undefined;
+          
+          const outputSize = (() => {
+            if (isQualityBadge) {
+              const streamMeta = STREAM_BADGE_META.get(badge.key as StreamBadgeKey);
+              return streamMeta
+                ? { width: Math.max(96, Math.round((streamMeta.iconWidthRatio ?? 1) * 96)), height: 96 }
+                : { width: 96, height: 96 };
+            }
+            return { width: 96, height: 96 };
+          })();
+
           const iconDataUri = await getProviderIconDataUri(
             badge.iconUrl,
-            badge.iconCornerRadius || 0
+            badge.iconCornerRadius || 0,
+            outputSize,
+            tintColor
           );
           return [badge.key, iconDataUri] as const;
         })
@@ -1030,7 +1049,8 @@ export const renderWithSharp = async (
           badge.key as StreamBadgeKey,
           qualityHeight,
           uniformBadgeWidth,
-          input.qualityBadgesStyle
+          input.qualityBadgesStyle,
+          iconByProvider.get(badge.key)
         );
         if (!spec) continue;
         const badgeWidth = Math.min(spec.width, uniformBadgeWidth);
@@ -1052,7 +1072,7 @@ export const renderWithSharp = async (
       }
     };
     type QualityBadgeRowLayout = {
-      badgeWidth: number;
+      badgeWidths: number[];
       height: number;
       rowGap: number;
       rowWidth: number;
@@ -1069,30 +1089,44 @@ export const renderWithSharp = async (
         input.imageType === 'poster' ? posterReferenceBadgeHeight : badgeHeight;
       const qualityBaseGap = input.imageType === 'poster' ? (input.qualityBadgeGap ?? posterReferenceBadgeGap) : input.badgeGap;
       let qualityHeight = Math.max(32, Math.round(baseHeight ?? qualityBaseHeight));
-      let badgeWidth = Math.min(
-        Math.max(64, Math.round(qualityHeight * 1.75)),
-        Math.max(64, input.outputWidth - rowInset * 2)
-      );
       let rowGap = qualityBaseGap;
-      let rowWidth = rowBadges.length * badgeWidth + Math.max(0, rowBadges.length - 1) * rowGap;
-      if (rowWidth > maxRowWidth && rowBadges.length > 1) {
-        const ratio = Math.max(0.45, maxRowWidth / rowWidth);
-        const heightRatio = Math.max(0.75, Math.min(1, ratio));
-        qualityHeight = Math.max(32, Math.floor(qualityHeight * heightRatio));
-        badgeWidth = Math.min(
-          Math.max(60, Math.floor(badgeWidth * ratio)),
-          Math.max(60, input.outputWidth - rowInset * 2)
-        );
-        rowWidth = rowBadges.length * badgeWidth + Math.max(0, rowBadges.length - 1) * rowGap;
-        if (rowWidth > maxRowWidth) {
-          const availableForGaps = Math.max(0, maxRowWidth - rowBadges.length * badgeWidth);
-          rowGap = Math.max(0, Math.floor(availableForGaps / (rowBadges.length - 1)));
-          rowWidth = rowBadges.length * badgeWidth + Math.max(0, rowBadges.length - 1) * rowGap;
+
+      const getBadgeWidth = (key: StreamBadgeKey, h: number): number => {
+        const iconMeta = STREAM_BADGE_META.get(key);
+        if (iconMeta) {
+          return Math.round(h * (iconMeta.iconWidthRatio ?? Math.max(1.35, 0.72 + iconMeta.label.length * 0.34)));
         }
+        return Math.round(h * 1.75);
+      };
+
+      const getBadgeWidths = (h: number) =>
+        rowBadges.map((badge) => {
+          if (!STREAM_BADGE_META.has(badge.key as StreamBadgeKey)) return 0;
+          return getBadgeWidth(badge.key as StreamBadgeKey, h);
+        });
+
+      let badgeWidths = getBadgeWidths(qualityHeight);
+      let rowWidth = badgeWidths.reduce((sum, w) => sum + w, 0) + Math.max(0, rowBadges.length - 1) * rowGap;
+
+      let attempts = 0;
+      while (rowWidth > maxRowWidth && rowBadges.length > 1 && qualityHeight > 28 && attempts < 12) {
+        const ratio = Math.max(0.72, Math.min(0.94, maxRowWidth / Math.max(1, rowWidth)));
+        qualityHeight = Math.max(28, Math.floor(qualityHeight * ratio));
+        badgeWidths = getBadgeWidths(qualityHeight);
+        rowWidth = badgeWidths.reduce((sum, w) => sum + w, 0) + Math.max(0, rowBadges.length - 1) * rowGap;
+        attempts += 1;
       }
+
+      if (rowWidth > maxRowWidth && rowBadges.length > 1) {
+        const sumWidths = badgeWidths.reduce((sum, w) => sum + w, 0);
+        const availableForGaps = Math.max(0, maxRowWidth - sumWidths);
+        rowGap = Math.max(0, Math.floor(availableForGaps / (rowBadges.length - 1)));
+        rowWidth = sumWidths + Math.max(0, rowBadges.length - 1) * rowGap;
+      }
+
       let rowX = Math.floor((input.outputWidth - rowWidth) / 2);
       rowX = Math.max(rowInset, Math.min(rowX, Math.max(rowInset, input.outputWidth - rowWidth - rowInset)));
-      return { badgeWidth, height: qualityHeight, rowGap, rowWidth, rowX };
+      return { badgeWidths, height: qualityHeight, rowGap, rowWidth, rowX };
     };
     const composeQualityBadgeRow = (
       rowBadges: RatingBadge[],
@@ -1101,15 +1135,18 @@ export const renderWithSharp = async (
     ): number => {
       const layout = getQualityBadgeRowLayout(rowBadges, baseHeight);
       if (!layout) return 0;
-      const { badgeWidth, height: qualityHeight, rowGap } = layout;
+      const { badgeWidths, height: qualityHeight, rowGap } = layout;
       let rowX = layout.rowX;
-      for (const badge of rowBadges) {
+      for (let index = 0; index < rowBadges.length; index += 1) {
+        const badge = rowBadges[index];
         if (!STREAM_BADGE_META.has(badge.key as StreamBadgeKey)) continue;
+        const badgeWidth = badgeWidths[index] ?? 0;
         const spec = buildQualityBadgeSvg(
           badge.key as StreamBadgeKey,
           qualityHeight,
           badgeWidth,
-          input.qualityBadgesStyle
+          input.qualityBadgesStyle,
+          iconByProvider.get(badge.key)
         );
         if (!spec) continue;
         overlays.push({ input: Buffer.from(spec.svg), top: rowY, left: rowX });
@@ -1211,7 +1248,8 @@ export const renderWithSharp = async (
           badge.key as StreamBadgeKey,
           qualityHeight,
           uniformBadgeWidth,
-          input.qualityBadgesStyle
+          input.qualityBadgesStyle,
+          iconByProvider.get(badge.key)
         );
         if (!spec) continue;
         overlays.push({ input: Buffer.from(spec.svg), top: rowY, left: clampedX });

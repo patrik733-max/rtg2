@@ -30,6 +30,7 @@ import { parseNonNegativeInt } from '@/lib/routeUtils';
 
 const sourceImageInFlight = new Map<string, Promise<RenderedImagePayload>>();
 const providerIconInFlight = new Map<string, Promise<string | null>>();
+const PROVIDER_ICON_CACHE_VERSION = 'v5';
 const generatedLogoVariantCache = new Map<string, { dataUrl: string; aspectRatio: number }>();
 const generatedLogoVariantInFlight = new Map<string, Promise<{ dataUrl: string; aspectRatio: number }>>();
 const getGeneratedLogoVariantCacheKey = (
@@ -132,20 +133,28 @@ const isTmdbSourceImageUrl = (value: string) => {
   }
 };
 
-const buildProviderIconStorageKey = (iconUrl: string, iconCornerRadius = 0) =>
-  `icons/${sha1Hex(`${iconUrl}|r:${iconCornerRadius}`)}.png`;
+const buildProviderIconStorageKey = (
+  iconUrl: string,
+  iconCornerRadius = 0,
+  outputWidth = 96,
+  outputHeight = 96,
+  tintColor?: string
+) => `icons/${sha1Hex(`${PROVIDER_ICON_CACHE_VERSION}|${iconUrl}|r:${iconCornerRadius}|s:${outputWidth}x${outputHeight}${tintColor ? `|t:${tintColor}` : ''}`)}.png`;
 
 const buildGeneratedLogoVariantStorageKey = (cacheKey: string) =>
   `customlogos/${sha1Hex(cacheKey)}.svg`;
 
 const readProviderIconFromStorage = async (
   iconUrl: string,
-  iconCornerRadius = 0
+  iconCornerRadius = 0,
+  outputWidth = 96,
+  outputHeight = 96,
+  tintColor?: string
 ): Promise<string | null> => {
   if (!isObjectStorageConfigured()) return null;
   try {
     const payload = await getCachedImageFromObjectStorage(
-      buildProviderIconStorageKey(iconUrl, iconCornerRadius)
+      buildProviderIconStorageKey(iconUrl, iconCornerRadius, outputWidth, outputHeight, tintColor)
     );
     if (!payload) return null;
     const buffer = Buffer.from(payload.body);
@@ -159,11 +168,14 @@ const readProviderIconFromStorage = async (
 const writeProviderIconToStorage = async (
   iconUrl: string,
   buffer: Buffer,
-  iconCornerRadius = 0
+  iconCornerRadius = 0,
+  outputWidth = 96,
+  outputHeight = 96,
+  tintColor?: string
 ) => {
   if (!isObjectStorageConfigured()) return;
   try {
-    await putCachedImageToObjectStorage(buildProviderIconStorageKey(iconUrl, iconCornerRadius), {
+    await putCachedImageToObjectStorage(buildProviderIconStorageKey(iconUrl, iconCornerRadius, outputWidth, outputHeight, tintColor), {
       body: bufferToArrayBuffer(buffer),
       contentType: 'image/png',
       cacheControl: buildSourceImageFallbackCacheControl(PROVIDER_ICON_CACHE_TTL_MS),
@@ -319,14 +331,18 @@ export const getSourceImagePayload = async (
 
 export const getProviderIconDataUri = async (
   iconUrl: string,
-  iconCornerRadius = 0
+  iconCornerRadius = 0,
+  outputSize = { width: 96, height: 96 },
+  tintColor?: string
 ): Promise<string | null> => {
   const normalizedIconUrl = iconUrl.trim();
   if (!normalizedIconUrl) return null;
   if (normalizedIconUrl.startsWith('data:')) {
     return normalizedIconUrl;
   }
-  const cacheKey = `${normalizedIconUrl}|r:${iconCornerRadius}`;
+  const outputWidth = Math.max(1, Math.round(outputSize.width));
+  const outputHeight = Math.max(1, Math.round(outputSize.height));
+  const cacheKey = `${PROVIDER_ICON_CACHE_VERSION}|${normalizedIconUrl}|r:${iconCornerRadius}|s:${outputWidth}x${outputHeight}${tintColor ? `|t:${tintColor}` : ''}`;
 
   const localCached = getMetadata<string>(cacheKey);
   if (localCached) {
@@ -337,7 +353,7 @@ export const getProviderIconDataUri = async (
     const warmLocal = getMetadata<string>(cacheKey);
     if (warmLocal) return warmLocal;
 
-    const storageCached = await readProviderIconFromStorage(normalizedIconUrl, iconCornerRadius);
+    const storageCached = await readProviderIconFromStorage(normalizedIconUrl, iconCornerRadius, outputWidth, outputHeight, tintColor);
     if (storageCached) {
       setMetadata(cacheKey, storageCached, PROVIDER_ICON_CACHE_TTL_MS);
       return storageCached;
@@ -351,23 +367,43 @@ export const getProviderIconDataUri = async (
       const sharp = await getSharpFactory();
       let pipeline = sharp(sourceBuffer)
         .trim()
-        .resize(96, 96, {
+        .resize(outputWidth, outputHeight, {
           fit: 'contain',
           background: { r: 0, g: 0, b: 0, alpha: 0 },
         });
       if (iconCornerRadius > 0) {
-        const radius = Math.max(1, Math.min(48, Math.round(iconCornerRadius)));
+        const radius = Math.max(1, Math.min(Math.round(Math.min(outputWidth, outputHeight) / 2), Math.round(iconCornerRadius)));
         const roundedMask = Buffer.from(
-          `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" rx="${radius}" ry="${radius}" fill="white"/></svg>`
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${outputWidth}" height="${outputHeight}"><rect width="${outputWidth}" height="${outputHeight}" rx="${radius}" ry="${radius}" fill="white"/></svg>`
         );
         pipeline = pipeline.composite([{ input: roundedMask, blend: 'dest-in' }]);
       }
-      const outputBuffer = await pipeline.png({ compressionLevel: 6 }).toBuffer();
-      const outputContentType = 'image/png';
+      let outputBuffer = await pipeline.png({ compressionLevel: 6 }).toBuffer();
 
+      if (tintColor) {
+        const iconMetadata = await sharp(outputBuffer).metadata();
+        const overlayWidth = iconMetadata.width || outputWidth;
+        const overlayHeight = iconMetadata.height || outputHeight;
+        outputBuffer = await sharp(outputBuffer)
+          .composite([{
+            input: {
+              create: {
+                width: overlayWidth,
+                height: overlayHeight,
+                channels: 4,
+                background: tintColor,
+              }
+            },
+            blend: 'in'
+          }])
+          .png({ compressionLevel: 6 })
+          .toBuffer();
+      }
+
+      const outputContentType = 'image/png';
       const dataUri = `data:${outputContentType};base64,${outputBuffer.toString('base64')}`;
       setMetadata(cacheKey, dataUri, PROVIDER_ICON_CACHE_TTL_MS);
-      await writeProviderIconToStorage(normalizedIconUrl, outputBuffer, iconCornerRadius);
+      await writeProviderIconToStorage(normalizedIconUrl, outputBuffer, iconCornerRadius, outputWidth, outputHeight, tintColor);
 
       return dataUri;
     } catch {

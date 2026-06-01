@@ -547,7 +547,8 @@ export const buildQualityBadgeSvg = (
   key: StreamBadgeKey,
   height: number,
   widthOverride?: number,
-  style: RatingStyle = DEFAULT_QUALITY_BADGES_STYLE
+  style: RatingStyle = DEFAULT_QUALITY_BADGES_STYLE,
+  iconDataUri?: string | null
 ) => {
   const h = Math.max(32, height);
   const isReferencePlain = style === 'plain';
@@ -604,6 +605,20 @@ ${content}
 </svg>`;
   };
 
+  const iconMeta = STREAM_BADGE_META.get(key);
+  if (iconMeta && iconDataUri) {
+    const width = widthOverride ?? Math.round(h * (iconMeta.iconWidthRatio ?? Math.max(1.35, 0.72 + iconMeta.label.length * 0.34)));
+    const imageHref = escapeXml(iconDataUri);
+    const imagePaddingX = Math.max(2, Math.round(h * 0.04));
+    const imagePaddingY = Math.max(2, Math.round(h * 0.04));
+    const imageWidth = Math.max(1, width - imagePaddingX * 2);
+    const imageHeight = Math.max(1, h - imagePaddingY * 2);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
+<image href="${imageHref}" x="${imagePaddingX}" y="${imagePaddingY}" width="${imageWidth}" height="${imageHeight}" preserveAspectRatio="xMidYMid meet"/>
+</svg>`;
+    return { svg, width, height: h };
+  }
+
   if (key === '4k') {
     const width = widthOverride ?? Math.round(h * 1.3);
     if (isReferencePlain) {
@@ -641,7 +656,7 @@ ${rect}
     const rect =
       style === 'square'
         ? baseRect(width, 'url(#hdrBorder)', '#0b0b0b')
-        : buildRect(width, '#e5e7eb');
+        : buildRect(width, '#ffffff');
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
 <defs>
   <linearGradient id="hdrBorder" x1="0" y1="0" x2="1" y2="1">
@@ -673,36 +688,11 @@ ${generateGlowText(`x="${width / 2}" y="${bottomY}" font-family="${fontFamily}" 
     const topY = Math.round(h * 0.36);
     const bottomY = Math.round(h * 0.73);
     const textLength = Math.max(40, Math.floor(width - innerPadding * 2));
-    const rect = buildRect(width, '#e5e7eb');
+    const rect = buildRect(width, '#ffffff');
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
 ${rect}
-<text x="${width / 2}" y="${topY}" font-family="${fontFamily}" font-size="${topSize}" font-weight="700" text-anchor="middle" fill="#e5e7eb" letter-spacing="0.18em" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>DOLBY</text>
-<text x="${width / 2}" y="${bottomY}" font-family="${fontFamily}" font-size="${bottomSize}" font-weight="800" text-anchor="middle" fill="#e5e7eb" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>VISION</text>
-</svg>`;
-    return { svg, width, height: h };
-  }
-
-  if (key === 'dolbyatmos') {
-    const width = widthOverride ?? Math.round(h * 1.7);
-    if (isReferencePlain) {
-      const topSize = Math.round(h * 0.24);
-      const bottomSize = Math.round(h * 0.34);
-      const topY = Math.round(h * 0.35);
-      const bottomY = Math.round(h * 0.78);
-      const content = `${generateGlowText(`x="${width / 2}" y="${topY}" font-family="${fontFamily}" font-size="${topSize}" font-weight="900" text-anchor="middle"`, 'DOLBY')}
-${generateGlowText(`x="${width / 2}" y="${bottomY}" font-family="${fontFamily}" font-size="${bottomSize}" font-weight="900" text-anchor="middle" letter-spacing="0.04em"`, 'ATMOS')}`;
-      return { svg: wrapSvg(content, width, h), width, height: h };
-    }
-    const topSize = Math.round(h * 0.22);
-    const bottomSize = Math.round(h * 0.42);
-    const topY = Math.round(h * 0.36);
-    const bottomY = Math.round(h * 0.73);
-    const textLength = Math.max(40, Math.floor(width - innerPadding * 2));
-    const rect = buildRect(width, '#e5e7eb');
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
-${rect}
-<text x="${width / 2}" y="${topY}" font-family="${fontFamily}" font-size="${topSize}" font-weight="700" text-anchor="middle" fill="#e5e7eb" letter-spacing="0.18em" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>DOLBY</text>
-<text x="${width / 2}" y="${bottomY}" font-family="${fontFamily}" font-size="${bottomSize}" font-weight="800" text-anchor="middle" fill="#e5e7eb" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>ATMOS</text>
+<text x="${width / 2}" y="${topY}" font-family="${fontFamily}" font-size="${topSize}" font-weight="700" text-anchor="middle" fill="#ffffff" letter-spacing="0.18em" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>DOLBY</text>
+<text x="${width / 2}" y="${bottomY}" font-family="${fontFamily}" font-size="${bottomSize}" font-weight="800" text-anchor="middle" fill="#ffffff" textLength="${textLength}" lengthAdjust="spacingAndGlyphs"${universalStroke}>VISION</text>
 </svg>`;
     return { svg, width, height: h };
   }
@@ -722,6 +712,24 @@ ${rect}
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
 ${rect}
 <text x="${width / 2}" y="${textY}" font-family="${fontFamily}" font-size="${textSize}" font-weight="800" text-anchor="middle" fill="${color}" letter-spacing="0.08em"${universalStroke}>REMUX</text>
+</svg>`;
+    return { svg, width, height: h };
+  }
+
+  const meta = STREAM_BADGE_META.get(key);
+  if (meta) {
+    const label = escapeXml(meta.label);
+    const width = widthOverride ?? Math.max(Math.round(h * 1.35), Math.round(h * (0.72 + label.length * 0.34)));
+    const textSize = Math.max(12, Math.round(h * (label.length > 6 ? 0.32 : 0.42)));
+    const textY = Math.round(h * 0.63);
+    if (isReferencePlain) {
+      const content = generateGlowText(`x="${width / 2}" y="${textY}" font-family="${fontFamily}" font-size="${textSize}" font-weight="900" text-anchor="middle"`, label);
+      return { svg: wrapSvg(content, width, h), width, height: h };
+    }
+    const rect = buildRect(width, meta.accentColor);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}">
+${rect}
+<text x="${width / 2}" y="${textY}" font-family="${fontFamily}" font-size="${textSize}" font-weight="800" text-anchor="middle" fill="${meta.accentColor}" textLength="${Math.max(20, width - innerPadding * 2)}" lengthAdjust="spacingAndGlyphs"${universalStroke}>${label}</text>
 </svg>`;
     return { svg, width, height: h };
   }

@@ -8,7 +8,7 @@ import { Dropdown } from './dropdown';
 import type { HomePageViewProps } from '@/components/workspace/types';
 import { RatingProviderSortableList } from '@/components/rating-provider-sortable-list';
 import { isVerticalPosterRatingLayout, type PosterRatingLayout } from '@/lib/posterRatingLayout';
-import { RATING_STYLE_OPTIONS, QUALITY_BADGE_STYLE_OPTIONS, type RatingStyle } from '@/lib/ratingStyle';
+import { RATING_STYLE_OPTIONS, type RatingStyle } from '@/lib/ratingStyle';
 import { BACKDROP_RATING_LAYOUT_OPTIONS, type BackdropRatingLayout } from '@/lib/backdropRatingLayout';
 import { BACKDROP_RATINGS_SIZE_OPTIONS, type BackdropRatingsSize } from '@/lib/backdropRatingsSize';
 import { THUMBNAIL_RATING_LAYOUT_OPTIONS, type ThumbnailRatingLayout } from '@/lib/thumbnailRatingLayout';
@@ -475,12 +475,6 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
               <h3 className="text-xs font-medium text-slate-400 mb-2">Mode</h3>
               {renderDropdown(activeStreamBadges, setActiveStreamBadges, STREAM_BADGE_OPTIONS)}
             </div>
-            {!(previewType === 'poster' && posterConfiguratorPreset === 'simple') && (
-              <div>
-                <h3 className="text-xs font-medium text-slate-400 mb-2">Badge Style</h3>
-                {renderDropdown(activeQualityBadgesStyle, (v) => setActiveQualityBadgesStyle(v), QUALITY_BADGE_STYLE_OPTIONS)}
-              </div>
-            )}
             <div className="flex flex-wrap gap-4 pt-2">
               {shouldShowQualityBadgesPosition && (
                 <div className="flex-1 min-w-0">
