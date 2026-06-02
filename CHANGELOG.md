@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.81](https://github.com/realbestia1/erdb/compare/v0.4.80...v0.4.81) - 2026-06-02
+
+- Support colored/white quality badge color modes ([ccc1728](https://github.com/realbestia1/erdb/commit/ccc17286125551f7cf46812024577e978719d01f))
+  Introduce a qualityBadgesColorMode setting ("colored" or "white") and wire it through the stack. Added normalizeQualityBadgesColorMode and new fast/route/proxy/type mappings to accept poster/backdrop/thumbnail color mode params; route handler now reads and resolves color mode per image type. UI: expose a dropdown for badge color mode and thread state through home-page controller and workspace types/actions. Rendering: badge SVG generation and image renderer respect color mode for text, rect and accent colors; provider icon pipeline updated to produce tinted or white variants and cache version bumped. Also bumped final image renderer cache version and added debug logging for badge tint selection.
+- Add premium glow, padding, and icon outline fixes ([e99a190](https://github.com/realbestia1/erdb/commit/e99a1903a086ecbe2959c1c7092a7ecfad21647f))
+  Add SVG text-shadow and premium-glow filters and switch badge text rendering to use layered glows and padded SVG wrappers to avoid clipping. Mark badge specs with isPadded and adjust imageRenderer overlays to offset padded SVGs. Improve provider icon pipeline: shrink+extend input to prevent shadow clipping, generate solid white/black layers, blurred shadow and multi-offset outline, then composite onto a larger canvas for crisp outlines and soft glow. Bump provider icon and final image renderer cache versions, set rating badge accentColor to white, and add /scratch to .gitignore.
+
 ## [0.4.80](https://github.com/realbestia1/erdb/compare/v0.4.79...v0.4.80) - 2026-06-01
 
 - Cap quality badge height and bump cache version ([6362a21](https://github.com/realbestia1/erdb/commit/6362a214ea1a226a02cb8e8d8d44ed4120b5f479))
