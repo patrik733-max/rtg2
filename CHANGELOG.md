@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.82](https://github.com/realbestia1/erdb/compare/v0.4.81...v0.4.82) - 2026-06-03
+
+- Adjust dropdown sizing and add truncation ([75252a5](https://github.com/realbestia1/erdb/commit/75252a5622196dd12305ffaaf997ab3ad1974dc4))
+  Make the dropdown width content-driven and prevent overflow on small viewports. Set width to 'max-content', reduce minWidth from 180 to 160, and add a maxWidth based on the viewport (Math.min(320, window.innerWidth - rect.left - 16)). Also replace whitespace-nowrap with a 'truncate' utility on option buttons to avoid wrapped labels for long option text.
+- Add ratings color mode and thumbnailRatingStyle keys ([572e2e6](https://github.com/realbestia1/erdb/commit/572e2e69753b39259ca994fb087f1346ade7a893))
+  Allow ratings color mode options to flow through the proxy and home-page controller. Added posterRatingsColorMode, backdropRatingsColorMode, thumbnailRatingsColorMode, logoRatingsColorMode and ratingsColorMode to PROXY_OPTIONAL_STRING_KEYS (and added thumbnailRatingStyle). Also updated useHomePageController to accept the new rating color mode props where needed so these settings are propagated from proxy config into the controller.
+- Add ratingsColorMode for badge rendering ([f97dcdb](https://github.com/realbestia1/erdb/commit/f97dcdbb5607abc018babf2c2f7f837ac77c8ce7))
+  Introduce a ratingsColorMode option ("colored" | "transparent") across the stack to control glass-style badge coloring and opacities. Changes include: new normalizeRatingsColorMode helper; propagate ratingsColorMode through route params, proxy token config, ERDB proxy mapping, and aiometadata pattern builder; add UI state, actions and controls in home/workspace components to pick per-image-type color mode; pass mode into image renderer and badge SVG generators which adjust fill/border colors and opacities for the glass style; update types and tests accordingly. Also bumps package version.
+
 ## [0.4.81](https://github.com/realbestia1/erdb/compare/v0.4.80...v0.4.81) - 2026-06-02
 
 - Support colored/white quality badge color modes ([ccc1728](https://github.com/realbestia1/erdb/commit/ccc17286125551f7cf46812024577e978719d01f))
