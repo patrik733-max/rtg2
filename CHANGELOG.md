@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.83](https://github.com/realbestia1/erdb/compare/v0.4.82...v0.4.83) - 2026-06-07
+
+- Switch default stream badges provider URL ([83d6505](https://github.com/realbestia1/erdb/commit/83d6505c29e625bf8f89e07c2ace2c5dbf1bf25c))
+  Update STREAM_BADGES_PROVIDER_BASE_URL default from corsaro.stremio.dpdns.org to icv.stremio-italia.eu in lib/ratingBadgeLogic.ts and lib/routeConfig.ts. Also bump package version from 0.4.82 to 0.4.83. This redirects the app to the new stream badges provider endpoint; no other logic changes.
+
 ## [0.4.82](https://github.com/realbestia1/erdb/compare/v0.4.81...v0.4.82) - 2026-06-03
 
 - Adjust dropdown sizing and add truncation ([75252a5](https://github.com/realbestia1/erdb/commit/75252a5622196dd12305ffaaf997ab3ad1974dc4))
