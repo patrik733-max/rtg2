@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.84](https://github.com/realbestia1/erdb/compare/v0.4.83...v0.4.84) - 2026-06-07
+
+- Remove legacy source image cache and cleanup ([38eaaa4](https://github.com/realbestia1/erdb/commit/38eaaa4e678e7eaedc8304c6657f98b6bb0f22ad))
+  Simplify source image pipeline by removing legacy shared/local caching logic: imageAssetPipeline now always fetches source images inside the in-flight dedupe wrapper (no more read/write of `source/*` entries in object storage). Add startup cleanup in objectStorage to remove the old CACHE_DIR/source directory to reclaim disk space. Bump package version to 0.4.84. (tsbuildinfo updated as part of the build artifacts.)
+
 ## [0.4.83](https://github.com/realbestia1/erdb/compare/v0.4.82...v0.4.83) - 2026-06-07
 
 - Switch default stream badges provider URL ([83d6505](https://github.com/realbestia1/erdb/commit/83d6505c29e625bf8f89e07c2ace2c5dbf1bf25c))
