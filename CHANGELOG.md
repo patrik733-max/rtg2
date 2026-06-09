@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.85](https://github.com/realbestia1/erdb/compare/v0.4.84...v0.4.85) - 2026-06-09
+
+- Refactor cache/dedupe, add metadata pruning, Kitsu ([ac6c6bb](https://github.com/realbestia1/erdb/commit/ac6c6bb2b59916e356177971fe20910d52b84f28))
+  Consolidate final image cache key construction into buildCacheKey and use a dedupeKey for shared in-flight renders; remove local fs debug logging. Add a dedupe timeout to withDedupe to prevent hung promises. Add a background metadata prune timer (ensureMetadataPruneStarted) and call it from get/set/prune helpers to keep metadata cache trimmed. Improve parseKitsuInputParts to handle older proxy URL formats with or without season/episode. Bump package version to 0.4.85.
+
 ## [0.4.84](https://github.com/realbestia1/erdb/compare/v0.4.83...v0.4.84) - 2026-06-07
 
 - Remove legacy source image cache and cleanup ([38eaaa4](https://github.com/realbestia1/erdb/commit/38eaaa4e678e7eaedc8304c6657f98b6bb0f22ad))
