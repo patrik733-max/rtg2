@@ -1,42 +1,23 @@
 import { buildErdbImageUrl, normalizeErdbId, type ProxyConfig } from '@/lib/addonProxy';
+import { fetchJsonCached, fetchTextCached } from '@/lib/cachedFetch';
 import { fetchWithRetry } from '@/lib/request';
+import { TMDB_CACHE_TTL_MS } from '@/lib/routeConfig';
+import type { PhaseDurations } from '@/lib/routeTypes';
 export const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-export const tmdbFetchCache = new Map<string, Promise<any>>();
-export const textFetchCache = new Map<string, Promise<string | null>>();
 export type TmdbRef = { id: number; type: 'movie' | 'tv'; season?: number | null; episode?: number | null; isAnime?: boolean };
 
+const emptyPhases = (): PhaseDurations => ({ auth: 0, tmdb: 0, mdb: 0, stream: 0, render: 0 });
+
 export const fetchTmdbJson = async (url: string) => {
-  const cached = tmdbFetchCache.get(url);
-  if (cached) return cached;
-  const promise = fetch(url, { cache: 'no-store' })
-    .then(async (response) => {
-      if (!response.ok) return null;
-      try {
-        return await response.json();
-      } catch {
-        return null;
-      }
-    })
-    .catch(() => null);
-  tmdbFetchCache.set(url, promise);
-  return promise;
+  const response = await fetchJsonCached(`tmdb:${url}`, url, TMDB_CACHE_TTL_MS, emptyPhases(), 'tmdb');
+  if (!response.ok) return null;
+  return response.data;
 };
 
 export const fetchText = async (url: string) => {
-  const cached = textFetchCache.get(url);
-  if (cached) return cached;
-  const promise = fetchWithRetry(url, { cache: 'no-store', redirect: 'follow' })
-    .then(async (response) => {
-      if (!response.ok) return null;
-      try {
-        return await response.text();
-      } catch {
-        return null;
-      }
-    })
-    .catch(() => null);
-  textFetchCache.set(url, promise);
-  return promise;
+  const response = await fetchTextCached(`tvdbtext:${url}`, url, TMDB_CACHE_TTL_MS, emptyPhases(), 'tmdb');
+  if (!response.ok) return null;
+  return response.data;
 };
 
 export const extractTvdbEpisodeIdFromAiredOrder = async (

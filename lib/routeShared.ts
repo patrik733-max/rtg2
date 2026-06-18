@@ -38,12 +38,14 @@ export const withDedupe = async <T,>(
     // Handle silently as the caller will have already received the timeout error
   });
 
+  let timer: ReturnType<typeof setTimeout> | null = null;
   const promise = Promise.race([
     fetchPromise,
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error(`Dedupe timeout: ${key}`)), timeoutMs)
-    ),
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`Dedupe timeout: ${key}`)), timeoutMs);
+    }),
   ]).finally(() => {
+    if (timer) clearTimeout(timer);
     inFlightMap.delete(key);
   });
   inFlightMap.set(key, promise);
