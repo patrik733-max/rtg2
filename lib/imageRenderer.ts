@@ -95,11 +95,6 @@ export const renderWithSharp = async (
                     : (badge.accentColor || '#ffffff'))
                 : '#ffffff')
             : undefined;
-          
-          if (isQualityBadge) {
-            console.log(`[ERDB LOG] Badge: ${badge.key}, AccentColor: ${badge.accentColor}, Mode: ${input.qualityBadgesColorMode}, Tint: ${tintColor}`);
-          }
-          
           const outputSize = (() => {
             if (isQualityBadge) {
               const streamMeta = STREAM_BADGE_META.get(badge.key as StreamBadgeKey);
