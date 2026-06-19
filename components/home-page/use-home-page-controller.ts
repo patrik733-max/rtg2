@@ -242,13 +242,13 @@ export function useHomePageController({
       setRanking('daily');
       setPosterGenrePosition('top');
       setPosterVignetteEnabled(true);
-      setPosterRatingsLayout('top');
+      setPosterRatingsLayout('bottom');
       setPosterRatingsColorMode('colored');
     } else {
       setPosterAverageRatingsEnabled(false);
     }
   }, []);
-  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('top');
+  const [posterRatingsLayout, setPosterRatingsLayout] = useState<PosterRatingLayout>('bottom');
   const [backdropRatingsLayout, setBackdropRatingsLayout] = useState<BackdropRatingLayout>('right-vertical');
   const [backdropRatingsSize, setBackdropRatingsSize] = useState<BackdropRatingsSize>('large');
   const [thumbnailRatingsLayout, setThumbnailRatingsLayout] = useState<ThumbnailRatingLayout>('left-vertical');
@@ -2089,7 +2089,7 @@ export function useHomePageController({
     if (typeof payload.rankingPosition === 'string') {
       setRankingPosition(normalizeRankingPosition(payload.rankingPosition));
     }
-    if (typeof payload.posterRatingsLayout === 'string' && isPosterRatingLayout(payload.posterRatingsLayout)) {
+    if (typeof payload.posterRatingsLayout === 'string' && isPosterRatingLayout(payload.posterRatingsLayout) && payload.posterConfiguratorPreset !== 'simple') {
       setPosterRatingsLayout(payload.posterRatingsLayout);
     }
     if (typeof payload.backdropRatingsLayout === 'string') {

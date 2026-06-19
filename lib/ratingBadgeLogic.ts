@@ -163,8 +163,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'DV',
       value: '',
       accentColor: '#ffffff',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/DV.png',
-      iconWidthRatio: 5.72,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/dolby_vision.png',
+      iconWidthRatio: 2.33,
     },
   ],
   [
@@ -173,8 +173,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'HDR10+',
       value: '',
       accentColor: '#ffbe01',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR10Plus.png',
-      iconWidthRatio: 4.79,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/hdr10_plus.png',
+      iconWidthRatio: 4.3,
     },
   ],
   [
@@ -183,8 +183,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'HDR10',
       value: '',
       accentColor: '#ffbe01',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR10.png',
-      iconWidthRatio: 4.25,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/hdr10.png',
+      iconWidthRatio: 3.18,
     },
   ],
   [
@@ -193,8 +193,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'HDR',
       value: '',
       accentColor: '#ffbe01',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/HDR.png',
-      iconWidthRatio: 2.6,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/hdr.png',
+      iconWidthRatio: 1.78,
     },
   ],
   [
@@ -203,8 +203,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'IMAX Enhanced',
       value: '',
       accentColor: '#ffffff',
-      iconUrl: 'https://raw.githubusercontent.com/9mousaa/BetterFormatter/main/images/IMAX-enhanced.png',
-      iconWidthRatio: 2.93,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/imax_enhanced.png',
+      iconWidthRatio: 2.87,
     },
   ],
   [
@@ -213,8 +213,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'IMAX',
       value: '',
       accentColor: '#ffbe01',
-      iconUrl: 'https://github.com/nobnobz/Omni-Template-Bot-Bid-Raiser/blob/main/Other/regex%20tags/IMAXv2.PNG?raw=true',
-      iconWidthRatio: 5.16,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/imax.png',
+      iconWidthRatio: 3.73,
     },
   ],
   [
@@ -223,8 +223,8 @@ export const STREAM_BADGE_META = new Map<
       label: 'SDR',
       value: '',
       accentColor: '#ffffff',
-      iconUrl: 'https://raw.githubusercontent.com/ngreyx1/badges/refs/heads/main/images/sdr.png',
-      iconWidthRatio: 2.5,
+      iconUrl: 'https://raw.githubusercontent.com/leonevz/Elite-Badges/main/Badges/SDR_transparent_4x.png',
+      iconWidthRatio: 1.78,
     },
   ],
   [
@@ -557,6 +557,7 @@ export const buildStreamBadgesFromFlags = (flags: StreamQualityFlags): RatingBad
   for (const key of STREAM_BADGE_ORDER) {
     if (!normalizedFlags[key]) continue;
     const category = STREAM_BADGE_CATEGORY[key];
+    if (category === 'quality' || category === 'audio') continue;
     if (usedCategories.has(category)) continue;
     const meta = STREAM_BADGE_META.get(key);
     if (!meta) continue;

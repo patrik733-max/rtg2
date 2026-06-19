@@ -164,24 +164,13 @@ export const fetchRanking = async (
 };
 
 export const getRankingLabel = (interval: RankingInterval, lang: string) => {
+  if (interval === 'WEEKLY' || interval === 'MONTHLY') return '';
   try {
     const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
-    let label = '';
-    if (interval === 'DAILY') {
-      label = rtf.format(0, 'day');
-    } else if (interval === 'WEEKLY') {
-      label = rtf.format(0, 'week');
-    } else if (interval === 'MONTHLY') {
-      label = rtf.format(0, 'month');
-    } else {
-      return 'Rank';
-    }
-    if (!label) return interval === 'DAILY' ? 'Today' : interval === 'WEEKLY' ? 'This Week' : 'This Month';
+    let label = rtf.format(0, 'day');
+    if (!label) label = 'Today';
     return label.charAt(0).toUpperCase() + label.slice(1);
   } catch {
-    if (interval === 'DAILY') return 'Today';
-    if (interval === 'WEEKLY') return 'This Week';
-    if (interval === 'MONTHLY') return 'This Month';
-    return 'Rank';
+    return 'Today';
   }
 };

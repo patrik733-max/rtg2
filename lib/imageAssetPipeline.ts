@@ -30,7 +30,7 @@ import { parseNonNegativeInt } from '@/lib/routeUtils';
 
 const sourceImageInFlight = new Map<string, Promise<RenderedImagePayload>>();
 const providerIconInFlight = new Map<string, Promise<string | null>>();
-const PROVIDER_ICON_CACHE_VERSION = 'v17';
+const PROVIDER_ICON_CACHE_VERSION = 'v19';
 const generatedLogoVariantCache = new Map<string, { dataUrl: string; aspectRatio: number }>();
 const generatedLogoVariantInFlight = new Map<string, Promise<{ dataUrl: string; aspectRatio: number }>>();
 const getGeneratedLogoVariantCacheKey = (
