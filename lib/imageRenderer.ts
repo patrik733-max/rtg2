@@ -1956,8 +1956,14 @@ export const renderWithSharp = async (
       const scale = rankingSpec.width > maxWidth ? maxWidth / rankingSpec.width : 1;
       let renderedWidth = Math.round(rankingSpec.width * scale);
       let renderedHeight = Math.round(rankingSpec.height * scale);
+      const targetRankingHeight = Math.round(Math.min(40, posterReferenceBadgeHeight) * 1.6);
+      if (renderedHeight > targetRankingHeight) {
+        const heightScale = targetRankingHeight / renderedHeight;
+        renderedWidth = Math.round(renderedWidth * heightScale);
+        renderedHeight = targetRankingHeight;
+      }
       let rankingBuffer =
-        scale < 1
+        renderedWidth < rankingSpec.width
           ? await sharp(Buffer.from(rankingSpec.svg))
             .resize(renderedWidth, renderedHeight, { fit: 'fill' })
             .png()
@@ -1982,7 +1988,9 @@ export const renderWithSharp = async (
         return { left: rankingLeft, top: rowY };
       };
       const getTopRankingTop = () => {
-        let nextTop = input.badgeTopOffset;
+        const qualityRefHeight = Math.min(40, posterReferenceBadgeHeight);
+        const baseTop = input.badgeTopOffset + Math.round((qualityRefHeight - renderedHeight) / 2);
+        let nextTop = baseTop;
         if (input.topBadges.length > 0) {
           nextTop = Math.max(nextTop, input.badgeTopOffset + verticalBadgeHeight + rankingGap);
         }
@@ -2074,7 +2082,8 @@ export const renderWithSharp = async (
       ) {
         top = Math.max(input.badgeTopOffset, lastPosterQualityTopY - renderedHeight - rankingGap);
       }
-      const minTop = input.badgeTopOffset;
+      const rankingMinTop = Math.min(input.badgeTopOffset, Math.round(input.badgeTopOffset + (Math.min(40, posterReferenceBadgeHeight) - renderedHeight) / 2));
+      const minTop = rankingMinTop;
       const maxTop = Math.max(minTop, input.outputHeight - input.badgeBottomOffset - renderedHeight);
       top = Math.max(minTop, Math.min(Math.round(top), maxTop));
       const topPositionMaxTop =

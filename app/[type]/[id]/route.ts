@@ -74,7 +74,7 @@ import { getTokenConfig } from '@/lib/tokens';
 import { MDBLIST_API_KEYS, buildMdbListCacheSeed, fetchFilmwebCriticsRating, fetchFilmwebIdBySearch, fetchFilmwebIdFromWikidata, fetchFilmwebRating, fetchMdbListRatings, fetchSimklRating, getMdbListCacheTtlMs, getRatingCacheTtlMs } from '@/lib/ratingProviders';
 import { fetchJsonCached, fetchTextCached } from '@/lib/cachedFetch';
 import { fetchStreamBadges } from '@/lib/streamBadges';
-import { fetchRanking, getFirstTmdbGenreName, getRankingLabel, isTmdbAnimationTitle, normalizeRankingInterval } from '@/lib/tmdbMetadata';
+import { buildFallbackBadge, fetchRanking, getFirstTmdbGenreName, getRankingLabel, isTmdbAnimationTitle, normalizeRankingInterval } from '@/lib/tmdbMetadata';
 import { buildGeneratedLogoVariantDataUrl, buildTmdbImageUrl, getSourceImagePayload } from '@/lib/imageAssetPipeline';
 import { renderWithSharp } from '@/lib/imageRenderer';
 import { ANIME_NATIVE_INPUT_ID_PREFIX_SET, extractAnimeSubtypeFromAnimemapping, fetchAnilistIdFromReverseMapping, fetchAnilistRating, fetchAnimemappingPayload, fetchKitsuFallbackAsset, fetchKitsuIdFromReverseMapping, fetchKitsuRating, fetchMalIdFromReverseMapping, fetchMyAnimeListRating, fetchNativeAnimeDirectFallbackAsset, fetchTmdbIdFromReverseMapping, normalizeAiometadataEpisodeProvider, parseKitsuInputParts, pickPosterTitleFromMedia, toAnimeMappingProvider } from '@/lib/animeProviders';
@@ -3022,6 +3022,26 @@ export async function GET(
           noBox: rankingNoBox,
           compact: rankingCompact,
         };
+      } else if (rankingParam !== 'off') {
+        const detailsBundle = detailsBundlePromise ? await detailsBundlePromise : null;
+        const voteAverage = detailsBundle?.details?.vote_average ?? null;
+        const fallbackBadge = await buildFallbackBadge({
+          tmdbKey: tmdbKey || null,
+          tmdbId: media?.id ? String(media.id) : null,
+          imdbId: mappedImdbId || (detailsBundle?.details as any)?.imdb_id || null,
+          mediaType: mediaType as 'movie' | 'tv',
+          voteAverage: voteAverage != null ? Number(voteAverage) : null,
+          language: requestedImageLang,
+          phases,
+        });
+        if (fallbackBadge) {
+          rankingBadge = {
+            label: fallbackBadge.label,
+            value: fallbackBadge.value,
+            noBox: rankingNoBox,
+            compact: fallbackBadge.compact ?? rankingCompact,
+          };
+        }
       }
       if (
         ratingBadges.length === 0 &&

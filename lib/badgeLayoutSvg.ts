@@ -1132,22 +1132,27 @@ export const buildRankingBadgeSvg = (value: string, label: string, iconDataUri?:
   const hasLabel = label.length > 0;
 
   if (!hasIcon && !hasLabel) {
-    const width = Math.ceil(rankWidth + paddingX * 2);
-    const rankX = Math.round((width - rankWidth) / 2);
-    const textY = Math.round(height / 2 + rankFontSize * 0.36);
+    const isTextBadge = value.length > 3 && !value.startsWith('#');
+    const compactFontSize = isTextBadge ? Math.round(24 * scale) : rankFontSize;
+    const compactWidth = estimateBadgeTextWidth(value, compactFontSize, false);
+    const width = Math.ceil(compactWidth + paddingX * 2);
+    const rankX = Math.round((width - compactWidth) / 2);
+    const textY = Math.round(height / 2 + compactFontSize * 0.36);
+    const fontStyle = isTextBadge ? 'normal' : 'italic';
+    const fontWeight = isTextBadge ? '800' : '500';
 
     const rankGlowLayers = noBox
       ? Array.from({ length: 8 }, (_, i) => {
         const strokeWidth = 20 - i * 2.5;
         const opacity = 0.05 + (i * 0.05);
-        return `<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>`;
+        return `<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${compactFontSize}" font-style="${fontStyle}" font-weight="${fontWeight}" fill="none" stroke="rgba(0,0,0,${opacity})" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>`;
       }).join('\\n')
       : '';
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="-4 -4 ${width + 8} ${height + 8}">
 ${!noBox ? `<rect x="0.75" y="0.75" width="${width - 1.5}" height="${height - 1.5}" rx="10" fill="rgb(21,35,49)" fill-opacity="0.92" stroke="rgba(255,255,255,0.10)" stroke-width="1" />` : ''}
 ${rankGlowLayers}
-<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${rankFontSize}" font-style="italic" font-weight="500" fill="white" stroke="rgba(0,0,0,0.85)" stroke-width="2.2" paint-order="stroke fill" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>
+<text x="${rankX}" y="${textY}" font-family="'Noto Sans','DejaVu Sans',Arial,sans-serif" font-size="${compactFontSize}" font-style="${fontStyle}" font-weight="${fontWeight}" fill="white" stroke="rgba(0,0,0,0.85)" stroke-width="2.2" paint-order="stroke fill" style="font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum' 1, 'lnum' 1;">${escapeXml(value)}</text>
 </svg>`;
     return { svg, width, height };
   }
