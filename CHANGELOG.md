@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.89](https://github.com/realbestia1/erdb/compare/v0.4.88...v0.4.89) - 2026-06-19
+
+- Simplify badge regexes; bump versions ([f9eba16](https://github.com/realbestia1/erdb/commit/f9eba166154ccfb1d089b9f78e43d8d3e73e30fd))
+  Refactor stream badge regexes in lib/ratingBadgeLogic.ts to use word-boundaries and targeted negative lookaheads for hdr/hdr10/hdr10plus and IMAX, improving matching accuracy and simplifying complex lookahead logic. Update FINAL_IMAGE_RENDERER_CACHE_VERSION in lib/routeConfig.ts (v237 → v240) and bump package version to 0.4.89. tsbuildinfo was updated as part of the build output.
+
 ## [0.4.88](https://github.com/realbestia1/erdb/compare/v0.4.87...v0.4.88) - 2026-06-19
 
 - Increase badge fonts and bump versions ([f2be7fa](https://github.com/realbestia1/erdb/commit/f2be7faad0643b0c006d374964481b5d3e8f91e9))
