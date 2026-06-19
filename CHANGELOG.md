@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.91](https://github.com/realbestia1/erdb/compare/v0.4.90...v0.4.91) - 2026-06-19
+
+- Update cache versions and bump package ([87a2175](https://github.com/realbestia1/erdb/commit/87a217563d8e90e7b044a3edf8226f28495d2f6f))
+  Increment FINAL_IMAGE_RENDERER_CACHE_VERSION to 'poster-backdrop-logo-thumbnail-v243' to force image cache invalidation, and update stream badges cache namespace from v9 to v10 to rotate that cache. Also bump package.json version to 0.4.91. tsconfig.tsbuildinfo was regenerated as part of the build metadata update.
+
 ## [0.4.90](https://github.com/realbestia1/erdb/compare/v0.4.89...v0.4.90) - 2026-06-19
 
 - Refine HDR badge regex & scoring; bump versions ([b02ae5d](https://github.com/realbestia1/erdb/commit/b02ae5d1328e4d78539eae90ea3adf8f5d121503))
