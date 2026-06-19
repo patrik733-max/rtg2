@@ -24,7 +24,7 @@ export const fetchStreamBadges = async (input: {
   if (!trimmedId) {
     return { badges: [], cacheTtlMs: STREAM_BADGES_CACHE_TTL_MS };
   }
-  const cacheKey = `streambadges:v10:${input.type}:${trimmedId}`;
+  const cacheKey = `streambadges:v11:${input.type}:${trimmedId}`;
   const ttlMs =
     typeof input.cacheTtlMs === 'number' && Number.isFinite(input.cacheTtlMs) && input.cacheTtlMs > 0
       ? input.cacheTtlMs

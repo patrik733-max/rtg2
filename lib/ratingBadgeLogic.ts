@@ -11,6 +11,10 @@ export type StreamBadgeKey =
   | '4k'
   | '1080p'
   | '720p'
+  | '576p'
+  | '480p'
+  | '360p'
+  | '240p'
   | 'dolbyvision'
   | 'hdr10plus'
   | 'hdr10'
@@ -133,8 +137,8 @@ export const STREAM_BADGE_META = new Map<
       label: '4K',
       value: '',
       accentColor: '#ffbe01',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/4k.png',
-      iconWidthRatio: 1.39,
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-4k.svg',
+      iconWidthRatio: 1.3,
     },
   ],
   [
@@ -143,8 +147,8 @@ export const STREAM_BADGE_META = new Map<
       label: '1080p',
       value: '',
       accentColor: '#ff6904',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/1080p.png',
-      iconWidthRatio: 2.23,
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-1080p.svg',
+      iconWidthRatio: 2.388,
     },
   ],
   [
@@ -153,8 +157,48 @@ export const STREAM_BADGE_META = new Map<
       label: '720p',
       value: '',
       accentColor: '#fb411c',
-      iconUrl: 'https://raw.githubusercontent.com/nobnobz/Omni-Template-Bot-Bid-Raiser/main/Other/regex%20tags/720p.png',
-      iconWidthRatio: 1.59,
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-720p.svg',
+      iconWidthRatio: 1.9,
+    },
+  ],
+  [
+    '576p',
+    {
+      label: '576p',
+      value: '',
+      accentColor: '#fb411c',
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-576p.svg',
+      iconWidthRatio: 2.019,
+    },
+  ],
+  [
+    '480p',
+    {
+      label: '480p',
+      value: '',
+      accentColor: '#fb411c',
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-480p.svg',
+      iconWidthRatio: 2.05,
+    },
+  ],
+  [
+    '360p',
+    {
+      label: '360p',
+      value: '',
+      accentColor: '#fb411c',
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-360p.svg',
+      iconWidthRatio: 2.031,
+    },
+  ],
+  [
+    '240p',
+    {
+      label: '240p',
+      value: '',
+      accentColor: '#fb411c',
+      iconUrl: 'https://cdn.jsdelivr.net/gh/sweatycab/nuvio-minimalist-badges@main/badges/white-240p.svg',
+      iconWidthRatio: 2.022,
     },
   ],
   [
@@ -317,6 +361,10 @@ export const STREAM_BADGE_ORDER: StreamBadgeKey[] = [
   '4k',
   '1080p',
   '720p',
+  '576p',
+  '480p',
+  '360p',
+  '240p',
   'dolbyvision',
   'hdr10plus',
   'hdr10',
@@ -342,6 +390,10 @@ const STREAM_BADGE_PATTERNS: Array<[StreamBadgeKey, RegExp]> = [
   ['4k', /^(?=.*(?:2160[pi]?|4k|uhd))(?!.*(?:1080[pi]?|720[pi]?))/i],
   ['1080p', /\b1080[pi]?\b/i],
   ['720p', /\b720[pi]?\b/i],
+  ['576p', /\b576[pi]?\b/i],
+  ['480p', /\b480[pi]?\b/i],
+  ['360p', /\b360[pi]?\b/i],
+  ['240p', /\b240[pi]?\b/i],
   ['dolbyvision', /\b(?:dv|dovi|dolby[\s._-]?vision)\b/i],
   ['hdr10plus', /\bhdr[\s._-]?10[\s._-]?(?:\+|plus|p)(?=\s|$|[^a-z])/i],
   ['hdr10', /\bhdr[\s._-]?10(?![\s._-]?(?:\+|plus|p))(?=\s|$|[^a-z0-9])/i],
@@ -368,6 +420,10 @@ const STREAM_BADGE_CATEGORY: Record<StreamBadgeKey, StreamBadgeCategory> = {
   '4k': 'resolution',
   '1080p': 'resolution',
   '720p': 'resolution',
+  '576p': 'resolution',
+  '480p': 'resolution',
+  '360p': 'resolution',
+  '240p': 'resolution',
   dolbyvision: 'visual',
   hdr10plus: 'visual',
   hdr10: 'visual',
