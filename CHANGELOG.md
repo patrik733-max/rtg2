@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.87](https://github.com/realbestia1/erdb/compare/v0.4.86...v0.4.87) - 2026-06-19
+
+- Add fallback ranking badge and adjust rendering ([45e4b2b](https://github.com/realbestia1/erdb/commit/45e4b2bb01bd0ec97ee5c130906461dcab153257))
+  Introduce fallback ranking badges when external ratings are unavailable: add buildFallbackBadge with Cinemeta award parsing and top-rated logic (tmdbMetadata.ts), and call it in the route to populate rankingBadge when appropriate. Improve badge SVG layout to better handle compact/text badges (font size/style/weight and width estimation) in badgeLayoutSvg.ts. Constrain and reposition rendered ranking badge sizes in imageRenderer.ts so badges fit reference heights and align correctly. Bump image renderer cache/version and package version to reflect these changes.
+- Add quality badges and bump image cache version ([af2ae8f](https://github.com/realbestia1/erdb/commit/af2ae8fc476031ded0bfa48c56ad91b16ca863a3))
+  Treat additional stream badge keys (dolbyvision, hdr10plus, hdr10, hdr, imaxenhanced, imax, sdr) as colored badges in imageRenderer so they receive the colored tint when qualityBadgesColorMode is 'colored'. Also increment FINAL_IMAGE_RENDERER_CACHE_VERSION to 'poster-backdrop-logo-thumbnail-v222' to force cache invalidation for the updated rendering behavior.
+- Update routeConfig.ts ([e5732e4](https://github.com/realbestia1/erdb/commit/e5732e41da7aae4778e51acdb4ea8feb044b6613))
+- Update imageRenderer.ts ([1f9670a](https://github.com/realbestia1/erdb/commit/1f9670a798a296b01c27fdcbfdc12b6059995750))
+
 ## [0.4.86](https://github.com/realbestia1/erdb/compare/v0.4.85...v0.4.86) - 2026-06-19
 
 - Improve badge rendering, assets and cache versions ([a788141](https://github.com/realbestia1/erdb/commit/a788141c79e6fd1e2926e8a489ce2f7033a9c1b9))
