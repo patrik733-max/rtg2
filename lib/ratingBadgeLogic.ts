@@ -343,8 +343,8 @@ const STREAM_BADGE_PATTERNS: Array<[StreamBadgeKey, RegExp]> = [
   ['1080p', /\b1080[pi]?\b/i],
   ['720p', /\b720[pi]?\b/i],
   ['dolbyvision', /\b(?:dv|dovi|dolby[\s._-]?vision)\b/i],
-  ['hdr10plus', /\bhdr[\s._-]?10[\s._-]?(?:\+|plus|p)\b/i],
-  ['hdr10', /\bhdr[\s._-]?10\b(?![\s._-]*(?:\+|plus|p))/i],
+  ['hdr10plus', /\bhdr[\s._-]?10[\s._-]?(?:\+|plus|p)(?=\s|$|[^a-z])/i],
+  ['hdr10', /\bhdr[\s._-]?10(?![\s._-]?(?:\+|plus|p))(?=\s|$|[^a-z0-9])/i],
   ['hdr', /\bhdr\b(?![\s._-]?10)/i],
   ['imaxenhanced', /\bimax[\s._-]?enhanced\b/i],
   ['imax', /\bimax\b(?![\s._-]?enhanced)/i],
@@ -517,6 +517,8 @@ export const collectStreamFlags = (filenames: string[]) => {
   const scoreFlags = (flags: StreamQualityFlags) =>
     STREAM_BADGE_ORDER.reduce((score, key, index) => {
       if (!flags[key]) return score;
+      const category = STREAM_BADGE_CATEGORY[key];
+      if (category === 'quality' || category === 'audio') return score;
       return score + STREAM_BADGE_ORDER.length - index;
     }, 0);
 
