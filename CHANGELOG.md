@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.88](https://github.com/realbestia1/erdb/compare/v0.4.87...v0.4.88) - 2026-06-19
+
+- Increase badge fonts and bump versions ([f2be7fa](https://github.com/realbestia1/erdb/commit/f2be7faad0643b0c006d374964481b5d3e8f91e9))
+  Improve ranking badge appearance by increasing rank, label, and compact font sizes and making badge corners rounder (rx 10 -> 20). Bump FINAL_IMAGE_RENDERER_CACHE_VERSION to poster-backdrop-logo-thumbnail-v237 to invalidate image caches and increment package version to 0.4.88. Updated TypeScript build metadata.
+- Default poster and ranking positions to top ([daf8d61](https://github.com/realbestia1/erdb/commit/daf8d619f8f9e894f9334ffa64ec89820293c755))
+  Change defaults so posterQualityBadgesPosition and rankingPosition initialize to 'top' instead of 'auto'. Also add explicit setPosterQualityBadgesPosition('top') and setRankingPosition('top') in the preset/settings block to ensure these values are applied when switching presets.
+
 ## [0.4.87](https://github.com/realbestia1/erdb/compare/v0.4.86...v0.4.87) - 2026-06-19
 
 - Add fallback ranking badge and adjust rendering ([45e4b2b](https://github.com/realbestia1/erdb/commit/45e4b2bb01bd0ec97ee5c130906461dcab153257))
