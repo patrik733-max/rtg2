@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.94](https://github.com/realbestia1/erdb/compare/v0.4.93...v0.4.94) - 2026-06-20
+
+- Update package.json ([52805c7](https://github.com/realbestia1/erdb/commit/52805c761a766b9ca8eb3dcbb832cdfe611e3d38))
+- Update use-home-page-controller.ts ([75f0312](https://github.com/realbestia1/erdb/commit/75f03127d0185db463d5cc23c80910a2cc080a78))
+- Add 'custom' poster configurator preset ([e6dcd8d](https://github.com/realbestia1/erdb/commit/e6dcd8d0710ce0d24e5fbe8757d986b85e6daef9))
+  Introduce a new 'custom' PosterConfiguratorPreset and wire it through types, controller logic, and the workspace UI. Updated type definitions in home-page-view.tsx, home-page-utils.ts, and workspace/types.ts to include 'custom'. use-home-page-controller now recognizes and sets the 'custom' preset from payloads. workspace-controls-panel.tsx: add the 'Custom' dropdown option and numerous conditional UI blocks when preset === 'custom' (ratings layout, vertical badge style & max per side, genre/quality badge positions, average ratings toggle, stream badge mode, ranking position), adjust layout for custom mode, and fix the anime image-text dropdown to pick poster vs backdrop values. These changes enable a manually configurable poster mode while keeping existing presets intact.
+- Add multiple poster presets and new defaults ([6bde897](https://github.com/realbestia1/erdb/commit/6bde8971bac5a9fabcd2dde0a8e7ce6f0a938ee9))
+  Introduce seven poster presets (preset1..preset7) replacing the old simple/advanced mode and wire them throughout the app. Update types to include the new presets, change defaults (language to it-IT, poster average ratings on, poster rating/quality style to plain, stream badges default on, ranking country to IT), and implement preset-specific configuration logic in useHomePageController (query generation, config object, UI state setters and derived values). Revamp workspace controls UI to expose the new preset dropdown, hide/adjust poster language & layout controls for presets, add vignette toggle and preset-specific layout fields (e.g. Max Badges per Side for preset7), and add an Info icon import. Also fix route handling for rankingParam by guarding the else branch (only run when rankingParam !== 'off'). These changes centralize multiple default layouts via presets and ensure URL/config serialization respects them.
+
 ## [0.4.93](https://github.com/realbestia1/erdb/compare/v0.4.92...v0.4.93) - 2026-06-19
 
 - Refactor quality badge tint logic; bump version ([b7a6049](https://github.com/realbestia1/erdb/commit/b7a604909456c3b006ebd58e43e71c39c8f69a1d))
