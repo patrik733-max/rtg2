@@ -2155,7 +2155,7 @@ export function useHomePageController({
     if (typeof payload.logoCustomOutline === 'string') {
       setLogoCustomOutline(normalizeHexColor(payload.logoCustomOutline, DEFAULT_LOGO_CUSTOM_OUTLINE));
     }
-    if (typeof payload.posterConfiguratorPreset === 'string' && (payload.posterConfiguratorPreset === 'simple' || payload.posterConfiguratorPreset === 'advanced' || payload.posterConfiguratorPreset === 'preset1' || payload.posterConfiguratorPreset === 'preset2' || payload.posterConfiguratorPreset === 'preset3' || payload.posterConfiguratorPreset === 'preset4' || payload.posterConfiguratorPreset === 'preset5' || payload.posterConfiguratorPreset === 'preset6' || payload.posterConfiguratorPreset === 'preset7')) {
+    if (typeof payload.posterConfiguratorPreset === 'string' && (payload.posterConfiguratorPreset === 'simple' || payload.posterConfiguratorPreset === 'advanced' || payload.posterConfiguratorPreset === 'preset1' || payload.posterConfiguratorPreset === 'preset2' || payload.posterConfiguratorPreset === 'preset3' || payload.posterConfiguratorPreset === 'preset4' || payload.posterConfiguratorPreset === 'preset5' || payload.posterConfiguratorPreset === 'preset6' || payload.posterConfiguratorPreset === 'preset7' || payload.posterConfiguratorPreset === 'custom')) {
       setPosterConfiguratorPresetState(
         payload.posterConfiguratorPreset === 'preset2'
           ? 'preset2'
@@ -2169,7 +2169,9 @@ export function useHomePageController({
                   ? 'preset6'
                   : payload.posterConfiguratorPreset === 'preset7'
                     ? 'preset7'
-                    : 'preset1'
+                    : payload.posterConfiguratorPreset === 'custom'
+                      ? 'custom'
+                      : 'preset1'
       );
     }
     if (typeof payload.posterAverageRatingsEnabled === 'boolean') {

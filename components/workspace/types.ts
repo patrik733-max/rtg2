@@ -20,7 +20,7 @@ export type StreamBadgesSetting = 'auto' | 'on' | 'off';
 export type QualityBadgesSide = 'left' | 'right';
 export type PosterQualityBadgesPosition = 'auto' | QualityBadgesSide | 'top' | 'bottom' | 'above-logo';
 export type { PosterGenrePosition, RankingPosition };
-export type PosterConfiguratorPreset = 'preset1' | 'preset2' | 'preset3' | 'preset4' | 'preset5' | 'preset6' | 'preset7';
+export type PosterConfiguratorPreset = 'preset1' | 'preset2' | 'preset3' | 'preset4' | 'preset5' | 'preset6' | 'preset7' | 'custom';
 export type AiometadataPatternType = 'poster' | 'background' | 'logo' | 'episodeThumbnail';
 export type AiometadataEpisodeProvider = 'tvdb' | 'realimdb';
 export type ProxySeriesMetadataProvider = 'tmdb' | 'imdb';

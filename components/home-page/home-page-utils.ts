@@ -53,7 +53,7 @@ export type QualityBadgesSide = 'left' | 'right';
 export type PosterQualityBadgesPosition = 'auto' | QualityBadgesSide | 'top' | 'bottom' | 'above-logo';
 export type { PosterGenrePosition };
 export type VerticalBadgeContent = 'standard' | 'stacked';
-export type PosterConfiguratorPreset = 'preset1' | 'preset2' | 'preset3' | 'preset4' | 'preset5' | 'preset6' | 'preset7';
+export type PosterConfiguratorPreset = 'preset1' | 'preset2' | 'preset3' | 'preset4' | 'preset5' | 'preset6' | 'preset7' | 'custom';
 export const DEFAULT_QUALITY_BADGES_STYLE: RatingStyle = 'glass';
 export const STREAM_BADGE_OPTIONS: Array<{ id: StreamBadgesSetting; label: string }> = [
   { id: 'auto', label: 'Auto' },

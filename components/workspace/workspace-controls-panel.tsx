@@ -244,6 +244,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                 { id: 'preset5', label: 'Preset 5' },
                 { id: 'preset6', label: 'Preset 6' },
                 { id: 'preset7', label: 'Preset 7' },
+                { id: 'custom', label: 'Custom' },
               ])}
             </div>
           </Section>
@@ -290,7 +291,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
           </Section>
         ) : null}
 
-        {(previewType !== 'poster' || posterConfiguratorPreset === 'preset1' || posterConfiguratorPreset === 'preset2' || posterConfiguratorPreset === 'preset3' || posterConfiguratorPreset === 'preset4' || posterConfiguratorPreset === 'preset5' || posterConfiguratorPreset === 'preset6') && (
+        {(previewType !== 'poster' || posterConfiguratorPreset === 'preset1' || posterConfiguratorPreset === 'preset2' || posterConfiguratorPreset === 'preset3' || posterConfiguratorPreset === 'preset4' || posterConfiguratorPreset === 'preset5' || posterConfiguratorPreset === 'preset6' || posterConfiguratorPreset === 'custom') && (
           <Section title={styleLabel}>
             {renderDropdown(activeRatingStyle, (v) => setRatingStyleForType(v as RatingStyle), RATING_STYLE_OPTIONS)}
             {activeRatingStyle === 'glass' && (
@@ -305,7 +306,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
           </Section>
         )}
 
-        {previewType === 'backdrop' && (
+        {(previewType === 'backdrop' || (previewType === 'poster' && posterConfiguratorPreset === 'custom')) && (
           <Section title={textLabel}>
             {renderDropdown(activeImageText, setImageTextForType, [
               { id: 'default', label: 'Default' },
@@ -314,11 +315,15 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
             ])}
             <div>
               <h3 className="text-xs font-medium text-slate-400 mb-2">Anime Override (Kitsu/MAL)</h3>
-              {renderDropdown(backdropAnimeImageText, setBackdropAnimeImageText, [
-                { id: 'default', label: 'Default' },
-                { id: 'clean', label: 'Clean' },
-                { id: 'alternative', label: 'Alternative' },
-              ])}
+              {renderDropdown(
+                previewType === 'poster' ? posterAnimeImageText : backdropAnimeImageText,
+                previewType === 'poster' ? setPosterAnimeImageText : setBackdropAnimeImageText,
+                [
+                  { id: 'default', label: 'Default' },
+                  { id: 'clean', label: 'Clean' },
+                  { id: 'alternative', label: 'Alternative' },
+                ]
+              )}
             </div>
           </Section>
         )}
@@ -359,6 +364,67 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                   >
                     Auto
                   </button>
+                </div>
+              )}
+
+              {posterConfiguratorPreset === 'custom' && (
+                <div className="space-y-4 pt-4 border-t border-slate-800">
+                  <div>
+                    <h3 className="text-xs font-medium text-slate-400 mb-2">Ratings Position</h3>
+                    {renderDropdown(posterRatingsLayout, setPosterRatingsLayout, POSTER_RATING_LAYOUT_OPTIONS)}
+                  </div>
+
+                  {isVerticalPosterRatingLayout(posterRatingsLayout) && (
+                    <>
+                      <div>
+                        <h3 className="text-xs font-medium text-slate-400 mb-2">Vertical Badge Style</h3>
+                        {renderDropdown(posterVerticalBadgeContent, setPosterVerticalBadgeContent, VERTICAL_BADGE_CONTENT_OPTIONS)}
+                      </div>
+                      <div className="pt-2 flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-medium text-slate-400">Max Badges per Side</span>
+                        <input
+                          type="number"
+                          min={1}
+                          max={20}
+                          value={posterRatingsMaxPerSide ?? ''}
+                          onChange={(e) => setPosterRatingsMaxPerSide(e.target.value === '' ? null : parseInt(e.target.value, 10))}
+                          placeholder="Auto"
+                          className={`w-20 ${INPUT_CLASS}`}
+                        />
+                        <button
+                          onClick={() => setPosterRatingsMaxPerSide(null)}
+                          className={BUTTON_BASE_CLASS + " " + BUTTON_INACTIVE_CLASS}
+                        >
+                          Auto
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  <div>
+                    <h3 className="text-xs font-medium text-slate-400 mb-2">Genre Position</h3>
+                    {renderDropdown(posterGenrePosition, setPosterGenrePosition, POSTER_GENRE_POSITION_OPTIONS)}
+                  </div>
+
+                  <div>
+                    <h3 className="text-xs font-medium text-slate-400 mb-2">Quality Badges Position</h3>
+                    {renderDropdown(posterQualityBadgesPosition, setPosterQualityBadgesPosition, POSTER_QUALITY_BADGE_POSITION_OPTIONS)}
+                  </div>
+
+                  <label className="flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-[#0a0a0a] px-4 py-3">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-xs font-medium text-slate-300">Average Ratings</span>
+                      <span className="text-[10px] text-slate-500">Calculate average of active providers</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPosterAverageRatingsEnabled((value) => !value)}
+                      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full p-1 transition-colors ${posterAverageRatingsEnabled ? 'bg-orange-500/80' : 'bg-white/10'}`}
+                      aria-pressed={posterAverageRatingsEnabled}
+                    >
+                      <span className={`block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${posterAverageRatingsEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                    </button>
+                  </label>
                 </div>
               )}
             </div>
@@ -474,7 +540,13 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
 
         {previewType === 'poster' && posterConfiguratorPreset !== 'preset4' && (
           <Section title="Quality Badges (Poster)">
-            <div className="grid grid-cols-2 gap-4">
+            <div className={`grid gap-4 ${posterConfiguratorPreset === 'custom' ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2'}`}>
+              {posterConfiguratorPreset === 'custom' && (
+                <div>
+                  <h3 className="text-xs font-medium text-slate-400 mb-2">Mode</h3>
+                  {renderDropdown(activeStreamBadges, setActiveStreamBadges, STREAM_BADGE_OPTIONS)}
+                </div>
+              )}
               <div>
                 <h3 className="text-xs font-medium text-slate-400 mb-2">Style</h3>
                 {renderDropdown(activeQualityBadgesStyle, (v) => setActiveQualityBadgesStyle(v as RatingStyle), RATING_STYLE_OPTIONS)}
@@ -556,6 +628,12 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
                       </div>
                     </div>
 
+                    {posterConfiguratorPreset === 'custom' && (
+                      <div className="space-y-3 pt-2 border-t border-slate-800/40">
+                        <h4 className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Ranking Position</h4>
+                        {renderDropdown(rankingPosition, setRankingPosition, RANKING_POSITION_OPTIONS)}
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -565,7 +643,7 @@ export function WorkspaceControlsPanel({ state, derived, actions }: WorkspaceCon
 
         <Section title={providersLabel}>
           <p className="text-xs text-slate-500">Drag the grips to reorder providers. Order flows top to bottom.</p>
-          {previewType === 'poster' && posterConfiguratorPreset === 'preset1' && (
+          {previewType === 'poster' && (posterConfiguratorPreset === 'preset1' || (posterConfiguratorPreset === 'custom' && posterAverageRatingsEnabled)) && (
             <div className="flex items-start gap-2.5 rounded-xl border border-orange-500/10 bg-orange-500/5 p-3 text-[11px] text-orange-200/90 mt-2">
               <Info className="w-3.5 h-3.5 text-orange-400 shrink-0 mt-0.5" />
               <div className="flex flex-col gap-0.5">
